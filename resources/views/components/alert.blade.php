@@ -1,0 +1,1 @@
+<div id="livewire-alert"></div>
