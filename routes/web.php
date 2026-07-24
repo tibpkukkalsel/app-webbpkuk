@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\BerandaController;
+use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\FooterController;
@@ -107,6 +108,17 @@ Route::prefix('cp-x14')
             ->middleware('permission:agenda.konfig')
             ->name('agenda.view');
         //end Crud AGENDA
+        //Start Crud POST
+        Route::get('/berita', [BeritaController::class, 'view'])
+            ->middleware('permission:post.konfig')
+            ->name('berita.view');
+        Route::get('/berita/create', [BeritaController::class, 'create'])
+            ->middleware('permission:post.konfig')
+            ->name('berita.create');
+        Route::get('/berita/edit', [BeritaController::class, 'edit'])
+            ->middleware('permission:post.konfig')
+            ->name('berita.edit');
+        //end Crud POST
     });
 
 Route::middleware('auth')->group(function () {

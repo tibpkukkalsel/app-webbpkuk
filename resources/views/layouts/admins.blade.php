@@ -214,11 +214,11 @@
               <span class="hide-menu">Page</span>
             </li>
             <li class="sidebar-item">
-              <a href="#" class="sidebar-link">
+              <a class="sidebar-link {{ request()->routeIs('berita*') ? 'active' : '' }}" href="{{ route('berita.view')}}" aria-expanded="false">
                 <span>
                   <i class="ti ti-article"></i>
                 </span>
-                <span class="hide-menu">Post</span>
+                <span class="hide-menu">Berita</span>
               </a>
             </li>
             <li class="sidebar-item">

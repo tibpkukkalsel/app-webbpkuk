@@ -37,6 +37,8 @@ class PermissionSeeder extends Seeder
             'layanan.konfig',
             //agenda
             'agenda.konfig',
+            //post
+            'post.konfig',
          ];
          
          foreach ($permissions as $permission) {

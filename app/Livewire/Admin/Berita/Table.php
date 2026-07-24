@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Livewire\Admin\Berita;
+
+use App\Models\Post;
+use Livewire\Component;
+use Livewire\WithPagination;
+
+class Table extends Component
+{
+    use WithPagination;
+
+    protected $paginationTheme = 'bootstrap';
+
+    public $search = '';
+    public $perPage = 10;
+
+    protected $listeners = [
+        'berita-refresh' => '$refresh'
+    ];
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingPerPage()
+    {
+        $this->resetPage();
+    }
+
+    public function render()
+    {
+        $post=Post::with(['kategori','user'])
+            ->where('judul','like','%'.$this->search.'%')
+            ->orderByDesc('id_post')
+            ->paginate($this->perPage);
+
+        return view('livewire.admin.berita.table', compact('post'));
+    }
+
+}
+
+

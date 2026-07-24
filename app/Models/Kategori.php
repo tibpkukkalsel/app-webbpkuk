@@ -12,4 +12,9 @@ class Kategori extends Model
     protected $keyType = 'int'; // karena bigint
     protected $fillable = ['kategori'];
 
+    public function post()
+    {
+        return $this->hasMany(Post::class,'id_kategori','id_kategori');
+    }
+
 }
