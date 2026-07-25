@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\FooterController;
 use App\Http\Controllers\HalamanutamaController;
+use App\Http\Controllers\HashtagController;
 use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LayananController;
@@ -103,6 +104,13 @@ Route::prefix('cp-x14')
             ->middleware('permission:layanan.konfig')
             ->name('layanan.edit');
         //end Crud LAYANAN
+        //Start Crud HASHTAG
+        Route::get('/hashtag', [HashtagController::class, 'view'])
+            ->middleware('permission:profile.konfig')
+            ->name('hashtag.view');
+        Route::get('/hashtag/search', [HashtagController::class,'search'])
+            ->name('hashtag.search');
+        //Start Crud HASHTAG
         //Start Crud AGENDA
         Route::get('/agenda', [AgendaController::class, 'view'])
             ->middleware('permission:agenda.konfig')

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Livewire\Admin\Berita;
+namespace App\Livewire\Admin\Hashtag;
 
-use App\Models\Post;
+use App\Models\Hashtag;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Storage;
 
 class Table extends Component
 {
@@ -17,7 +16,7 @@ class Table extends Component
     public $perPage = 10;
 
     protected $listeners = [
-        'berita-refresh' => '$refresh'
+        'hashtag-refresh' => '$refresh'
     ];
 
     public function updatingSearch()
@@ -32,14 +31,10 @@ class Table extends Component
 
     public function render()
     {
-        $post=Post::with(['kategori','user'])
-            ->where('judul','like','%'.$this->search.'%')
-            ->orderByDesc('id_post')
+        $hashtag = Hashtag::where('hashtag', 'like', '%'.$this->search.'%')
+            ->orderBy('id_hashtag', 'desc')
             ->paginate($this->perPage);
 
-        return view('livewire.admin.berita.table', compact('post'));
+        return view('livewire.admin.hashtag.table', compact('hashtag'));
     }
-
 }
-
-

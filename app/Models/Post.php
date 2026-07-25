@@ -22,5 +22,20 @@ class Post extends Model
         return $this->belongsTo(User::class,'id_user','id');
     }
 
+    public function galeri()
+    {
+        return $this->hasMany(PostGaleri::class,'id_post','id_post');
+    }
+
+    public function hashtags()
+    {
+        return $this->belongsToMany(
+            Hashtag::class,
+            'post_hashtag',
+            'id_post',
+            'id_hashtag'
+        );
+    }
+
 }
 

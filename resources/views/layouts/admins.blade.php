@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="{{ asset('admins/libs/owl.carousel/dist/assets/owl.carousel.min.css') }}" />
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('admins/libs/magnific-popup/dist/magnific-popup.css') }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
 </head>
 
 <body>
@@ -72,7 +73,15 @@
                 <span class="hide-menu">Kategori</span>
               </a>
             </li>
-                        <li class="sidebar-item">
+            <li class="sidebar-item">
+              <a class="sidebar-link {{ request()->routeIs('hashtag*') ? 'active' : '' }}" href="{{ route('hashtag.view')}}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-category"></i>
+                </span>
+                <span class="hide-menu">Hashtag</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
               <a href="{{ route('pengguna.view') }}" class="sidebar-link {{ request()->routeIs('pengguna*') ? 'active' : '' }}">
                 <span>
                   <i class="ti ti-users"></i>
@@ -375,6 +384,7 @@
   <script src="{{ asset('admins/js/forms/sweet-alert.init.js') }}"></script>
   <script src="{{ asset('admins/libs/magnific-popup/dist/jquery.magnific-popup.min.js') }}"></script>
   <script src="{{ asset('admins/js/plugins/meg.init.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
   
   <script>
     function handleColorTheme(e) {

@@ -104,10 +104,78 @@
                         <button type="submit" class="btn btn-primary">
                             <i class="ti ti-device-floppy me-1"></i> Simpan
                         </button>
-                        <a href="{{ Route('berita.view') }}" class="btn btn-warning">
-                            Kembali
-                        </a>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Galeri</h5>
+                    <button
+                        type="button" class="btn btn-secondary" onclick="document.getElementById('galeri').click()">
+                        + Tambah
+                    </button>
+                    <input id="galeri" type="file" class="d-none" wire:model="galeri" accept="image/png,image/jpeg,image/webp">
+                </div>
+                <div class="card-body">
+                    <div wire:loading wire:target="galeri">
+                        <small class="text-primary">
+                            Mengupload foto...
+                        </small>
+                    </div>
+                    <div class="row popup-gallery">
+                        @forelse($galeriPost as $g)
+                        <div class="col-lg-4 col-md-6 mb-3" wire:key="galeri-{{ $g->id_galeri }}">
+                            <div class="card overflow-hidden">
+                                <a
+                                    href="{{ asset('storage/berita/galeri/'.$g->gambar) }}"
+                                    title="{{ $judul ?? 'Galeri' }}">
+                                    <img
+                                        src="{{ asset('storage/berita/galeri/'.$g->gambar) }}"
+                                        class="img-fluid w-100"
+                                        style="height:180px;object-fit:cover;cursor:pointer;">
+                                </a>
+                                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 hapus-galeri"
+                                data-id="{{ $g->id_galeri }}">
+                                    <i class="ti ti-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        @empty
+                        <div class="col-12 text-center text-muted">
+                            Belum ada galeri.
+                        </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Hastag</h5>
+                </div>
+                <div class="card-body">
+                    <div wire:ignore>
+                        <input
+                            id="hashtag"
+                            class="form-control"
+                            placeholder="Ketik hashtag...">
+                    </div>
+                    <script>
+                    window.hashtagList=@json(
+                        $hashtags->map(function($item){
+                            return[
+                                'value'=>$item->hashtag,
+                                'id_hashtag'=>$item->id_hashtag
+                            ];
+
+                        })
+                    );
+                    </script>
                 </div>
             </div>
         </div>

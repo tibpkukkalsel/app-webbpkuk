@@ -34,13 +34,7 @@
 
 @push('myscript')
 
-<script src="{{asset ('admins/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{asset ('admins/js/datatable/datatable-basic.init.js') }}"></script>
 <script src="{{asset ('admins/libs/quill/dist/quill.min.js') }}"></script>
-<script src="{{asset ('admins/libs/magnific-popup/dist/jquery.magnific-popup.min.js') }}"></script>
-<script src="{{asset ('admins/js/plugins/meg.init.js') }}"></script>
-
-<script src="{{ asset('admins/js/upload-thumbnail.js') }}"></script>
 
 <script>
 
@@ -126,5 +120,114 @@ document.addEventListener('livewire:init',()=>{
 
   }
 </script>
+
+<script>
+  function initGallery(){
+
+    $('.popup-gallery').magnificPopup({
+        delegate:'a',
+        type:'image',
+        gallery:{
+            enabled:true
+        }
+    });
+
+}
+
+$(function(){
+
+    initGallery();
+
+});
+
+document.addEventListener('livewire:init',()=>{
+
+    Livewire.hook('morphed',()=>{
+
+        $('.popup-gallery').magnificPopup('destroy');
+
+        initGallery();
+
+    });
+
+});
+</script>
+
+<script>
+    $(document).on('click','.hapus-galeri',function(){
+
+    let id=$(this).data('id');
+
+    Swal.fire({
+
+        title:'Hapus foto?',
+
+        text:'Foto akan dihapus permanen.',
+
+        icon:'warning',
+
+        showCancelButton:true,
+
+        confirmButtonText:'Ya',
+
+        cancelButtonText:'Batal'
+
+    }).then((result)=>{
+
+        if(result.isConfirmed){
+
+            Livewire.first().call(
+                'hapusGaleri',
+                id
+            );
+
+        }
+
+    });
+
+});
+</script>
+
+<script>
+document.addEventListener('livewire:init',()=>{
+
+    const input=document.querySelector('#hashtag');
+
+    const tagify=new Tagify(input,{
+
+        whitelist:window.hashtagList,
+
+        enforceWhitelist:true,
+
+        dropdown:{
+            enabled:1,
+            maxItems:20
+        }
+
+    });
+
+    // Tambah hashtag
+    tagify.on('add',function(e){
+
+        Livewire.first().call(
+            'tambahHashtag',
+            e.detail.data.id_hashtag
+        );
+
+    });
+
+    // Hapus hashtag
+    tagify.on('remove',function(e){
+
+        Livewire.first().call(
+            'hapusHashtag',
+            e.detail.data.id_hashtag
+        );
+
+    });
+
+});
+</script>
+
   
 @endpush

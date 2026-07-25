@@ -5,13 +5,13 @@
             <div class="card-body px-4 py-3">
               <div class="row align-items-center">
                 <div class="col-9">
-                  <h4 class="fw-semibold mb-8">Berita</h4>
+                  <h4 class="fw-semibold mb-8">Hashtag</h4>
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                       <li class="breadcrumb-item">
                         <a class="text-muted text-decoration-none" href="{{ Route('dashboard')}}">Dashboard</a>
                       </li>
-                      <li class="breadcrumb-item" aria-current="page">Berita</li>
+                      <li class="breadcrumb-item" aria-current="page">Hashtag</li>
                     </ol>
                   </nav>
                 </div>
@@ -29,25 +29,37 @@
               <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                   <h4 class="card-title mb-0">Data</h4>
-                  <a href="{{ Route('berita.create')}}" class="btn btn-primary">+ Buat Baru</a>                  
+                  <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambah-modal">+ Tambah Data</a>                  
                 </div>
                 <br>
+                  {{-- Modal Tambah --}}
+                  <div class="modal fade" id="tambah-modal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true" wire:ignore.self">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header d-flex align-items-center">
+                                <h4 class="modal-title" id="exampleModalLabel1">Tambah Data</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <livewire:admin.hashtag.create />
+                        </div>
+                    </div>
+                  </div>
                   {{-- End Modal Tambah --}}
                  <div class="table-responsive">
 
-                  <livewire:admin.berita.table />
-                  <livewire:admin.berita.delete />
+                  <livewire:admin.hashtag.table />
+                  <livewire:admin.hashtag.delete />
 
                   {{-- Modal Edit --}}
                   <div class="modal fade" id="editdata" tabindex="-1" wire:ignore.self>
-                      <div class="modal-dialog modal-lg">
+                      <div class="modal-dialog">
                           <div class="modal-content">
                               <div class="modal-header d-flex align-items-center">
                                   <h4 class="modal-title">Edit Data</h4>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                               </div>
 
-                              <livewire:admin.berita.edit />
+                              <livewire:admin.hashtag.edit />
 
                           </div>
                       </div>
@@ -69,8 +81,8 @@ $(document).on('click','.edit',function(){
 
     let id=$(this).data('id');
 
-    Livewire.dispatch('editBerita',{
-        id_post:id
+    Livewire.dispatch('editHashtag',{
+        id_hashtag:id
     });
 
     new bootstrap.Modal(document.getElementById('editdata')).show();
@@ -96,8 +108,8 @@ $(document).on('click','.hapus',function(){
 
         if(result.isConfirmed){
 
-            Livewire.dispatch('hapusBerita',{
-                id_post:id
+            Livewire.dispatch('hapusHashtag',{
+                id_hashtag:id
             });
 
         }
@@ -107,6 +119,13 @@ $(document).on('click','.hapus',function(){
 });
 </script>
 <!-- END Button Hapus -->
+<script>
+  document.addEventListener('livewire:init', () => {
+      Livewire.on('hashtag-created', () => {
+          bootstrap.Modal.getInstance(document.getElementById('tambah-modal')).hide();
+      });
+  });
+</script>
 <script>
   document.addEventListener('livewire:init',()=>{
 

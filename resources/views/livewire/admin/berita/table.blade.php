@@ -35,7 +35,7 @@
 
         <tbody>
             @forelse($post as $d)
-            <tr>
+            <tr wire:key="berita-{{ md5($d->id_post) }}">
                 <td class="text-center">{{ $post->firstItem() + $loop->index }}</td>
                 <td style="text-align: center">
                     <img src="{{ asset('storage/berita/'.$d->thumbnail) }}" class="img-thumbnail" style="height:100px;object-fit:cover;">
@@ -65,7 +65,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="6" class="text-center">Tidak ada data.</td>
+                <td colspan="9" class="text-center">Tidak ada data.</td>
             </tr>
             @endforelse
         </tbody>
