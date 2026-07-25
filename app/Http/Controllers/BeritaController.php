@@ -18,10 +18,10 @@ class BeritaController extends Controller
         
     }
 
-    public function edit($id_post)
-    {
-
-    return view('admin.berita.edit',compact('id_post'));
-    
-    }
+    public function edit($id)
+{
+    return view('admin.berita.edit',[
+        'id'=>$id
+    ]);
+}
 }

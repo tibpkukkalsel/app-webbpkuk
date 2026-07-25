@@ -37,22 +37,7 @@
 
                   <livewire:admin.berita.table />
                   <livewire:admin.berita.delete />
-
-                  {{-- Modal Edit --}}
-                  <div class="modal fade" id="editdata" tabindex="-1" wire:ignore.self>
-                      <div class="modal-dialog modal-lg">
-                          <div class="modal-content">
-                              <div class="modal-header d-flex align-items-center">
-                                  <h4 class="modal-title">Edit Data</h4>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                              </div>
-
-                              <livewire:admin.berita.edit />
-
-                          </div>
-                      </div>
-                  </div>
-                  {{-- End Edit Tambah --}}
+                  
                 </div>
               </div>
             </div>

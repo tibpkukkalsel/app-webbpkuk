@@ -123,7 +123,7 @@ Route::prefix('cp-x14')
         Route::get('/berita/create', [BeritaController::class, 'create'])
             ->middleware('permission:post.konfig')
             ->name('berita.create');
-        Route::get('/berita/edit', [BeritaController::class, 'edit'])
+        Route::get('/berita/edit/{id}', [BeritaController::class, 'edit'])
             ->middleware('permission:post.konfig')
             ->name('berita.edit');
         //end Crud POST

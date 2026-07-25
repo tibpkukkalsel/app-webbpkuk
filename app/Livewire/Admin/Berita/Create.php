@@ -4,19 +4,14 @@ namespace App\Livewire\Admin\Berita;
 
 use App\Models\Hashtag;
 use App\Models\Kategori;
-use App\Models\Post;
-use App\Models\PostHashtag;
-use App\Models\PostGaleri;
-use App\Services\GeminiService;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use App\Services\PostService;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class Create extends Component
 {
     use WithFileUploads;
+    protected PostService $postService;
 
     public $postId=null;
 
@@ -41,10 +36,16 @@ class Create extends Component
         'auto-save'=>'autoSave'
     ];
 
+    public function boot(PostService $postService)
+    {
+        $this->postService=$postService;
+    }
+
     public function mount()
     {
-        $this->refreshGallery();
-        $this->refreshHashtag();
+        $this->galeriPost=collect();
+
+        $this->hashtagPost=collect();
     }
 
     protected function rules()
@@ -80,55 +81,25 @@ class Create extends Component
         $this->validate();
     }
 
-    protected function buatSlug($judul)
-    {
-        $slug=Str::slug($judul);
-        $originalSlug=$slug;
-        $i=1;
-
-        while(
-            Post::where('slug',$slug)
-            ->when($this->postId,function($q){
-                $q->where('id_post','!=',$this->postId);
-            })
-            ->exists()
-        ){
-            $slug=$originalSlug.'-'.$i;
-            $i++;
-        }
-
-        return $slug;
-    }
-
     public function updated()
     {
         $this->isDirty=true;
     }
 
     public function updatedGambar()
-    {
-        if(!$this->gambar){
-            return;
-        }
-        $this->uploadThumbnail();
-        $this->isDirty=true;
+{
+    if(!$this->gambar){
+        return;
     }
 
-    protected function uploadThumbnail()
-    {
-        if(!$this->gambar){
-            return;
-        }
-        if($this->thumbnail){
-            Storage::disk('public')->delete('berita/'.$this->thumbnail);
-        }
-        $this->thumbnail=Str::uuid().'.'.$this->gambar->getClientOriginalExtension();
-        $this->gambar->storeAs(
-            'berita',
-            $this->thumbnail,
-            'public'
+    $this->thumbnail=$this->postService
+        ->uploadThumbnail(
+            $this->gambar,
+            $this->thumbnail
         );
-    }
+
+    $this->isDirty=true;
+}
 
     protected function saveDraft()
     {
@@ -140,32 +111,20 @@ class Create extends Component
             return false;
         }
 
-        $data=[
-            'judul'=>$this->judul,
-            'slug'=>$this->buatSlug($this->judul),
-            'thumbnail'=>$this->thumbnail,
-            'isi'=>$this->isi,
-            'ringkasan'=>$this->ringkasan,
-            'status'=>0,
-            'jenis'=>'Berita',
-            'view_count'=>0,
-            'id_kategori'=>$this->id_kategori,
-            'id_user'=>Auth::id()
-        ];
+        $post=$this->postService
+            ->saveDraft(
+                $this->postId,
+                [
+                    'judul'=>$this->judul,
+                    'thumbnail'=>$this->thumbnail,
+                    'isi'=>$this->isi,
+                    'ringkasan'=>$this->ringkasan,
+                    'jenis'=>'Berita',
+                    'id_kategori'=>$this->id_kategori
+                ]
+            );
 
-        if($this->postId){
-
-            $post=Post::findOrFail($this->postId);
-
-            $post->update($data);
-
-        }else{
-
-            $post=Post::create($data);
-
-            $this->postId=$post->id_post;
-
-        }
+        $this->postId=$post->id_post;
 
         return true;
     }
@@ -200,10 +159,11 @@ class Create extends Component
             return;
         }
 
-        Post::where('id_post',$this->postId)
-            ->update([
-                'status'=>$this->status
-            ]);
+        $this->postService
+            ->publish(
+            $this->postId,
+            $this->status
+        );
 
         $this->dispatch('swal',
             icon:'success',
@@ -221,8 +181,10 @@ class Create extends Component
 
         try{
 
-            $this->ringkasan=app(GeminiService::class)
-                ->ringkas($this->isi);
+            $this->ringkasan=$this->postService
+                    ->buatRingkasan(
+                        $this->isi
+                    );
 
             $this->isDirty=true;
 
@@ -259,9 +221,7 @@ class Create extends Component
         }
 
         $totalGaleri=count($this->galeriPost);
-
         $totalUpload=count($this->galeri);
-
         if(($totalGaleri + $totalUpload) > 6){
 
             $this->dispatch('swal',
@@ -275,64 +235,35 @@ class Create extends Component
             return;
         }
 
-        $this->uploadGallery();
-
-        $this->refreshGallery();
-    }
-
-    protected function uploadGallery()
-    {
-        foreach($this->galeri as $foto){
-            
-            if(!$foto->isValid()){
-            continue;
-            }
-
-            $nama=Str::uuid().'.'.$foto->getClientOriginalExtension();
-
-            $foto->storeAs(
-                'berita/galeri',
-                $nama,
-                'public'
+        $this->postService
+            ->uploadGallery(
+                $this->postId,
+                $this->galeri
             );
 
-            PostGaleri::create([
-                'id_post'=>$this->postId,
-                'gambar'=>$nama
-            ]);
-
-        }
-
         $this->galeri=[];
+
+        $this->galeriPost=$this->postService
+            ->refreshGallery(
+                $this->postId
+            );
 
         $this->dispatch('swal',
             icon:'success',
             title:'Berhasil',
-            text:'Galeri berhasil ditambahkan.'
+            text:'Foto berhasil disimpan.'
         );
-    }
-    
-
-    protected function refreshGallery()
-    {
-        $this->galeriPost=PostGaleri::where(
-            'id_post',
-            $this->postId
-        )
-        ->latest()
-        ->get();
     }
 
     public function hapusGaleri($id)
     {
-        $galeri=PostGaleri::findOrFail($id);
+        $this->postService
+            ->hapusGallery($id);
 
-        Storage::disk('public')
-            ->delete('berita/galeri/'.$galeri->gambar);
-
-        $galeri->delete();
-
-        $this->refreshGallery();
+        $this->galeriPost=$this->postService
+            ->refreshGallery(
+                $this->postId
+            );
 
         $this->dispatch('swal',
             icon:'success',
@@ -341,8 +272,8 @@ class Create extends Component
         );
     }
 
-    public function tambahHashtag($idHashtag)
-    {
+    public function tambahHashtag($tag){
+
         if(!$this->postId){
 
             $this->dispatch('swal',
@@ -354,41 +285,34 @@ class Create extends Component
             return;
         }
 
-        PostHashtag::firstOrCreate([
-            'id_post'=>$this->postId,
-            'id_hashtag'=>$idHashtag
-        ]);
+        $this->postService
+            ->tambahHashtag(
+                $this->postId,
+                $tag
+            );
 
-        $this->refreshHashtag();
+        $this->hashtagPost=$this->postService
+            ->refreshHashtag(
+                $this->postId
+            );
     }
 
-    public function hapusHashtag($idHashtag)
-    {
+    public function hapusHashtag($tag){
+
         if(!$this->postId){
             return;
         }
 
-        PostHashtag::where('id_post',$this->postId)
-            ->where('id_hashtag',$idHashtag)
-            ->delete();
+        $this->postService
+            ->hapusHashtag(
+                $this->postId,
+                $tag
+            );
 
-        $this->refreshHashtag();
-    }
-
-    protected function refreshHashtag()
-    {
-        if(!$this->postId){
-
-            $this->hashtagPost=[];
-
-            return;
-        }
-
-        $post=Post::find($this->postId);
-
-        $this->hashtagPost=$post
-        ? $post->hashtags()->orderBy('hashtag')->get()
-        : collect();
+        $this->hashtagPost=$this->postService
+            ->refreshHashtag(
+                $this->postId
+            );
     }
 
     protected function resetForm()
@@ -414,8 +338,11 @@ class Create extends Component
         $this->lastSavedAt='';
     }
 
-    protected function loadPost(Post $post)
-    {
+ protected function loadPost($idPost){
+
+        $post=$this->postService
+            ->load($idPost);
+
         $this->postId=$post->id_post;
         $this->judul=$post->judul;
         $this->isi=$post->isi;
@@ -424,13 +351,16 @@ class Create extends Component
         $this->thumbnail=$post->thumbnail;
         $this->id_kategori=$post->id_kategori;
 
-        $this->refreshGallery();
-        $this->refreshHashtag();
+        $this->galeriPost=$this->postService
+            ->refreshGallery($this->postId);
+
+        $this->hashtagPost=$this->postService
+            ->refreshHashtag($this->postId);
     }
 
 
-    public function render()
-    {
+    public function render(){
+        
         return view('livewire.admin.berita.create',[
             'kategori'=>Kategori::orderBy('kategori')->get(),
             'hashtags'=>Hashtag::orderBy('hashtag')->get()

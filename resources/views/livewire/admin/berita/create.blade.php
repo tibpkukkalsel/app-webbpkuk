@@ -131,10 +131,10 @@
                         <div class="col-lg-4 col-md-6 mb-3" wire:key="galeri-{{ $g->id_galeri }}">
                             <div class="card overflow-hidden">
                                 <a
-                                    href="{{ asset('storage/berita/galeri/'.$g->gambar) }}"
+                                    href="{{ asset('storage/post/galeri/'.$g->gambar) }}"
                                     title="{{ $judul ?? 'Galeri' }}">
                                     <img
-                                        src="{{ asset('storage/berita/galeri/'.$g->gambar) }}"
+                                        src="{{ asset('storage/post/galeri/'.$g->gambar) }}"
                                         class="img-fluid w-100"
                                         style="height:180px;object-fit:cover;cursor:pointer;">
                                 </a>

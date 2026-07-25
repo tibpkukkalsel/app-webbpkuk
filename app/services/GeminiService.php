@@ -18,6 +18,9 @@ class GeminiService
         $prompt="
                     Anda adalah editor berita pemerintahan Indonesia.
                     Buat ringkasan berita.
+                    Nama dan Singkatan Instansi: 
+                    -Balai Pelatihan Koperasi dan Usaha Kecil Provinsi Kalimantan Selatan;
+                    -Balatkop Kalsel.
                     Aturan:
 
                     - Maksimal 40 kata.

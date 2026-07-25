@@ -2,34 +2,33 @@
 
 namespace App\Livewire\Admin\Berita;
 
-use App\Models\Post;
+use App\Services\PostService;
 use Livewire\Component;
-use Illuminate\Support\Facades\Storage;
 
 class Delete extends Component
 {
-    
-    protected $listeners = [
+    protected PostService $postService;
+
+    protected $listeners=[
         'hapusBerita'
     ];
 
+    public function boot(PostService $postService)
+    {
+        $this->postService=$postService;
+    }
+
     public function hapusBerita($id_post)
     {
-
-        $post=Post::findOrFail($id_post);
-
-        if($post->thumbnail){
-            Storage::disk('public')->delete('berita/'.$post->thumbnail);
-        }
-
-        $post->delete();
+        $this->postService
+            ->hapus($id_post);
 
         $this->dispatch('berita-refresh');
 
         $this->dispatch('swal',
-            icon: 'success',
-            title: 'Berhasil',
-            text: 'Data berhasil dihapus.'
+            icon:'success',
+            title:'Berhasil',
+            text:'Data berhasil dihapus.'
         );
     }
 
@@ -38,5 +37,3 @@ class Delete extends Component
         return view('livewire.admin.berita.delete');
     }
 }
-
-

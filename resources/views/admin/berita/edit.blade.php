@@ -15,7 +15,7 @@
                       <li class="breadcrumb-item">
                         <a class="text-muted text-decoration-none" href="{{ Route('berita.view')}}">Berita</a>
                       </li>
-                      <li class="breadcrumb-item" aria-current="page">Buat Baru</li>
+                      <li class="breadcrumb-item" aria-current="page">Edit</li>
                     </ol>
                   </nav>
                 </div>
@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <livewire:admin.berita.create />
+          <livewire:admin.berita.edit :id="$id" />
 
 @endsection
 
@@ -206,6 +206,10 @@ document.addEventListener('livewire:init',()=>{
         }
 
     });
+
+    tagify.addTags(
+    window.selectedHashtag
+);
 
     tagify.on('add',function(e){
 

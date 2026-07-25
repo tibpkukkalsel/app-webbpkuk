@@ -38,7 +38,7 @@
             <tr wire:key="berita-{{ md5($d->id_post) }}">
                 <td class="text-center">{{ $post->firstItem() + $loop->index }}</td>
                 <td style="text-align: center">
-                    <img src="{{ asset('storage/berita/'.$d->thumbnail) }}" class="img-thumbnail" style="height:100px;object-fit:cover;">
+                    <img src="{{ asset('storage/post/thumbnail/'.$d->thumbnail) }}" class="img-thumbnail" style="height:100px;object-fit:cover;">
                 </td>
                 <td><b>{{ $d->judul }}</b></td>
                 <td>{{ \Illuminate\Support\Str::limit($d->ringkasan, 70, '...') }}</td>

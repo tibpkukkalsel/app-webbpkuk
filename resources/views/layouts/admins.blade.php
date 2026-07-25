@@ -76,7 +76,7 @@
             <li class="sidebar-item">
               <a class="sidebar-link {{ request()->routeIs('hashtag*') ? 'active' : '' }}" href="{{ route('hashtag.view')}}" aria-expanded="false">
                 <span>
-                  <i class="ti ti-category"></i>
+                  <i class="ti ti-hash"></i>
                 </span>
                 <span class="hide-menu">Hashtag</span>
               </a>
