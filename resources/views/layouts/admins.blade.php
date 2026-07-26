@@ -231,11 +231,27 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a href="#" class="sidebar-link">
+              <a class="sidebar-link {{ request()->routeIs('artikel*') ? 'active' : '' }}" href="{{ route('artikel.view')}}" aria-expanded="false">
+                <span class="d-flex">
+                  <i class="ti ti-file-text"></i>
+                </span>
+                <span class="hide-menu">Artikel</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link {{ request()->routeIs('info*') ? 'active' : '' }}" href="{{ route('info.view')}}" aria-expanded="false">
+                <span class="d-flex">
+                  <i class="ti ti-info-circle"></i>
+                </span>
+                <span class="hide-menu">Info</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link {{ request()->routeIs('tips*') ? 'active' : '' }}" href="{{ route('tips.view')}}" aria-expanded="false">
                 <span class="d-flex">
                   <i class="ti ti-bulb"></i>
                 </span>
-                <span class="hide-menu">Info Tips</span>
+                <span class="hide-menu">Tips</span>
               </a>
             </li>
           </ul>

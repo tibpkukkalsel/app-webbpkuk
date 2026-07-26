@@ -3,6 +3,9 @@
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\TipsController;
+use App\Http\Controllers\InfoController;
+use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\FooterController;
@@ -16,11 +19,11 @@ use App\Http\Controllers\StorganisasiController;
 use App\Http\Controllers\TentangController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VisimisiController;
+use App\Http\Controllers\Website\BerandaController as WebsiteBerandaController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [WebsiteBerandaController::class, 'view']);
+
 
 Route::prefix('cp-x14')
     ->middleware('auth')
@@ -127,6 +130,39 @@ Route::prefix('cp-x14')
             ->middleware('permission:post.konfig')
             ->name('berita.edit');
         //end Crud POST
+        //Start Crud TIPS
+        Route::get('/tips', [TipsController::class, 'view'])
+            ->middleware('permission:post.konfig')
+            ->name('tips.view');
+        Route::get('/tips/create', [TipsController::class, 'create'])
+            ->middleware('permission:post.konfig')
+            ->name('tips.create');
+        Route::get('/tips/edit/{id}', [TipsController::class, 'edit'])
+            ->middleware('permission:post.konfig')
+            ->name('tips.edit');
+        //end Crud TIPS
+        //Start Crud INFO
+        Route::get('/info', [InfoController::class, 'view'])
+            ->middleware('permission:post.konfig')
+            ->name('info.view');
+        Route::get('/info/create', [InfoController::class, 'create'])
+            ->middleware('permission:post.konfig')
+            ->name('info.create');
+        Route::get('/info/edit/{id}', [InfoController::class, 'edit'])
+            ->middleware('permission:post.konfig')
+            ->name('info.edit');
+        //end Crud INFO
+        //Start Crud ARTIKEL
+        Route::get('/artikel', [ArtikelController::class, 'view'])
+            ->middleware('permission:post.konfig')
+            ->name('artikel.view');
+        Route::get('/artikel/create', [ArtikelController::class, 'create'])
+            ->middleware('permission:post.konfig')
+            ->name('artikel.create');
+        Route::get('/artikel/edit/{id}', [ArtikelController::class, 'edit'])
+            ->middleware('permission:post.konfig')
+            ->name('artikel.edit');
+        //end Crud ARTIKEL
     });
 
 Route::middleware('auth')->group(function () {

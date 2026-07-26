@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Berita;
+namespace App\Livewire\Admin\Tips;
 
 use App\Models\Post;
 use Livewire\Component;
@@ -17,7 +17,7 @@ class Table extends Component
     public $perPage = 10;
 
     protected $listeners = [
-        'berita-refresh' => '$refresh'
+        'tips-refresh' => '$refresh'
     ];
 
     public function updatingSearch()
@@ -33,14 +33,12 @@ class Table extends Component
     public function render()
     {
         $post=Post::with(['kategori','user'])
-            ->where('jenis','Berita')
+            ->where('jenis','Tips')
             ->where('judul','like','%'.$this->search.'%')
             ->orderByDesc('id_post')
             ->paginate($this->perPage);
 
-        return view('livewire.admin.berita.table', compact('post'));
+        return view('livewire.admin.tips.table', compact('post'));
     }
 
 }
-
-

@@ -20,8 +20,9 @@ class PermissionSeeder extends Seeder
 
             // Pengguna
             'pengguna.view',
-            'pengguna.store ',
+            'pengguna.store',
             'pengguna.edit',
+            'pengguna.update',
             'pengguna.delete',
             // kategori
             'kategori.view',

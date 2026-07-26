@@ -66,8 +66,9 @@ class UsersController extends Controller
         $id = Crypt::decrypt($id);
 
         $users = User::where('id', $id)->first();
+        $roles = Role::all();
 
-        return view('admin.pengguna.edit', compact('users'));
+        return view('admin.pengguna.edit', compact('users', 'roles'));
 
     }
 
@@ -87,10 +88,16 @@ class UsersController extends Controller
         $data       = [
             'name'     => $nama,
             'email'    => $email,
-            'password' => $password
+            'password' => Hash::make($password)
         ];}
 
-        $update = User::where('id', $id)->update($data);
+        $user = User::where('id', $id)->first();
+        $update = $user->update($data);
+
+        if ($request->has('role') && $request->role != '') {
+            $user->syncRoles($request->role);
+        }
+
         if ($update) {
             return Redirect::back()->with(['success' => 'Data Berhasil Diubah']);
         } else {
