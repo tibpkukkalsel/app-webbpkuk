@@ -13,8 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (window.scrollY > scrollThreshold) {
             header.classList.add('scrolled');
+            header.style.position = 'fixed';
+            header.style.top = '0';
+            header.style.left = '0';
+            header.style.width = '100%';
         } else {
             header.classList.remove('scrolled');
+            header.style.position = 'absolute';
+            header.style.top = '0';
+            header.style.left = '0';
+            header.style.width = '100%';
         }
     };
 
