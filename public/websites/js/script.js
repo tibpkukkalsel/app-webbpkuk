@@ -1,12 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // =========================================================
-    // 1. STICKY HEADER SCROLL EVENT (WHITE HEADER ON SCROLL)
+    // 1. STICKY HEADER SCROLL EVENT (ACTIVATE ONLY AFTER 500px)
     // =========================================================
     const header = document.getElementById('mainHeader');
-    const scrollThreshold = 50;
+    const scrollThreshold = 500;
 
     const handleScroll = () => {
+        if (!header) {
+            return;
+        }
+
         if (window.scrollY > scrollThreshold) {
             header.classList.add('scrolled');
         } else {
@@ -15,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll);
     handleScroll();
 
     // =========================================================

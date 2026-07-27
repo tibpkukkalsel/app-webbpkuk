@@ -60,7 +60,7 @@ body {
    HEADER & NAVIGATION (WITH STICKY WHITE SCROLLED STATE)
    ========================================================= */
 .header {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     z-index: 1000;
@@ -72,6 +72,17 @@ body {
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.header.scrolled {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #ffffff !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 10px 24px;
+}
+
 .header-container {
     max-width: 1320px;
     margin: 0 auto;
@@ -81,13 +92,6 @@ body {
     justify-content: space-between;
 }
 
-/* White Header State on Scroll */
-.header.scrolled {
-    background: #ffffff !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 10px 24px;
-}
 
 /* Logos */
 .brand-logo {
