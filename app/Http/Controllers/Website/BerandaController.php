@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
+use App\Models\Agenda;
 use App\Models\Beranda;
 use App\Models\HeroBanner;
 use App\Models\Identitas;
@@ -68,6 +69,12 @@ class BerandaController extends Controller
             ->take(4)
             ->get();
 
+        $agendas = Agenda::where('status', 1)
+            ->orderBy('tgl_awal', 'desc')
+            ->orderBy('id_agenda', 'desc')
+            ->take(6)
+            ->get();
+
         return view('layouts.websites', compact(
             'identitas',
             'heroBanners',
@@ -77,7 +84,8 @@ class BerandaController extends Controller
             'beritaTerbaru',
             'beritaTerpopuler',
             'galeriFoto',
-            'galeriVideo'
+            'galeriVideo',
+            'agendas'
         ));
     }
 }

@@ -110,8 +110,8 @@
                         <a href="#" class="nav-link">LAYANAN <i
                                 class="fa-solid font-chevron fa-chevron-down"></i></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Diklat SDM Koperasi</a></li>
-                            <li><a href="#">Diklat SDM Usaha Kecil</a></li>
+                            <li><a href="#">Dashboard Diklat</a></li>
+                            <li><a href="#">Sertifikat Elektronik</a></li>
                         </ul>
                     </li>
                     <li class="nav-item active"><a href="#" class="nav-link">AGENDA</a></li>
@@ -233,7 +233,7 @@
 
                     <!-- Popular Searches / Hashtags -->
                     <div class="popular-search-bar">
-                        <span class="popular-label">Hashtag Terpopuler</span>
+                        <span class="popular-label">Hashtag Populer</span>
                         <div class="tags-group">
                             <a href="#" class="tag-pill">#KOPERASIMODERN</a>
                             <a href="#" class="tag-pill">#UMKMNAIKKELAS</a>
@@ -599,7 +599,7 @@
                                             <span
                                                 class="day-text">{{ $b->created_at ? $b->created_at->format('d') : '01' }}</span>
                                             <span
-                                                class="month-text">{{ $b->created_at ? strtoupper($b->created_at->format('M Y')) : 'JAN 2026' }}</span>
+                                                class="month-text">{{ $b->created_at ? $bulanIndo[(int) $b->created_at->format('m')] . ' ' . $b->created_at->format('Y') : 'JAN 2026' }}</span>
                                         </div>
                                     </div>
                                     <div class="news-details">
@@ -685,7 +685,7 @@
                                             <span
                                                 class="day-text">{{ $f->created_at ? $f->created_at->format('d') : '01' }}</span>
                                             <span
-                                                class="month-text">{{ $f->created_at ? strtoupper($f->created_at->format('M Y')) : 'JAN 2026' }}</span>
+                                                class="month-text">{{ $f->created_at ? $bulanIndo[(int) $f->created_at->format('m')] . ' ' . $f->created_at->format('Y') : 'JAN 2026' }}</span>
                                         </div>
                                     </div>
                                     <div class="news-details">
@@ -754,7 +754,7 @@
                                             <span
                                                 class="day-text">{{ $v->created_at ? $v->created_at->format('d') : '01' }}</span>
                                             <span
-                                                class="month-text">{{ $v->created_at ? strtoupper($v->created_at->format('M Y')) : 'JAN 2026' }}</span>
+                                                class="month-text">{{ $v->created_at ? $bulanIndo[(int) $v->created_at->format('m')] . ' ' . $v->created_at->format('Y') : 'JAN 2026' }}</span>
                                         </div>
                                     </div>
                                     <div class="news-details">
@@ -843,7 +843,7 @@
                                 <div class="popular-info">
                                     <div class="popular-meta" style="display: flex; align-items: center; gap: 8px;">
                                         <span class="popular-date">
-                                            {{ $pop->created_at ? strtoupper($pop->created_at->format('d M Y')) : '' }}
+                                            {{ $pop->created_at ? $pop->created_at->format('d') . ' ' . $bulanIndo[(int) $pop->created_at->format('m')] . ' ' . $pop->created_at->format('Y') : '' }}
                                         </span>
                                     </div>
                                     <h4 class="popular-title">
@@ -892,77 +892,98 @@
             <div class="agenda-carousel-wrapper">
                 <div class="agenda-track" id="agendaTrack">
 
-                    <!-- Agenda Item 1 -->
-                    <div class="agenda-card">
-                        <div class="agenda-date-box">
-                            <div class="agenda-day">06</div>
-                            <div class="agenda-month">JAN</div>
-                        </div>
-                        <div class="agenda-body">
-                            <span class="status-pill status-upcoming">Belum Dimulai</span>
-                            <h3 class="agenda-card-title">
-                                <a href="#">Pembekalan KKN Mahasiswa Universitas Padjadjaran</a>
-                            </h3>
-                            <div class="agenda-meta">
-                                <span class="meta-item"><i class="fa-regular fa-calendar-check"></i> 06.01.26</span>
-                                <span class="meta-item"><i class="fa-regular fa-clock"></i> 10:11 AM</span>
-                            </div>
-                        </div>
-                    </div>
+                    @forelse($agendas as $a)
+                        @php
+                            $tglAwal = $a->tgl_awal ? \Carbon\Carbon::parse($a->tgl_awal) : null;
+                            $tglAkhirObj = $a->tgl_akhir ? \Carbon\Carbon::parse($a->tgl_akhir) : null;
 
-                    <!-- Agenda Item 2 -->
-                    <div class="agenda-card">
-                        <div class="agenda-date-box">
-                            <div class="agenda-day">06</div>
-                            <div class="agenda-month">JAN</div>
-                        </div>
-                        <div class="agenda-body">
-                            <span class="status-pill status-upcoming">Belum Dimulai</span>
-                            <h3 class="agenda-card-title">
-                                <a href="#">Rapat Percepatan Pembangunan KDKMP</a>
-                            </h3>
-                            <div class="agenda-meta">
-                                <span class="meta-item"><i class="fa-regular fa-calendar-check"></i> 06.01.26</span>
-                                <span class="meta-item"><i class="fa-regular fa-clock"></i> 10:08 AM</span>
-                            </div>
-                        </div>
-                    </div>
+                            $day = '01';
+                            $month = 'JAN';
 
-                    <!-- Agenda Item 3 -->
-                    <div class="agenda-card">
-                        <div class="agenda-date-box">
-                            <div class="agenda-day">06</div>
-                            <div class="agenda-month">JAN</div>
-                        </div>
-                        <div class="agenda-body">
-                            <span class="status-pill status-upcoming">Belum Dimulai</span>
-                            <h3 class="agenda-card-title">
-                                <a href="#">Rapat Anggota Tahunan Koperasi Warga SMAN 5 Cimahi</a>
-                            </h3>
-                            <div class="agenda-meta">
-                                <span class="meta-item"><i class="fa-regular fa-calendar-check"></i> 06.01.26</span>
-                                <span class="meta-item"><i class="fa-regular fa-clock"></i> 10:07 AM</span>
-                            </div>
-                        </div>
-                    </div>
+                            if ($tglAwal) {
+                                $day = $tglAwal->format('d');
+                                $month = $bulanIndo[(int) $tglAwal->format('m')] ?? 'JAN';
 
-                    <!-- Agenda Item 4 (Additional slide for carousel) -->
-                    <div class="agenda-card">
-                        <div class="agenda-date-box">
-                            <div class="agenda-day">12</div>
-                            <div class="agenda-month">JAN</div>
-                        </div>
-                        <div class="agenda-body">
-                            <span class="status-pill status-upcoming">Belum Dimulai</span>
-                            <h3 class="agenda-card-title">
-                                <a href="#">Sosialisasi Pembiayaan Dana Bergulir UMKM Jabar</a>
-                            </h3>
+                                if ($tglAkhirObj && $tglAkhirObj->format('Y-m-d') !== $tglAwal->format('Y-m-d')) {
+                                    if ($tglAwal->format('m-Y') === $tglAkhirObj->format('m-Y')) {
+                                        $day = $tglAwal->format('d') . '-' . $tglAkhirObj->format('d');
+                                    }
+                                }
+                            }
+
+                            // Format tanggal awal s.d. tanggal akhir full angka (dd/mm/yyyy)
+                            $formattedDate = '-';
+                            if ($tglAwal) {
+                                $formattedDate = $tglAwal->format('d/m/Y');
+
+                                if ($tglAkhirObj && $tglAkhirObj->format('Y-m-d') !== $tglAwal->format('Y-m-d')) {
+                                    $formattedDate .= ' - ' . $tglAkhirObj->format('d/m/Y');
+                                }
+                            }
+
+                            $jamText = '';
+                            if ($a->jam_mulai) {
+                                $jamMulai = \Carbon\Carbon::parse($a->jam_mulai)->format('H:i');
+                                $jamText = $jamMulai;
+                                if ($a->jam_akhir) {
+                                    $jamAkhir = \Carbon\Carbon::parse($a->jam_akhir)->format('H:i');
+                                    $jamText .= ' - ' . $jamAkhir;
+                                }
+                            }
+
+                            $now = \Carbon\Carbon::now();
+                            $tglAkhirVal = $tglAkhirObj
+                                ? $tglAkhirObj->copy()->endOfDay()
+                                : ($tglAwal
+                                    ? $tglAwal->copy()->endOfDay()
+                                    : null);
+
+                            $statusText = 'Belum Dimulai';
+                            $statusClass = 'status-upcoming';
+
+                            if ($tglAwal && $tglAkhirVal) {
+                                if ($now->between($tglAwal->copy()->startOfDay(), $tglAkhirVal)) {
+                                    $statusText = 'Sedang Berlangsung';
+                                    $statusClass = 'status-active';
+                                } elseif ($now->gt($tglAkhirVal)) {
+                                    $statusText = 'Selesai';
+                                    $statusClass = 'status-ended';
+                                }
+                            }
+                        @endphp
+                        <div class="agenda-card">
+                            <div class="agenda-card-top">
+                                <div class="agenda-date-box">
+                                    <div class="agenda-day"
+                                        style="{{ strlen($day) > 2 ? 'font-size: 1.05rem; padding: 10px 2px 4px;' : '' }}">
+                                        {{ $day }}</div>
+                                    <div class="agenda-month">{{ $month }}</div>
+                                </div>
+                                <div class="agenda-body">
+                                    <span class="status-pill {{ $statusClass }}">{{ $statusText }}</span>
+                                    <h3 class="agenda-card-title">
+                                        <a href="#">{{ $a->nama }}</a>
+                                    </h3>
+                                </div>
+                            </div>
                             <div class="agenda-meta">
-                                <span class="meta-item"><i class="fa-regular fa-calendar-check"></i> 12.01.26</span>
-                                <span class="meta-item"><i class="fa-regular fa-clock"></i> 09:00 AM</span>
+                                <span class="meta-item" title="Tanggal Agenda">
+                                    <i class="fa-regular fa-calendar-check"></i> {{ $formattedDate }}
+                                </span>
+                                @if ($jamText)
+                                    <span class="meta-item" title="Waktu Agenda">
+                                        <i class="fa-regular fa-clock"></i> {{ $jamText }} WIB
+                                    </span>
+                                @endif
                             </div>
                         </div>
-                    </div>
+                    @empty
+                        <div class="agenda-card" style="width: 100%;">
+                            <div class="agenda-body" style="text-align: center; padding: 20px;">
+                                <p style="color: #64748b; margin: 0;">Belum ada agenda kegiatan.</p>
+                            </div>
+                        </div>
+                    @endforelse
 
                 </div>
             </div>

@@ -1420,13 +1420,20 @@ body {
     min-width: 340px;
     background: #ffffff;
     border-radius: 14px;
-    padding: 22px 24px;
+    padding: 20px 22px;
     display: flex;
-    align-items: flex-start;
-    gap: 20px;
+    flex-direction: column;
+    gap: 12px;
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
     border: 1px solid rgba(226, 232, 240, 0.8);
     transition: all 0.3s ease;
+}
+
+.agenda-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    width: 100%;
 }
 
 .agenda-card:hover {
@@ -1484,14 +1491,32 @@ body {
     padding: 3px 12px;
     border-radius: 12px;
     border: 1px solid #cbd5e1;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+}
+
+.status-upcoming {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+}
+
+.status-active {
+    background: #f0fdf4;
+    color: #15803d;
+    border-color: #bbf7d0;
+}
+
+.status-ended {
+    background: #f8fafc;
+    color: #64748b;
+    border-color: #e2e8f0;
 }
 
 .agenda-card-title {
     font-size: 1rem;
     font-weight: 700;
     line-height: 1.4;
-    margin-bottom: 12px;
+    margin-bottom: 0;
 }
 
 .agenda-card-title a {
@@ -1508,16 +1533,23 @@ body {
 .agenda-meta {
     display: flex;
     align-items: center;
-    gap: 16px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 16px;
     color: #64748b;
     font-size: 0.82rem;
     font-weight: 600;
+    padding-top: 10px;
+    border-top: 1px solid #f1f5f9;
+    width: 100%;
+    margin-top: 2px;
 }
 
 .meta-item {
     display: flex;
     align-items: center;
     gap: 6px;
+    white-space: nowrap;
 }
 
 .meta-item i {
