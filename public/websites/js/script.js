@@ -1,20 +1,82 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // =========================================================
+    // 0. HERO BACKGROUND SLIDER (FADE IN, ZOOM IN, FADE OUT)
+    // =========================================================
+    const heroBgSlides = document.querySelectorAll('.hero-bg-slide');
+    if (heroBgSlides.length > 1) {
+        let currentHeroIndex = 0;
+        const totalHeroSlides = heroBgSlides.length;
+        const displayDuration = 7000;
+
+        setInterval(() => {
+            const prevSlide = heroBgSlides[currentHeroIndex];
+            currentHeroIndex = (currentHeroIndex + 1) % totalHeroSlides;
+            const nextSlide = heroBgSlides[currentHeroIndex];
+
+            prevSlide.classList.remove('active');
+            nextSlide.classList.add('active');
+        }, displayDuration);
+    }
+
+    // =========================================================
     // 1. STICKY HEADER SCROLL EVENT (WHITE HEADER ON SCROLL)
     // =========================================================
     const header = document.getElementById('mainHeader');
-    const scrollThreshold = 50;
+    const scrollThreshold = 500;
+    let stickyTimeout = null;
 
     const handleScroll = () => {
-        if (window.scrollY > scrollThreshold) {
-            header.classList.add('scrolled');
+        const currentScroll = window.scrollY;
+
+        if (currentScroll > scrollThreshold) {
+            if (stickyTimeout) {
+                clearTimeout(stickyTimeout);
+                stickyTimeout = null;
+            }
+            header.classList.add('sticky');
+            requestAnimationFrame(() => {
+                if (window.scrollY > scrollThreshold) {
+                    header.classList.add('scrolled');
+                }
+            });
         } else {
+            // Remove 'scrolled' first to trigger slide up exit animation
             header.classList.remove('scrolled');
+
+            if (currentScroll <= 100) {
+                // At the top of hero section, reset immediately to absolute top: 0
+                if (stickyTimeout) {
+                    clearTimeout(stickyTimeout);
+                    stickyTimeout = null;
+                }
+                header.classList.remove('sticky');
+            } else if (header.classList.contains('sticky')) {
+                // In transition zone (100px - 500px), wait for slide up animation (350ms) before removing 'sticky'
+                if (!stickyTimeout) {
+                    stickyTimeout = setTimeout(() => {
+                        if (window.scrollY <= scrollThreshold) {
+                            header.classList.remove('sticky');
+                        }
+                        stickyTimeout = null;
+                    }, 350);
+                }
+            }
         }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    let isTicking = false;
+    const onScroll = () => {
+        if (!isTicking) {
+            requestAnimationFrame(() => {
+                handleScroll();
+                isTicking = false;
+            });
+            isTicking = true;
+        }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
     handleScroll();
 
     // =========================================================
@@ -146,21 +208,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5. PUSAT INFORMASI / NEWS TABS FILTERING
     // =========================================================
     const tabBtns = document.querySelectorAll('.news-tab-btn');
-    const newsCardsGrid = document.getElementById('newsCardsGrid');
+    const tabPanes = document.querySelectorAll('.tab-content-pane');
 
-    if (tabBtns.length > 0 && newsCardsGrid) {
+    if (tabBtns.length > 0) {
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
+                const targetTab = btn.getAttribute('data-tab');
+
                 tabBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
-                newsCardsGrid.style.opacity = '0.3';
-                newsCardsGrid.style.transform = 'translateY(6px)';
-
-                setTimeout(() => {
-                    newsCardsGrid.style.opacity = '1';
-                    newsCardsGrid.style.transform = 'translateY(0)';
-                }, 200);
+                tabPanes.forEach(pane => {
+                    if (pane.id === `tab-${targetTab}`) {
+                        pane.style.display = 'block';
+                        pane.style.opacity = '0';
+                        pane.style.transform = 'translateY(8px)';
+                        setTimeout(() => {
+                            pane.style.opacity = '1';
+                            pane.style.transform = 'translateY(0)';
+                            pane.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                        }, 50);
+                    } else {
+                        pane.style.display = 'none';
+                    }
+                });
             });
         });
     }

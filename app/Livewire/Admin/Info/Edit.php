@@ -140,7 +140,7 @@ class Edit extends Component
                     'thumbnail'=>$this->thumbnail,
                     'isi'=>$this->isi,
                     'ringkasan'=>$this->ringkasan,
-                    'jenis'=>'Info',
+                    'jenis'=>'Info dan Tips',
                     'id_kategori'=>$this->id_kategori
                 ]
             );

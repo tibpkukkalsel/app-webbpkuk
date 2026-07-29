@@ -35,7 +35,7 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Isi Info :</label>
+                        <label class="form-label fw-semibold">Isi Info dan Tips :</label>
                         <div wire:ignore>
                             <div id="editor">
                                 <p>{!! $isi !!}</p>

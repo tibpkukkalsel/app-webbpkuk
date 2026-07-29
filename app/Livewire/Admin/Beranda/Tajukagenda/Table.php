@@ -14,7 +14,7 @@ class Table extends Component
     public function render()
     {
         return view('livewire.admin.beranda.tajukagenda.table',[
-            'beranda'=>Beranda::where('jenis', 'Agenda')->orderBy('id_beranda')->get()
+            'beranda'=>Beranda::where('jenis', 'Tajuk')->orderBy('id_beranda')->get()
         ]);
     }
     

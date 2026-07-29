@@ -1,23 +1,71 @@
 <!DOCTYPE html>
 <html lang="id">
 
+@php
+    // Pemilihan Gambar Background Hero — Dikelola melalui Admin Panel (Hero Banner)
+    $fallbackImages = [
+        'https://images.unsplash.com/photo-1577495508048-b635879837f1?q=80&w=1920&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1920&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1920&auto=format&fit=crop',
+    ];
+
+    if (!empty($heroBanners) && count($heroBanners) > 0) {
+        $heroImages = $heroBanners->map(fn($b) => asset('storage/hero-banner/' . $b->gambar))->toArray();
+    } else {
+        $heroImages = $fallbackImages;
+    }
+@endphp
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    @if ($title = $identitas->firstWhere('nama', 'Title Website'))
-    <title>
-        {{ $title->keterangan }}
-    </title>
-    @endif
+    <!-- Preload Hero Image Pertama Agar Tampil Seketika / Cepat -->
+    <link rel="preload" as="image" href="{{ $heroImages[0] }}">
+
+    @php
+        $siteTitle =
+            $identitas->firstWhere('nama', 'Title Website')?->keterangan ??
+            'Balai Pelatihan Koperasi & Usaha Kecil Prov. Kalsel';
+        $siteDesc =
+            'Website Resmi Balai Pelatihan Koperasi & Usaha Kecil Provinsi Kalimantan Selatan. Temukan informasi publik, layanan koperasi, layanan usaha kecil, dan info pelatihan.';
+
+        $shareLogo = null;
+        if ($logoItem = $identitas->firstWhere('nama', 'Logo Website')) {
+            $shareLogo = asset('storage/header/' . $logoItem->keterangan);
+        }
+    @endphp
+
+    <title>{{ $siteTitle }}</title>
 
     <link rel="shortcut icon" type="image/png"
-        @if ($shortcut = $identitas->firstWhere('nama', 'Logo Shorcut')) 
-        href="{{ asset('storage/header/' . $shortcut->keterangan) }}" /> 
-        @endif
+        @if ($shortcut = $identitas->firstWhere('nama', 'Logo Shortcut')) href="{{ asset('storage/header/' . $shortcut->keterangan) }}" /> @endif <meta
+        name="description" content="{{ $siteDesc }}">
 
-    <meta name="description"
-        content="Website Resmi Balai Pelatihan Koperasi & Usaha Kecil Provinsi Kalimantan Selatan. Temukan informasi publik, layanan koperasi, layanan usaha kecil, dan info pelatihan.">
+    <!-- =========================================================
+         OPEN GRAPH / WHATSAPP / FACEBOOK SHARE META TAGS
+         ========================================================= -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $siteTitle }}">
+    <meta property="og:description" content="{{ $siteDesc }}">
+    @if ($shareLogo)
+        <meta property="og:image" content="{{ $shareLogo }}">
+        <meta property="og:image:secure_url" content="{{ $shareLogo }}">
+        <meta property="og:image:type" content="image/png">
+    @endif
+    <meta property="og:site_name" content="BALATKOP-UK KALSEL">
+
+    <!-- =========================================================
+         TWITTER / X CARD META TAGS
+         ========================================================= -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="{{ $siteTitle }}">
+    <meta name="twitter:description" content="{{ $siteDesc }}">
+    @if ($shareLogo)
+        <meta name="twitter:image" content="{{ $shareLogo }}">
+    @endif
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,6 +74,8 @@
         rel="stylesheet">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tabler Icons for icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <link rel="stylesheet" href="{{ asset('websites/css/style.css') }}">
 </head>
 
@@ -50,48 +100,36 @@
                         <a href="#" class="nav-link">PROFIL <i
                                 class="fa-solid font-chevron fa-chevron-down"></i></a>
                         <ul class="dropdown-menu">
+                            <li><a href="#">Tentang</a></li>
+                            <li><a href="#">Tugas & Fungsi</a></li>
                             <li><a href="#">Visi & Misi</a></li>
                             <li><a href="#">Struktur Organisasi</a></li>
-                            <li><a href="#">Tugas & Fungsi</a></li>
-                            <li><a href="#">Sejarah</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">UNIT KERJA <i
+                        <a href="#" class="nav-link">LAYANAN <i
                                 class="fa-solid font-chevron fa-chevron-down"></i></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Bidang Koperasi</a></li>
-                            <li><a href="#">Bidang Usaha Kecil</a></li>
-                            <li><a href="#">UPTD Balatkop</a></li>
+                            <li><a href="#">Diklat SDM Koperasi</a></li>
+                            <li><a href="#">Diklat SDM Usaha Kecil</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item active"><a href="#" class="nav-link">AGENDA</a></li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">BERITA <i
+                                class="fa-solid font-chevron fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Berita</a></li>
+                            <li><a href="#">Artikel</a></li>
+                            <li><a href="#">Info dan Tips</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">PPID <i
+                        <a href="#" class="nav-link">GALERI <i
                                 class="fa-solid font-chevron fa-chevron-down"></i></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Profil PPID</a></li>
-                            <li><a href="#">Informasi Berkala</a></li>
-                            <li><a href="#">Informasi Setiap Saat</a></li>
-                            <li><a href="#">Permohonan Informasi</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">PROGRAM <i
-                                class="fa-solid font-chevron fa-chevron-down"></i></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">OPOP (One Pesantren One Product)</a></li>
-                            <li><a href="#">Wirausaha Juara</a></li>
-                            <li><a href="#">Digitalisasi UMKM</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">MEDIA <i
-                                class="fa-solid font-chevron fa-chevron-down"></i></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Berita Terkini</a></li>
-                            <li><a href="#">Galeri Foto</a></li>
-                            <li><a href="#">Video Kegiatan</a></li>
-                            <li><a href="#">Pengumuman</a></li>
+                            <li><a href="#">Foto</a></li>
+                            <li><a href="#">Video</a></li>
                         </ul>
                     </li>
                     <li class="nav-item"><a href="#" class="nav-link">REGULASI</a></li>
@@ -103,12 +141,12 @@
             <div class="brand-logo right-logo">
                 <div class="balatkop-logo-wrap">
                     @if ($logoright = $identitas->firstWhere('nama', 'Logo White'))
-                    <img src="{{ asset('storage/header/' . $logoright->keterangan) }}" class="logo-img logo-white"
-                        style="height: 70px">
+                        <img src="{{ asset('storage/header/' . $logoright->keterangan) }}"
+                            class="logo-img logo-white" style="height: 70px">
                     @endif
                     @if ($logoright = $identitas->firstWhere('nama', 'Logo Landing'))
-                    <img src="{{ asset('storage/header/' . $logoright->keterangan) }}" class="logo-img logo-blue"
-                        style="height: 70px">
+                        <img src="{{ asset('storage/header/' . $logoright->keterangan) }}" class="logo-img logo-blue"
+                            style="height: 70px">
                     @endif
                 </div>
             </div>
@@ -122,6 +160,13 @@
 
     <!-- Hero Wrapper with Background -->
     <div class="hero-wrapper">
+        <div class="hero-bg-slider" id="heroBgSlider">
+            @foreach ($heroImages as $index => $imgUrl)
+                <div class="hero-bg-slide {{ $index === 0 ? 'active' : '' }}"
+                    style="background-image: url('{{ $imgUrl }}');"></div>
+            @endforeach
+        </div>
+
         <div class="bg-overlay"></div>
 
         <!-- Main Hero Content -->
@@ -130,18 +175,51 @@
 
                 <!-- Welcome Tagline -->
                 <div class="welcome-badge">
-                    <span>SELAMAT DATANG DI WEBSITE</span>
+                    @foreach ($tagline as $item)
+                        @if ($item->nama === 'Sambutan Dinas/UPTD')
+                            <span>{{ $item->keterangan_1 }}</span>
+                        @endif
+                    @endforeach
                 </div>
 
                 <!-- Headline -->
                 <h1 class="hero-title">
-                    Balai Pelatihan Koperasi & Usaha Kecil<br>Provinsi Kalimantan Selatan
+                    @foreach ($tagline as $item)
+                        @if ($item->nama === 'Nama Dinas/UPTD')
+                            @php
+                                $titleRaw = $item->keterangan_1;
+                                $titleFormatted = str_replace(
+                                    [
+                                        'Balai Pelatihan Koperasi dan Usaha Kecil Provinsi Kalimantan Selatan',
+                                        'Balai Pelatihan Koperasi dan Usaha Kecil Prov. Kalsel',
+                                    ],
+                                    [
+                                        'Balai Pelatihan Koperasi <br class="br-mobile">dan Usaha Kecil <br class="br-mobile">Provinsi Kalimantan Selatan',
+                                        'Balai Pelatihan Koperasi <br class="br-mobile">dan Usaha Kecil <br class="br-mobile">Prov. Kalsel',
+                                    ],
+                                    $titleRaw,
+                                );
+                                if ($titleFormatted === $titleRaw) {
+                                    $titleFormatted = str_replace(
+                                        ['Koperasi dan Usaha Kecil', 'Koperasi Dan Usaha Kecil'],
+                                        'Koperasi <br class="br-mobile">dan Usaha Kecil <br class="br-mobile">',
+                                        $titleRaw,
+                                    );
+                                }
+                            @endphp
+                            {!! $titleFormatted !!}
+                        @endif
+                    @endforeach
                 </h1>
 
                 <!-- Subheadline -->
-                <p class="hero-subtitle">
-                    Temukan informasi publik terkini
-                </p>
+                @foreach ($tagline as $item)
+                    @if ($item->nama === 'Motto Dinas/UPTD')
+                        <p class="hero-subtitle">
+                            {{ $item->keterangan_1 }}
+                        </p>
+                    @endif
+                @endforeach
 
                 <!-- Search Container -->
                 <div class="search-box-wrapper">
@@ -155,39 +233,38 @@
 
                     <!-- Popular Searches / Hashtags -->
                     <div class="popular-search-bar">
-                        <span class="popular-label">Pencarian Terpopuler</span>
+                        <span class="popular-label">Hashtag Terpopuler</span>
                         <div class="tags-group">
-                            <a href="#" class="tag-pill">#CPNS</a>
-                            <a href="#" class="tag-pill">#LAYANAN KOPERASI</a>
-                            <a href="#" class="tag-pill">#BAZAR</a>
+                            <a href="#" class="tag-pill">#KOPERASIMODERN</a>
+                            <a href="#" class="tag-pill">#UMKMNAIKKELAS</a>
                         </div>
                     </div>
                 </div>
 
                 <!-- Feature Quick Action Cards (3 Column) -->
                 <div class="action-cards-grid">
-                    <!-- Blue Card: Layanan Koperasi -->
+                    <!-- Blue Card: Statistik Layanan -->
                     <a href="#" class="action-card card-blue">
                         <div class="card-icon-box">
-                            <i class="fa-solid fa-city"></i>
+                            <i class="fa-solid fa-chart-column"></i>
                         </div>
-                        <span class="card-text">LAYANAN KOPERASI</span>
+                        <span class="card-text">DASHBOARD DIKLAT</span>
                     </a>
 
                     <!-- Green Card: Layanan Usaha Kecil -->
                     <a href="#" class="action-card card-green">
                         <div class="card-icon-box">
-                            <i class="fa-solid fa-store"></i>
+                            <i class="fa-solid fa-ticket"></i>
                         </div>
-                        <span class="card-text">LAYANAN USAHA KECIL</span>
+                        <span class="card-text">SERTIFIKAT ELEKTRONIK</span>
                     </a>
 
                     <!-- Yellow/Gold Card: Info Pelatihan -->
                     <a href="#" class="action-card card-yellow">
                         <div class="card-icon-box">
-                            <i class="fa-solid fa-arrow-right-from-bracket icon-rotate"></i>
+                            <i class="fa-solid fa-calendar"></i>
                         </div>
-                        <span class="card-text">INFO PELATIHAN</span>
+                        <span class="card-text">AGENDA PELATIHAN</span>
                     </a>
                 </div>
 
@@ -195,83 +272,39 @@
         </main>
     </div>
 
-    <!-- Megamendung Pattern Slider Section Below Hero -->
+    <!-- Sasirangan Pattern Slider Section Below Hero -->
     <section class="slider-section">
-        <div class="megamendung-bg"></div>
+        <div class="sasirangan-bg"></div>
         <div class="slider-wrapper-container">
 
             <!-- Slider Carousel Box -->
             <div class="slider-carousel" id="autoSlider">
                 <div class="slider-track" id="sliderTrack">
 
-                    <!-- Slide 1: Anti Gratifikasi Banner -->
-                    <div class="slide-item">
-                        <div class="banner-card banner-gratifikasi-custom">
-                            <div class="banner-left-content">
-                                <div class="banner-logos">
-                                    <svg viewBox="0 0 100 120" width="30" height="36">
-                                        <path d="M50 5 L90 25 V65 C90 90 50 115 50 115 C50 115 10 90 10 65 V25 Z"
-                                            fill="#15803d" stroke="#facc15" stroke-width="4" />
-                                        <path d="M25 70 L50 40 L75 70 Z" fill="#1e3a8a" />
-                                    </svg>
-                                    <div class="mini-diskuk">
-                                        <span class="m-title">DISKUK</span>
-                                        <span class="m-sub">• JABAR •</span>
-                                    </div>
-                                </div>
-                                <div class="banner-gratifikasi-graphics">
-                                    <div class="hand-stop-icon">
-                                        <i class="fa-solid fa-hand"></i>
-                                    </div>
-                                    <div class="stop-heading">
-                                        <span class="stop-red-text">STOP</span>
-                                        <span class="gratifikasi-text">GRATIFIKASI!</span>
-                                    </div>
-                                </div>
-                                <div class="banner-notice-box">
-                                    <p>MOHON UNTUK TIDAK MEMBERI IMBALAN, HADIAH ATAU PEMBERIAN DALAM BENTUK APAPUN,
-                                        ATAS PELAYANAN YANG KAMI BERIKAN</p>
-                                </div>
-                            </div>
-                            <div class="banner-right-illustration">
-                                <img src="banner1.jpg" alt="Anti Gratifikasi Campaign" class="banner-img">
+                    @forelse($infografis as $info)
+                        <div class="slide-item">
+                            <div class="full-banner-card">
+                                @if ($info->link)
+                                    <a href="{{ $info->link }}" target="_blank">
+                                        <img src="{{ asset('storage/infografis/' . $info->gambar) }}"
+                                            alt="{{ $info->judul }}" class="full-banner-img" loading="lazy"
+                                            decoding="async">
+                                    </a>
+                                @else
+                                    <img src="{{ asset('storage/infografis/' . $info->gambar) }}"
+                                        alt="{{ $info->judul }}" class="full-banner-img" loading="lazy"
+                                        decoding="async">
+                                @endif
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Slide 2: OPOP & UMKM Juara -->
-                    <div class="slide-item">
-                        <div class="banner-card banner-opop-custom">
-                            <div class="banner-left-content text-light">
-                                <span class="banner-tag">PROGRAM UNGGULAN</span>
-                                <h2 class="banner-main-title">One Pesantren One Product (OPOP)</h2>
-                                <p class="banner-desc">Mewujudkan Kemandirian Ekonomi Pesantren & Pendampingan UMKM
-                                    Juara di Kalimantan Selatan</p>
-                                <a href="#" class="banner-btn">Selengkapnya <i
-                                        class="fa-solid fa-arrow-right"></i></a>
-                            </div>
-                            <div class="banner-right-illustration">
-                                <img src="banner2.jpg" alt="OPOP Jabar" class="banner-img">
+                    @empty
+                        <div class="slide-item">
+                            <div class="full-banner-card">
+                                <img src="{{ asset('storage/slider/koperasi.jpg') }}" alt="Banner 1"
+                                    class="full-banner-img">
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Slide 3: Pelatihan Koperasi & UMKM -->
-                    <div class="slide-item">
-                        <div class="banner-card banner-pelatihan-custom">
-                            <div class="banner-left-content text-light">
-                                <span class="banner-tag gold-tag">BALATKOP JABAR</span>
-                                <h2 class="banner-main-title">Pelatihan & Digitalisasi UMKM 2026</h2>
-                                <p class="banner-desc">Tingkatkan Kapasitas Usaha Anda Melalui Pelatihan Kewirausahaan
-                                    & Akses Pembiayaan Koperasi</p>
-                                <a href="#" class="banner-btn gold-btn">Daftar Sekarang <i
-                                        class="fa-solid fa-arrow-right"></i></a>
-                            </div>
-                            <div class="banner-right-illustration">
-                                <img src="banner3.jpg" alt="Pelatihan Koperasi Jabar" class="banner-img">
-                            </div>
-                        </div>
-                    </div>
+                    @endforelse
 
                 </div>
 
@@ -282,10 +315,220 @@
                 <button class="slider-arrow next-btn" id="nextBtn" aria-label="Next Slide">
                     <i class="fa-solid fa-chevron-right"></i>
                 </button>
+            </div>
 
-                <!-- Pagination Dots -->
-                <div class="slider-dots" id="sliderDots">
-                    <!-- Dots will be populated by script.js -->
+            <!-- Pagination Dots (Below Banner Image) -->
+            <div class="slider-dots" id="sliderDots">
+                <!-- Dots will be populated by script.js -->
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =========================================================
+         TENTANG BALAI PELATIHAN / TUGAS & FUNGSI SECTION
+         ========================================================= -->
+    <section class="about-overview-section">
+        <div class="about-overview-container">
+            <div class="about-overview-grid">
+
+                <!-- Left Column: Intro & Headline -->
+                <div class="about-overview-left">
+                    <span class="about-tagline-pill">TENTANG</span>
+                    <h2 class="about-overview-title">Balai Pelatihan Koperasi & Usaha Kecil Prov. Kalsel</h2>
+
+                    <p class="about-overview-lead">
+                        adalah unit pelaksana teknis di bawah Dinas Koperasi dan UKM Provinsi Kalimantan Selatan
+                    </p>
+
+                    <div class="about-accent-box">
+                        <p>
+                            yang memiliki fungsi utama sebagai pusat pendidikan dan pelatihan untuk pengembangan sumber
+                            daya manusia (SDM) koperasi dan pelaku usaha kecil di Provinsi Kalimantan Selatan.
+                        </p>
+                    </div>
+
+                    <div class="about-btn-wrap">
+                        <a href="#" class="btn-outline-blue">
+                            <span>SELENGKAPNYA</span>
+                            <i class="fa-solid fa-arrow-right-long ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column: 4 Feature Cards Grid -->
+                <div class="about-overview-right">
+                    <div class="about-cards-grid">
+
+                        <!-- Card 1 -->
+                        <div class="about-feature-card">
+                            <div class="feature-icon-box icon-blue">
+                                <i class="fa-solid fa-chalkboard-user"></i>
+                            </div>
+                            <h3 class="feature-card-title">Menyelenggarakan Pelatihan</h3>
+                            <p class="feature-card-desc">
+                                Kegiatan Pelatihan teknis dan manajerial untuk meningkatkan keterampilan SDM Koperasi
+                                dan UMKM
+                            </p>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="about-feature-card">
+                            <div class="feature-icon-box icon-amber">
+                                <i class="fa-solid fa-lightbulb"></i>
+                            </div>
+                            <h3 class="feature-card-title">Meningkatkan Kapasitas SDM</h3>
+                            <p class="feature-card-desc">
+                                Mengembangkan kompetensi pelaku Koperasi dan UMKM agar lebih profesional, produktif dan
+                                mampu bersaing di pasar hingga era digital
+                            </p>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="about-feature-card">
+                            <div class="feature-icon-box icon-teal">
+                                <i class="fa-solid fa-book-open-reader"></i>
+                            </div>
+                            <h3 class="feature-card-title">Fasilitasi Pembinaan dan Pendampingan</h3>
+                            <p class="feature-card-desc">
+                                Berperan dalam membantu pendampingan, konsultasi, dan bimbingan teknis pasca pelatihan
+                                SDM Koperasi dan UMKM
+                            </p>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="about-feature-card">
+                            <div class="feature-icon-box icon-indigo">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <h3 class="feature-card-title">Mendorong Transformasi Koperasi dan UMKM</h3>
+                            <p class="feature-card-desc">
+                                Mendorong Transformasi Koperasi dan UMKM agar adaptif, inovatif, dan berdaya saing
+                                tinggi
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================
+         LINK TERKAIT (PARTNER LOGOS MARQUEE) SECTION
+         ========================================================= -->
+    <section class="related-links-section">
+        <div class="links-container">
+
+            <!-- Section Header -->
+            <div class="links-header">
+                <h2 class="links-main-title">Link Terkait</h2>
+            </div>
+
+            @php
+                // Build a robust set of items for the infinite marquee
+                $baseItems = $linkTerkait->count() > 0 ? $linkTerkait : collect([]);
+
+                if ($baseItems->count() > 0) {
+                    $set1 = collect();
+                    while ($set1->count() < 8) {
+                        $set1 = $set1->concat($baseItems);
+                    }
+                } else {
+                    $set1 = collect();
+                }
+            @endphp
+
+            <!-- Infinite Auto-Scrolling Marquee Container -->
+            <div class="partner-marquee-container" id="partnerMarquee">
+                <div class="partner-marquee-track">
+
+                    @if ($set1->count() > 0)
+                        {{-- First Half (Set 1) --}}
+                        @foreach ($set1 as $linkItem)
+                            <a href="{{ $linkItem->url ?? '#' }}" target="_blank" class="partner-logo-item"
+                                title="{{ $linkItem->nama }}">
+                                <div class="logo-box">
+                                    @if ($linkItem->gambar)
+                                        <img src="{{ asset('storage/link-terkait/' . $linkItem->gambar) }}"
+                                            alt="{{ $linkItem->nama }}"
+                                            style="max-height: 48px; max-width: 140px; object-fit: contain;">
+                                    @else
+                                        <div class="portal-symbol">
+                                            <i class="fa-solid fa-globe"></i>
+                                        </div>
+                                        <div class="portal-text-col">
+                                            <span class="portal-bold">{{ $linkItem->nama }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                            </a>
+                        @endforeach
+
+                        {{-- Second Half (Set 2 - Exact Duplicate for Seamless Infinite Loop) --}}
+                        @foreach ($set1 as $linkItem)
+                            <a href="{{ $linkItem->url ?? '#' }}" target="_blank" class="partner-logo-item"
+                                title="{{ $linkItem->nama }}">
+                                <div class="logo-box">
+                                    @if ($linkItem->gambar)
+                                        <img src="{{ asset('storage/link-terkait/' . $linkItem->gambar) }}"
+                                            alt="{{ $linkItem->nama }}"
+                                            style="max-height: 48px; max-width: 140px; object-fit: contain;">
+                                    @else
+                                        <div class="portal-symbol">
+                                            <i class="fa-solid fa-globe"></i>
+                                        </div>
+                                        <div class="portal-text-col">
+                                            <span class="portal-bold">{{ $linkItem->nama }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                            </a>
+                        @endforeach
+                    @else
+                        {{-- Fallback default logos set if DB is empty --}}
+                        @for ($i = 0; $i < 2; $i++)
+                            <a href="https://kemenkopukm.go.id" target="_blank" class="partner-logo-item"
+                                title="Kementerian Koperasi dan UKM RI">
+                                <div class="logo-box">
+                                    <div class="kemenkop-symbol"><i class="fa-solid fa-dharmachakra"></i></div>
+                                    <div class="logo-text-col">
+                                        <span class="logo-bold-title">KEMEN<br>KOPUKM</span>
+                                        <span class="logo-tiny-sub">Kementerian Koperasi Dan UKM<br>Republik
+                                            Indonesia</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="https://smesco.go.id" target="_blank" class="partner-logo-item"
+                                title="Smesco Indonesia">
+                                <div class="logo-box">
+                                    <div class="smesco-symbol">S</div>
+                                    <span class="smesco-title">smesco</span>
+                                </div>
+                            </a>
+                            <a href="#" class="partner-logo-item" title="Balatkop Kalsel">
+                                <div class="logo-box">
+                                    <div class="portal-symbol"><i class="fa-solid fa-building-columns"></i></div>
+                                    <div class="portal-text-col">
+                                        <span class="portal-sub">BALATKOP</span>
+                                        <span class="portal-bold">KALSEL</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="https://kalselprov.go.id" target="_blank" class="partner-logo-item"
+                                title="Pemprov Kalsel">
+                                <div class="logo-box">
+                                    <div class="portal-symbol"><i class="fa-solid fa-cubes"></i></div>
+                                    <div class="portal-text-col">
+                                        <span class="portal-sub">PORTAL</span>
+                                        <span class="portal-bold">KALSELPROV</span>
+                                    </div>
+                                </div>
+                            </a>
+                        @endfor
+                    @endif
+
                 </div>
             </div>
 
@@ -300,8 +543,8 @@
 
             <!-- Section Header Titles -->
             <div class="news-header">
-                <span class="news-sub-tagline">PUSAT INFORMASI KOPERASI DAN USAHA KECIL DI PROVINSI Kalimantan
-                    Selatan</span>
+                <span class="news-sub-tagline">PUSAT INFORMASI KOPERASI DAN USAHA KECIL DI PROVINSI KALIMANTAN
+                    SELATAN</span>
                 <h2 class="news-main-title">Berita Terkini</h2>
             </div>
 
@@ -317,96 +560,246 @@
             <!-- Main Content Layout (2 Columns: News Grid + Popular Sidebar) -->
             <div class="news-content-grid">
 
-                <!-- Left Column: Featured News Cards Grid (2x2) -->
+                <!-- Left Column: Tabs Content (Berita, Foto, Video) -->
                 <div class="news-left-column">
-                    <div class="news-cards-wrapper" id="newsCardsGrid">
 
-                        <!-- Card 1 -->
-                        <article class="news-card">
-                            <div class="news-image-box">
-                                <div class="placeholder-img-bg bg-gradient-1">
-                                    <i class="fa-solid fa-people-roof placeholder-icon"></i>
-                                </div>
-                                <div class="date-badge">
-                                    <span class="day-text">24</span>
-                                    <span class="month-text">JUL 2026</span>
-                                </div>
-                            </div>
-                            <div class="news-details">
-                                <span class="news-category-label">UMKM</span>
-                                <h3 class="news-title">
-                                    <a href="#">Pendampingan Digitalisasi dan Fasilitasi Legalitas Usaha Mikro
-                                        Kalimantan Selatan</a>
-                                </h3>
-                            </div>
-                        </article>
+                    <!-- TAB 1: BERITA TERBARU -->
+                    <div class="tab-content-pane active" id="tab-berita">
+                        <div class="news-cards-wrapper">
+                            @forelse($beritaTerbaru as $b)
+                                @php
+                                    $jenisIcon = 'ti ti-article';
+                                    $jenisLower = strtolower($b->jenis ?? '');
+                                    if (str_contains($jenisLower, 'artikel')) {
+                                        $jenisIcon = 'ti ti-file-text';
+                                    } elseif (str_contains($jenisLower, 'info') || str_contains($jenisLower, 'tips')) {
+                                        $jenisIcon = 'ti ti-bulb';
+                                    }
+                                @endphp
+                                <article class="news-card">
+                                    <div class="news-image-box">
+                                        <a href="#" class="news-img-link" title="Baca Selengkapnya">
+                                            @if ($b->thumbnail)
+                                                <img src="{{ asset('storage/post/thumbnail/' . $b->thumbnail) }}"
+                                                    alt="{{ $b->judul }}" loading="lazy" decoding="async"
+                                                    style="width:100%; height:100%; object-fit:cover;">
+                                            @else
+                                                <div class="placeholder-img-bg bg-gradient-1">
+                                                    <i class="fa-solid fa-newspaper placeholder-icon"></i>
+                                                </div>
+                                            @endif
+                                            <div class="blue-overlay-hover">
+                                                <div class="read-more-btn">
+                                                    <i class="fa-solid fa-book-open"></i>
+                                                    <span>Baca Selengkapnya</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="date-badge">
+                                            <span
+                                                class="day-text">{{ $b->created_at ? $b->created_at->format('d') : '01' }}</span>
+                                            <span
+                                                class="month-text">{{ $b->created_at ? strtoupper($b->created_at->format('M Y')) : 'JAN 2026' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="news-details">
+                                        <span class="news-category-label">
+                                            <i class="{{ $jenisIcon }} me-1"></i>
+                                            {{ strtoupper($b->jenis ?? 'BERITA') }} &bull;
+                                            {{ strtoupper($b->kategori?->kategori ?? 'KATEGORI') }}
+                                        </span>
+                                        <h3 class="news-title">
+                                            <a href="#">{{ $b->judul }}</a>
+                                        </h3>
+                                    </div>
+                                </article>
+                            @empty
+                                <article class="news-card">
+                                    <div class="news-image-box">
+                                        <a href="#" class="news-img-link" title="Baca Selengkapnya">
+                                            <div class="placeholder-img-bg bg-gradient-1">
+                                                <i class="fa-solid fa-people-roof placeholder-icon"></i>
+                                            </div>
+                                            <div class="blue-overlay-hover">
+                                                <div class="read-more-btn">
+                                                    <i class="fa-solid fa-book-open"></i>
+                                                    <span>Baca Selengkapnya</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="date-badge">
+                                            <span class="day-text">24</span>
+                                            <span class="month-text">JUL 2026</span>
+                                        </div>
+                                    </div>
+                                    <div class="news-details">
+                                        <span class="news-category-label"><i class="ti ti-article me-1"></i> BERITA
+                                            &bull; UMKM</span>
+                                        <h3 class="news-title">
+                                            <a href="#">Pendampingan Digitalisasi dan Fasilitasi Legalitas Usaha
+                                                Mikro Kalimantan Selatan</a>
+                                        </h3>
+                                    </div>
+                                </article>
+                            @endforelse
+                        </div>
 
-                        <!-- Card 2 -->
-                        <article class="news-card">
-                            <div class="news-image-box">
-                                <div class="placeholder-img-bg bg-gradient-2">
-                                    <i class="fa-solid fa-chalkboard-user placeholder-icon"></i>
-                                </div>
-                                <div class="date-badge">
-                                    <span class="day-text">24</span>
-                                    <span class="month-text">JUL 2026</span>
-                                </div>
-                            </div>
-                            <div class="news-details">
-                                <span class="news-category-label">UMKM</span>
-                                <h3 class="news-title">
-                                    <a href="#">Bimbingan Teknis Peningkatan Kapasitas SDM Koperasi & UMKM
-                                        Juara</a>
-                                </h3>
-                            </div>
-                        </article>
-
-                        <!-- Card 3 -->
-                        <article class="news-card">
-                            <div class="news-image-box">
-                                <div class="placeholder-img-bg bg-gradient-3">
-                                    <i class="fa-solid fa-graduation-cap placeholder-icon"></i>
-                                </div>
-                                <div class="date-badge">
-                                    <span class="day-text">21</span>
-                                    <span class="month-text">JUL 2026</span>
-                                </div>
-                            </div>
-                            <div class="news-details">
-                                <span class="news-category-label">KOPERASI</span>
-                                <h3 class="news-title">
-                                    <a href="#">Saba Sakola Hadir di SMA PGRI 1 Bandung, Pelajar Dibekali
-                                        Pemahaman Koperasi yang...</a>
-                                </h3>
-                            </div>
-                        </article>
-
-                        <!-- Card 4 -->
-                        <article class="news-card">
-                            <div class="news-image-box">
-                                <div class="placeholder-img-bg bg-gradient-4">
-                                    <i class="fa-solid fa-user-group placeholder-icon"></i>
-                                </div>
-                                <div class="date-badge">
-                                    <span class="day-text">17</span>
-                                    <span class="month-text">JUL 2026</span>
-                                </div>
-                            </div>
-                            <div class="news-details">
-                                <span class="news-category-label">KOPERASI</span>
-                                <h3 class="news-title">
-                                    <a href="#">Tata Sugiarta Terima Kunjungan Kuliah Lapangan Mahasiswa Ikopin
-                                        University</a>
-                                </h3>
-                            </div>
-                        </article>
-
+                        <div class="more-news-btn-wrap">
+                            <a href="#" class="btn-outline-blue">BERITA LAINNYA</a>
+                        </div>
                     </div>
 
-                    <!-- Bottom Action Button -->
-                    <div class="more-news-btn-wrap">
-                        <a href="#" class="btn-outline-blue">BERITA LAINNYA</a>
+                    <!-- TAB 2: GALERI FOTO -->
+                    <div class="tab-content-pane" id="tab-foto" style="display: none;">
+                        <div class="news-cards-wrapper">
+                            @forelse($galeriFoto as $f)
+                                @php
+                                    $coverFoto = $f->galeri->first()?->gambar
+                                        ? asset('storage/post/galeri/' . $f->galeri->first()->gambar)
+                                        : ($f->thumbnail
+                                            ? asset('storage/post/thumbnail/' . $f->thumbnail)
+                                            : null);
+                                    $totalFoto = $f->galeri->count();
+                                @endphp
+                                <article class="news-card">
+                                    <div class="news-image-box">
+                                        <a href="#" class="news-img-link"
+                                            title="Lihat Galeri Foto ({{ $totalFoto }} Foto)">
+                                            @if ($coverFoto)
+                                                <img src="{{ $coverFoto }}" alt="{{ $f->judul }}"
+                                                    loading="lazy" decoding="async"
+                                                    style="width:100%; height:100%; object-fit:cover;">
+                                            @else
+                                                <div class="placeholder-img-bg bg-gradient-2">
+                                                    <i class="fa-solid fa-images placeholder-icon"></i>
+                                                </div>
+                                            @endif
+                                            <div class="blue-overlay-hover">
+                                                <div class="read-more-btn">
+                                                    <i class="fa-solid fa-images"></i>
+                                                    <span>Lihat {{ $totalFoto }} Foto</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="date-badge">
+                                            <span
+                                                class="day-text">{{ $f->created_at ? $f->created_at->format('d') : '01' }}</span>
+                                            <span
+                                                class="month-text">{{ $f->created_at ? strtoupper($f->created_at->format('M Y')) : 'JAN 2026' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="news-details">
+                                        <span
+                                            class="news-category-label">{{ $f->kategori?->kategori ?? 'GALERI FOTO' }}
+                                            &bull; {{ $totalFoto }} FOTO</span>
+                                        <h3 class="news-title">
+                                            <a href="#">{{ $f->judul }}</a>
+                                        </h3>
+                                    </div>
+                                </article>
+                            @empty
+                                <article class="news-card">
+                                    <div class="news-image-box">
+                                        <a href="#" class="news-img-link" title="Lihat Foto">
+                                            <div class="placeholder-img-bg bg-gradient-2">
+                                                <i class="fa-solid fa-images placeholder-icon"></i>
+                                            </div>
+                                            <div class="blue-overlay-hover">
+                                                <div class="read-more-btn">
+                                                    <i class="fa-solid fa-image"></i>
+                                                    <span>Lihat Foto</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="date-badge">
+                                            <span class="day-text">24</span>
+                                            <span class="month-text">JUL 2026</span>
+                                        </div>
+                                    </div>
+                                    <div class="news-details">
+                                        <span class="news-category-label">GALERI FOTO</span>
+                                        <h3 class="news-title">
+                                            <a href="#">Kegiatan Pelatihan dan Pendampingan Koperasi & UMKM
+                                                Juara</a>
+                                        </h3>
+                                    </div>
+                                </article>
+                            @endforelse
+                        </div>
+
+                        <div class="more-news-btn-wrap">
+                            <a href="#" class="btn-outline-blue">FOTO LAINNYA</a>
+                        </div>
                     </div>
+
+                    <!-- TAB 3: GALERI VIDEO -->
+                    <div class="tab-content-pane" id="tab-video" style="display: none;">
+                        <div class="news-cards-wrapper">
+                            @forelse($galeriVideo as $v)
+                                <article class="news-card">
+                                    <div class="news-image-box">
+                                        <a href="https://www.youtube.com/watch?v={{ $v->youtube_id }}"
+                                            class="news-img-link" title="Putar Video" target="_blank">
+                                            <img src="https://img.youtube.com/vi/{{ $v->youtube_id }}/hqdefault.jpg"
+                                                alt="{{ $v->judul }}" loading="lazy" decoding="async"
+                                                style="width:100%; height:100%; object-fit:cover;">
+                                            <div class="blue-overlay-hover">
+                                                <div class="read-more-btn">
+                                                    <i class="fa-solid fa-circle-play"></i>
+                                                    <span>Putar Video</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="date-badge">
+                                            <span
+                                                class="day-text">{{ $v->created_at ? $v->created_at->format('d') : '01' }}</span>
+                                            <span
+                                                class="month-text">{{ $v->created_at ? strtoupper($v->created_at->format('M Y')) : 'JAN 2026' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="news-details">
+                                        <span
+                                            class="news-category-label">{{ $v->kategori?->kategori ?? 'VIDEO' }}</span>
+                                        <h3 class="news-title">
+                                            <a href="https://www.youtube.com/watch?v={{ $v->youtube_id }}"
+                                                target="_blank">{{ $v->judul }}</a>
+                                        </h3>
+                                    </div>
+                                </article>
+                            @empty
+                                <article class="news-card">
+                                    <div class="news-image-box">
+                                        <a href="#" class="news-img-link" title="Putar Video">
+                                            <div class="placeholder-img-bg bg-gradient-3">
+                                                <i class="fa-solid fa-video placeholder-icon"></i>
+                                            </div>
+                                            <div class="blue-overlay-hover">
+                                                <div class="read-more-btn">
+                                                    <i class="fa-solid fa-circle-play"></i>
+                                                    <span>Putar Video</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="date-badge">
+                                            <span class="day-text">24</span>
+                                            <span class="month-text">JUL 2026</span>
+                                        </div>
+                                    </div>
+                                    <div class="news-details">
+                                        <span class="news-category-label">GALERI VIDEO</span>
+                                        <h3 class="news-title">
+                                            <a href="#">Dokumentasi Video Kegiatan Balatkop Kalsel</a>
+                                        </h3>
+                                    </div>
+                                </article>
+                            @endforelse
+                        </div>
+
+                        <div class="more-news-btn-wrap">
+                            <a href="#" class="btn-outline-blue">VIDEO LAINNYA</a>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- Right Column: Berita Terpopuler Sidebar -->
@@ -414,88 +807,53 @@
                     <h3 class="sidebar-heading">Berita Terpopuler</h3>
 
                     <div class="popular-list">
+                        @forelse($beritaTerpopuler as $index => $pop)
+                            @php
+                                $thumbClasses = [
+                                    'thumb-blue',
+                                    'thumb-teal',
+                                    'thumb-red',
+                                    'thumb-purple',
+                                    'thumb-green',
+                                    'thumb-orange',
+                                ];
+                                $bgClass = $thumbClasses[$index % count($thumbClasses)];
 
-                        <!-- Popular Item 1 -->
-                        <div class="popular-item">
-                            <div class="popular-thumb-box thumb-blue">
-                                <i class="fa-solid fa-file-signature"></i>
-                            </div>
-                            <div class="popular-info">
-                                <span class="popular-date">10 JUL 2025</span>
-                                <h4 class="popular-title">
-                                    <a href="#">Panduan Membuat NIB Perorangan Secara Online untuk Pelaku
-                                        UMKM</a>
-                                </h4>
-                            </div>
-                        </div>
-
-                        <!-- Popular Item 2 -->
-                        <div class="popular-item">
-                            <div class="popular-thumb-box thumb-teal">
-                                <i class="fa-solid fa-handshake"></i>
-                            </div>
-                            <div class="popular-info">
-                                <span class="popular-date">31 MAR 2026</span>
-                                <h4 class="popular-title">
-                                    <a href="#">Memahami Alur Rapat Anggota Tahunan (RAT) Koperasi Secara...</a>
-                                </h4>
-                            </div>
-                        </div>
-
-                        <!-- Popular Item 3 -->
-                        <div class="popular-item">
-                            <div class="popular-thumb-box thumb-red">
-                                <i class="fa-solid fa-bullhorn"></i>
-                            </div>
-                            <div class="popular-info">
-                                <span class="popular-date">14 AUG 2025</span>
-                                <h4 class="popular-title">
-                                    <a href="#">Tata Cara Pengaduan Melalui SP4N Lapor di lapor.go.id</a>
-                                </h4>
-                            </div>
-                        </div>
-
-                        <!-- Popular Item 4 -->
-                        <div class="popular-item">
-                            <div class="popular-thumb-box thumb-purple">
-                                <i class="fa-solid fa-building-columns"></i>
-                            </div>
-                            <div class="popular-info">
-                                <span class="popular-date">05 FEB 2025</span>
-                                <h4 class="popular-title">
-                                    <a href="#">Perkembangan Koperasi di Indonesia: Dari Gerakan Rakyat ke Pilar
-                                        Ekono...</a>
-                                </h4>
-                            </div>
-                        </div>
-
-                        <!-- Popular Item 5 -->
-                        <div class="popular-item">
-                            <div class="popular-thumb-box thumb-green">
-                                <i class="fa-solid fa-ribbon"></i>
-                            </div>
-                            <div class="popular-info">
-                                <span class="popular-date">12 JUL 2025</span>
-                                <h4 class="popular-title">
-                                    <a href="#">Hari Koperasi ke-78 Tahun 2025: Koperasi Maju, Indonesia Adil
-                                        dan...</a>
-                                </h4>
-                            </div>
-                        </div>
-
-                        <!-- Popular Item 6 -->
-                        <div class="popular-item">
-                            <div class="popular-thumb-box thumb-orange">
-                                <i class="fa-solid fa-clipboard-check"></i>
-                            </div>
-                            <div class="popular-info">
-                                <span class="popular-date">21 MAY 2024</span>
-                                <h4 class="popular-title">
-                                    <a href="#">Penerapan Metode Pemeriksaan Kesehatan Koperasi</a>
-                                </h4>
-                            </div>
-                        </div>
-
+                                $jenisLower = strtolower($pop->jenis ?? '');
+                                $icon = 'fa-file-signature';
+                                if (str_contains($jenisLower, 'artikel')) {
+                                    $icon = 'fa-newspaper';
+                                } elseif (str_contains($jenisLower, 'info') || str_contains($jenisLower, 'tips')) {
+                                    $icon = 'fa-lightbulb';
+                                }
+                            @endphp
+                            <a href="#" class="popular-item" title="{{ $pop->judul }}">
+                                <div class="popular-thumb-link">
+                                    @if ($pop->thumbnail)
+                                        <img src="{{ asset('storage/post/thumbnail/' . $pop->thumbnail) }}"
+                                            alt="{{ $pop->judul }}" loading="lazy" decoding="async"
+                                            style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+                                    @else
+                                        <div class="popular-thumb-box {{ $bgClass }}">
+                                            <i class="fa-solid {{ $icon }}"></i>
+                                        </div>
+                                    @endif
+                                    <div class="blue-overlay-hover"></div>
+                                </div>
+                                <div class="popular-info">
+                                    <div class="popular-meta" style="display: flex; align-items: center; gap: 8px;">
+                                        <span class="popular-date">
+                                            {{ $pop->created_at ? strtoupper($pop->created_at->format('d M Y')) : '' }}
+                                        </span>
+                                    </div>
+                                    <h4 class="popular-title">
+                                        {{ $pop->judul }}
+                                    </h4>
+                                </div>
+                            </a>
+                        @empty
+                            <p style="font-size: 0.85rem; color: #64748b;">Belum ada berita populer.</p>
+                        @endforelse
                     </div>
                 </aside>
 
@@ -513,8 +871,9 @@
             <!-- Section Header (Tagline + Title + Navigation Arrows) -->
             <div class="agenda-header">
                 <div class="agenda-title-box">
-                    <span class="agenda-sub-tagline">PUSAT INFORMASI KOPERASI DAN USAHA KECIL DI PROVINSI Kalimantan
-                        Selatan</span>
+                    @if ($textagenda = $tagline->firstWhere('nama', 'Kalimat Agenda'))
+                        <span class="agenda-sub-tagline">{{ strtoupper($textagenda->keterangan_1) }}</span>
+                    @endif
                     <h2 class="agenda-main-title">Agenda Kegiatan</h2>
                 </div>
 
@@ -616,6 +975,8 @@
         </div>
     </section>
 
+
+
     <!-- =========================================================
          PRODUK UNGGULAN USAHA KECIL Kalimantan Selatan SECTION
          ========================================================= -->
@@ -627,9 +988,10 @@
 
                 <!-- Left Intro Side -->
                 <div class="products-intro-side">
-                    <span class="products-sub-tagline">PUSAT INFORMASI KOPERASI DAN USAHA KECIL DI PROVINSI Kalimantan
-                        Selatan</span>
-                    <h2 class="products-main-title">Produk<br>Unggulan Usaha<br>Kecil Kalimantan Selatan</h2>
+                    @if ($textproduk = $tagline->firstWhere('nama', 'Kalimat Produk UMKM'))
+                        <span class="products-sub-tagline">{{ $textproduk->keterangan_1 }}</span>
+                    @endif
+                    <h2 class="products-main-title">Produk UMKM<br>Kalimantan Selatan</h2>
 
                     <!-- Navigation Arrows for Product Cards -->
                     <div class="products-nav-arrows">
@@ -655,7 +1017,7 @@
                                 <div class="product-info-box">
                                     <span class="product-tag">ADMIN</span>
                                     <h3 class="product-title"><a href="#">Sukahijab</a></h3>
-                                    <p class="product-location">KAB TASIKMALAYA, Kalimantan Selatan</p>
+                                    <p class="product-location">KAB TANAH LAUT, Kalimantan Selatan</p>
                                 </div>
                             </div>
 
@@ -667,7 +1029,7 @@
                                 <div class="product-info-box">
                                     <span class="product-tag">ZN</span>
                                     <h3 class="product-title"><a href="#">Sae Nadhilah</a></h3>
-                                    <p class="product-location">KAB BOGOR, Kalimantan Selatan</p>
+                                    <p class="product-location">KAB BANJAR, Kalimantan Selatan</p>
                                 </div>
                             </div>
 
@@ -679,7 +1041,7 @@
                                 <div class="product-info-box">
                                     <span class="product-tag">ZN</span>
                                     <h3 class="product-title"><a href="#">Mister Jenky</a></h3>
-                                    <p class="product-location">KAB INDRAMAYU, Kalimantan Selatan</p>
+                                    <p class="product-location">KAB TABALONG, Kalimantan Selatan</p>
                                 </div>
                             </div>
 
@@ -704,193 +1066,6 @@
             <!-- Bottom Action Button -->
             <div class="more-products-btn-wrap">
                 <a href="#" class="btn-outline-blue">PRODUK LAINNYA</a>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- =========================================================
-         LINK TERKAIT (PARTNER LOGOS MARQUEE) SECTION
-         ========================================================= -->
-    <section class="related-links-section">
-        <div class="links-container">
-
-            <!-- Section Header -->
-            <div class="links-header">
-                <span class="links-sub-tagline">PUSAT INFORMASI KOPERASI DAN USAHA KECIL DI PROVINSI Kalimantan
-                    Selatan</span>
-                <h2 class="links-main-title">Link Terkait</h2>
-            </div>
-
-            <!-- Infinite Auto-Scrolling Marquee Container (1 Baris + Pause on Hover) -->
-            <div class="partner-marquee-container" id="partnerMarquee">
-                <div class="partner-marquee-track">
-
-                    <!-- SET 1 LOGOS -->
-                    <!-- Partner 1: KEMEN KOP UKM -->
-                    <a href="https://kemenkopukm.go.id" target="_blank" class="partner-logo-item"
-                        title="Kementerian Koperasi dan UKM RI">
-                        <div class="logo-box">
-                            <div class="kemenkop-symbol">
-                                <i class="fa-solid fa-dharmachakra"></i>
-                            </div>
-                            <div class="logo-text-col">
-                                <span class="logo-bold-title">KEMEN<br>KOPUKM</span>
-                                <span class="logo-tiny-sub">Kementerian Koperasi Dan UKM<br>Republik Indonesia</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Partner 2: Smesco -->
-                    <a href="https://smesco.go.id" target="_blank" class="partner-logo-item"
-                        title="Smesco Indonesia">
-                        <div class="logo-box">
-                            <div class="smesco-symbol">S</div>
-                            <span class="smesco-title">smesco</span>
-                        </div>
-                    </a>
-
-                    <!-- Partner 3: OPOP -->
-                    <a href="https://opop.jabarprov.go.id" target="_blank" class="partner-logo-item"
-                        title="One Pesantren One Product Jabar">
-                        <div class="logo-box">
-                            <div class="opop-symbol">
-                                <i class="fa-solid fa-people-carry-box"></i>
-                            </div>
-                            <div class="opop-text-col">
-                                <span class="opop-title">OPOP</span>
-                                <span class="opop-sub">One Pesantren One Product</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Partner 4: Singakota -->
-                    <a href="#" class="partner-logo-item" title="Singakota Digital">
-                        <div class="logo-box">
-                            <div class="singakota-symbol">
-                                <i class="fa-solid fa-diagram-project"></i>
-                            </div>
-                            <div class="singakota-text-col">
-                                <span class="singakota-title">singakota</span>
-                                <span class="singakota-sub">Sistem Informasi Pengawasan<br>Koperasi Digital</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Partner 5: DISKUK JABAR Emblem -->
-                    <a href="#" class="partner-logo-item" title="DISKUK Provinsi Kalimantan Selatan">
-                        <div class="logo-box diskuk-partner-card">
-                            <svg viewBox="0 0 100 45" width="48" height="24" fill="none"
-                                stroke="#94a3b8">
-                                <line x1="50" y1="2" x2="50" y2="10"
-                                    stroke-width="2" />
-                                <circle cx="50" cy="2" r="2" fill="#94a3b8" />
-                                <path d="M42 12 L50 7 L58 12 H42 Z" fill="#94a3b8" />
-                                <path d="M38 18 L50 12 L62 18 H38 Z" fill="#94a3b8" />
-                                <path d="M32 25 L50 18 L68 25 H32 Z" fill="#94a3b8" />
-                                <rect x="22" y="25" width="56" height="12" fill="none" stroke-width="2" />
-                            </svg>
-                            <span class="diskuk-partner-text">DISKUK JABAR</span>
-                        </div>
-                    </a>
-
-                    <!-- Partner 6: Portal Jabarprov.go.id -->
-                    <a href="https://jabarprov.go.id" target="_blank" class="partner-logo-item"
-                        title="Portal Resmi Pemprov Jabar">
-                        <div class="logo-box">
-                            <div class="portal-symbol">
-                                <i class="fa-solid fa-cubes"></i>
-                            </div>
-                            <div class="portal-text-col">
-                                <span class="portal-sub">PORTAL</span>
-                                <span class="portal-bold">JABARPROVGOID</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- SET 2 LOGOS (DUPLICATED FOR SEAMLESS INFINITE LOOP) -->
-                    <!-- Partner 1: KEMEN KOP UKM -->
-                    <a href="https://kemenkopukm.go.id" target="_blank" class="partner-logo-item"
-                        title="Kementerian Koperasi dan UKM RI">
-                        <div class="logo-box">
-                            <div class="kemenkop-symbol">
-                                <i class="fa-solid fa-dharmachakra"></i>
-                            </div>
-                            <div class="logo-text-col">
-                                <span class="logo-bold-title">KEMEN<br>KOPUKM</span>
-                                <span class="logo-tiny-sub">Kementerian Koperasi Dan UKM<br>Republik Indonesia</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Partner 2: Smesco -->
-                    <a href="https://smesco.go.id" target="_blank" class="partner-logo-item"
-                        title="Smesco Indonesia">
-                        <div class="logo-box">
-                            <div class="smesco-symbol">S</div>
-                            <span class="smesco-title">smesco</span>
-                        </div>
-                    </a>
-
-                    <!-- Partner 3: OPOP -->
-                    <a href="https://opop.jabarprov.go.id" target="_blank" class="partner-logo-item"
-                        title="One Pesantren One Product Jabar">
-                        <div class="logo-box">
-                            <div class="opop-symbol">
-                                <i class="fa-solid fa-people-carry-box"></i>
-                            </div>
-                            <div class="opop-text-col">
-                                <span class="opop-title">OPOP</span>
-                                <span class="opop-sub">One Pesantren One Product</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Partner 4: Singakota -->
-                    <a href="#" class="partner-logo-item" title="Singakota Digital">
-                        <div class="logo-box">
-                            <div class="singakota-symbol">
-                                <i class="fa-solid fa-diagram-project"></i>
-                            </div>
-                            <div class="singakota-text-col">
-                                <span class="singakota-title">singakota</span>
-                                <span class="singakota-sub">Sistem Informasi Pengawasan<br>Koperasi Digital</span>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Partner 5: DISKUK JABAR Emblem -->
-                    <a href="#" class="partner-logo-item" title="DISKUK Provinsi Kalimantan Selatan">
-                        <div class="logo-box diskuk-partner-card">
-                            <svg viewBox="0 0 100 45" width="48" height="24" fill="none"
-                                stroke="#94a3b8">
-                                <line x1="50" y1="2" x2="50" y2="10"
-                                    stroke-width="2" />
-                                <circle cx="50" cy="2" r="2" fill="#94a3b8" />
-                                <path d="M42 12 L50 7 L58 12 H42 Z" fill="#94a3b8" />
-                                <path d="M38 18 L50 12 L62 18 H38 Z" fill="#94a3b8" />
-                                <path d="M32 25 L50 18 L68 25 H32 Z" fill="#94a3b8" />
-                                <rect x="22" y="25" width="56" height="12" fill="none" stroke-width="2" />
-                            </svg>
-                            <span class="diskuk-partner-text">DISKUK JABAR</span>
-                        </div>
-                    </a>
-
-                    <!-- Partner 6: Portal Jabarprov.go.id -->
-                    <a href="https://jabarprov.go.id" target="_blank" class="partner-logo-item"
-                        title="Portal Resmi Pemprov Jabar">
-                        <div class="logo-box">
-                            <div class="portal-symbol">
-                                <i class="fa-solid fa-cubes"></i>
-                            </div>
-                            <div class="portal-text-col">
-                                <span class="portal-sub">PORTAL</span>
-                                <span class="portal-bold">JABARPROVGOID</span>
-                            </div>
-                        </div>
-                    </a>
-
-                </div>
             </div>
 
         </div>
@@ -992,7 +1167,7 @@
                 </div>
 
                 <div class="copyright-text">
-                    Copyright &copy; <span class="year-purple">2026</span> by Balatkop-uk Prov. Jabar
+                    Copyright &copy; <span class="year-purple">2026</span> by Balatkop-uk Prov. Kalimantan Selatan
                 </div>
             </div>
 

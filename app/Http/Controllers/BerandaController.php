@@ -32,7 +32,7 @@ class BerandaController extends Controller
         
         return view('admin.beranda.tajukcard.view');
     }
-    public function tajukagenda_view(){
+    public function kalimattajuk_view(){
         
         return view('admin.beranda.tajukagenda.view');
     }

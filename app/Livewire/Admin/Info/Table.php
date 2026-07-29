@@ -32,7 +32,7 @@ class Table extends Component
     public function render()
     {
         $post=Post::with(['kategori','user'])
-            ->where('jenis','Info')
+            ->whereIn('jenis',['Info dan Tips','Info','Tips','Info Tips'])
             ->where('judul','like','%'.$this->search.'%')
             ->orderByDesc('id_post')
             ->paginate($this->perPage);

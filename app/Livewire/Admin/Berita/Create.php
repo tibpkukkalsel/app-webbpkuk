@@ -222,12 +222,12 @@ class Create extends Component
 
         $totalGaleri=count($this->galeriPost);
         $totalUpload=count($this->galeri);
-        if(($totalGaleri + $totalUpload) > 6){
+        if(($totalGaleri + $totalUpload) > 8){
 
             $this->dispatch('swal',
                 icon:'warning',
                 title:'Batas Galeri',
-                text:'Maksimal hanya 6 foto untuk setiap berita.'
+                text:'Maksimal hanya 8 foto untuk setiap berita.'
             );
 
             $this->galeri=[];

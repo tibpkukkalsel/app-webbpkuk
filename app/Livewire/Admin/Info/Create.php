@@ -119,7 +119,7 @@ class Create extends Component
                     'thumbnail'=>$this->thumbnail,
                     'isi'=>$this->isi,
                     'ringkasan'=>$this->ringkasan,
-                    'jenis'=>'Info',
+                    'jenis'=>'Info dan Tips',
                     'id_kategori'=>$this->id_kategori
                 ]
             );
@@ -168,14 +168,14 @@ class Create extends Component
         $this->dispatch('swal',
             icon:'success',
             title:'Berhasil',
-            text:'Info berhasil disimpan.'
+            text:'Info dan Tips berhasil disimpan.'
         );
     }
 
     public function buatRingkasan()
     {
         if(blank(strip_tags($this->isi))){
-            $this->addError('isi','Isi info masih kosong.');
+            $this->addError('isi','Isi info dan tips masih kosong.');
             return;
         }
 

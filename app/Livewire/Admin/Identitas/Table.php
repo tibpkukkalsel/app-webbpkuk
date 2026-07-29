@@ -14,7 +14,7 @@ class Table extends Component
     public function render()
     {
         return view('livewire.admin.identitas.table',[
-            'identitas'=>Identitas::orderBy('id_identitas')->get()
+            'identitas'=>Identitas::orderBy('status')->get()
         ]);
     }
 }

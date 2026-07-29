@@ -3,7 +3,6 @@
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\BeritaController;
-use App\Http\Controllers\TipsController;
 use App\Http\Controllers\InfoController;
 use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\DashboardController;
@@ -19,6 +18,9 @@ use App\Http\Controllers\StorganisasiController;
 use App\Http\Controllers\TentangController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VisimisiController;
+use App\Http\Controllers\HeroBannerController;
+use App\Http\Controllers\InfografisController;
+use App\Http\Controllers\VideoController;
 use App\Http\Controllers\Website\BerandaController as WebsiteBerandaController;
 use Illuminate\Support\Facades\Route;
 
@@ -66,9 +68,6 @@ Route::prefix('cp-x14')
         Route::get('/beranda/bannerutama', [BerandaController::class, 'bannerutama_view'])
             ->middleware('permission:beranda.view')
             ->name('bannerutama.view');
-        Route::get('/beranda/bannercard', [BerandaController::class, 'bannercard_view'])
-            ->middleware('permission:beranda.view')
-            ->name('bannercard.view');
          Route::get('/beranda/mitra', [BerandaController::class, 'mitra_view'])
             ->middleware('permission:beranda.view')
             ->name('mitra.view');
@@ -78,9 +77,20 @@ Route::prefix('cp-x14')
         Route::get('/beranda/tajukcard', [BerandaController::class, 'tajukcard_view'])
             ->middleware('permission:beranda.view')
             ->name('tajukcard.view');
-        Route::get('/beranda/tajukagenda', [BerandaController::class, 'tajukagenda_view'])
+        Route::get('/beranda/kalimattajuk', [BerandaController::class, 'kalimattajuk_view'])
             ->middleware('permission:beranda.view')
-            ->name('tajukagenda.view');    
+            ->name('kalimattajuk.view');    
+        //Start Crud HERO BANNER
+        Route::get('/hero-banner', [HeroBannerController::class, 'view'])
+            ->middleware('permission:beranda.view')
+            ->name('hero-banner.view');
+        //end crud HERO BANNER
+
+        //Start Crud INFOGRAFIS
+        Route::get('/infografis', [InfografisController::class, 'view'])
+            ->middleware('permission:beranda.view')
+            ->name('infografis.view');
+        //end crud INFOGRAFIS
         //end crud BERANDA
         //Start Crud PROFILE WEBSITE
         Route::get('/profile/tentang', [TentangController::class, 'view'])
@@ -130,18 +140,7 @@ Route::prefix('cp-x14')
             ->middleware('permission:post.konfig')
             ->name('berita.edit');
         //end Crud POST
-        //Start Crud TIPS
-        Route::get('/tips', [TipsController::class, 'view'])
-            ->middleware('permission:post.konfig')
-            ->name('tips.view');
-        Route::get('/tips/create', [TipsController::class, 'create'])
-            ->middleware('permission:post.konfig')
-            ->name('tips.create');
-        Route::get('/tips/edit/{id}', [TipsController::class, 'edit'])
-            ->middleware('permission:post.konfig')
-            ->name('tips.edit');
-        //end Crud TIPS
-        //Start Crud INFO
+        //Start Crud INFO DAN TIPS
         Route::get('/info', [InfoController::class, 'view'])
             ->middleware('permission:post.konfig')
             ->name('info.view');
@@ -151,7 +150,7 @@ Route::prefix('cp-x14')
         Route::get('/info/edit/{id}', [InfoController::class, 'edit'])
             ->middleware('permission:post.konfig')
             ->name('info.edit');
-        //end Crud INFO
+        //end Crud INFO DAN TIPS
         //Start Crud ARTIKEL
         Route::get('/artikel', [ArtikelController::class, 'view'])
             ->middleware('permission:post.konfig')
@@ -163,6 +162,17 @@ Route::prefix('cp-x14')
             ->middleware('permission:post.konfig')
             ->name('artikel.edit');
         //end Crud ARTIKEL
+        //Start Crud VIDEO
+        Route::get('/video', [VideoController::class, 'view'])
+            ->middleware('permission:post.konfig')
+            ->name('video.view');
+        Route::get('/video/create', [VideoController::class, 'create'])
+            ->middleware('permission:post.konfig')
+            ->name('video.create');
+        Route::get('/video/edit/{id}', [VideoController::class, 'edit'])
+            ->middleware('permission:post.konfig')
+            ->name('video.edit');
+        //end Crud VIDEO
     });
 
 Route::middleware('auth')->group(function () {
