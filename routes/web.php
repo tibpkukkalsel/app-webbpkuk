@@ -22,9 +22,17 @@ use App\Http\Controllers\HeroBannerController;
 use App\Http\Controllers\InfografisController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\Website\BerandaController as WebsiteBerandaController;
+use App\Http\Controllers\Website\TentangController as WebsiteTentangController;
+use App\Http\Controllers\Website\VisimisiController as WebsiteVisimisiController;
+use App\Http\Controllers\Website\StorganisasiController as WebsiteStorganisasiController;
+use App\Http\Controllers\Website\InformasiController as WebsiteInformasiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebsiteBerandaController::class, 'view']);
+Route::get('/profil/tentang', [WebsiteTentangController::class, 'view'])->name('website.profil.tentang');
+Route::get('/profil/visimisi', [WebsiteVisimisiController::class, 'view'])->name('website.profil.visimisi');
+Route::get('/profil/struktur-organisasi', [WebsiteStorganisasiController::class, 'view'])->name('website.profil.storganisasi');
+Route::get('/informasi', [WebsiteInformasiController::class, 'view'])->name('website.informasi');
 
 
 Route::prefix('cp-x14')

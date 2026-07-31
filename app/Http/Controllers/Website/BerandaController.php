@@ -17,12 +17,22 @@ class BerandaController extends Controller
 {
     public function view()
     {
-        $identitas = Identitas::all();
-
         $heroBanners = HeroBanner::where('status', 'aktif')
             ->orderBy('urutan')
             ->orderBy('id_hero_banner')
             ->get();
+
+        $fallbackImages = [
+            'https://images.unsplash.com/photo-1577495508048-b635879837f1?q=80&w=1920&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1920&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1920&auto=format&fit=crop',
+        ];
+
+        if (!empty($heroBanners) && count($heroBanners) > 0) {
+            $heroImages = $heroBanners->map(fn($b) => asset('storage/hero-banner/' . $b->gambar))->toArray();
+        } else {
+            $heroImages = $fallbackImages;
+        }
 
         $infografis = Infografis::where('status', 'aktif')
             ->orderBy('urutan')
@@ -75,9 +85,9 @@ class BerandaController extends Controller
             ->take(6)
             ->get();
 
-        return view('layouts.websites', compact(
-            'identitas',
+        return view('websites.beranda.view', compact(
             'heroBanners',
+            'heroImages',
             'infografis',
             'linkTerkait',
             'tagline',

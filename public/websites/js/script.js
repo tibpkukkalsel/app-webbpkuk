@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================================
-    // 3. HASHTAG SEARCH AUTO-FILL
+    // 3. HASHTAG SEARCH AUTO-FILL & FORM SUBMISSION
     // =========================================================
     const tagPills = document.querySelectorAll('.tag-pill');
     const searchInput = document.getElementById('searchInput');
@@ -109,13 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const tagText = pill.textContent.replace('#', '').trim();
             if (searchInput) {
                 searchInput.value = tagText;
-                searchInput.focus();
-                
                 const searchForm = document.getElementById('searchForm');
-                searchForm.style.transform = 'scale(1.02)';
-                setTimeout(() => {
-                    searchForm.style.transform = 'scale(1)';
-                }, 200);
+                if (searchForm) {
+                    searchForm.submit();
+                } else {
+                    window.location.href = `/informasi?q=${encodeURIComponent(tagText)}`;
+                }
             }
         });
     });
@@ -123,13 +122,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchForm = document.getElementById('searchForm');
     if (searchForm) {
         searchForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const query = searchInput.value.trim();
-            if (query) {
-                alert(`Mencari informasi: "${query}" ...`);
-            } else {
-                searchInput.focus();
+            const query = searchInput ? searchInput.value.trim() : '';
+            if (!query) {
+                e.preventDefault();
+                if (searchInput) searchInput.focus();
             }
+            // Allow form submit to /informasi?q=KEYWORD
         });
     }
 
@@ -346,6 +344,208 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         window.addEventListener('resize', updateProductSlider);
+    }
+
+    // =========================================================
+    // 8. MOBILE BOTTOM NAVIGATION & SUB-MENU SHEETS LOGIC
+    // =========================================================
+    const mobileSheetButtons = document.querySelectorAll('.mobile-nav-item[data-sheet]');
+    const mobileSheets = document.querySelectorAll('.mobile-bottom-sheet');
+    const sheetBackdrop = document.getElementById('mobileSheetBackdrop');
+    const sheetCloseBtns = document.querySelectorAll('.sheet-close-btn');
+
+    function closeAllSheets() {
+        mobileSheets.forEach(sheet => sheet.classList.remove('active'));
+        if (sheetBackdrop) sheetBackdrop.classList.remove('active');
+        mobileSheetButtons.forEach(btn => btn.classList.remove('active'));
+    }
+
+    mobileSheetButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetSheetId = btn.getAttribute('data-sheet');
+            const targetSheet = document.getElementById(targetSheetId);
+
+            if (targetSheet) {
+                if (targetSheet.classList.contains('active')) {
+                    closeAllSheets();
+                } else {
+                    closeAllSheets();
+                    targetSheet.classList.add('active');
+                    if (sheetBackdrop) sheetBackdrop.classList.add('active');
+                    btn.classList.add('active');
+                }
+            }
+        });
+    });
+
+    sheetCloseBtns.forEach(btn => {
+        btn.addEventListener('click', closeAllSheets);
+    });
+
+    if (sheetBackdrop) {
+        sheetBackdrop.addEventListener('click', closeAllSheets);
+    }
+
+    // =========================================================
+    // 9. INTERACTIVE SCROLL & PAGE LOAD REVEAL ANIMATIONS
+    // =========================================================
+    const revealTargets = [
+        { selector: '.welcome-badge', animation: 'reveal-fade-up' },
+        { selector: '.hero-title', animation: 'reveal-fade-up', delay: 'delay-1' },
+        { selector: '.hero-subtitle', animation: 'reveal-fade-up', delay: 'delay-2' },
+        { selector: '.search-box-wrapper', animation: 'reveal-fade-up', delay: 'delay-3' },
+        { selector: '.action-card', animation: 'reveal-zoom-in', stagger: true },
+        { selector: '.slider-section', animation: 'reveal-fade-up' },
+        { selector: '.news-header', animation: 'reveal-fade-up' },
+        { selector: '.news-card', animation: 'reveal-fade-up', stagger: true },
+        { selector: '.agenda-section', animation: 'reveal-fade-up' },
+        { selector: '.about-overview-left', animation: 'reveal-fade-left' },
+        { selector: '.about-overview-right', animation: 'reveal-fade-right' },
+        { selector: '.products-section', animation: 'reveal-fade-up' },
+        { selector: '.related-links-section', animation: 'reveal-fade-up' }
+    ];
+
+    revealTargets.forEach(target => {
+        const elements = document.querySelectorAll(target.selector);
+        elements.forEach((el, idx) => {
+            el.classList.add(target.animation);
+            if (target.delay) {
+                el.classList.add(target.delay);
+            }
+            if (target.stagger) {
+                const delayClass = `delay-${(idx % 4) + 1}`;
+                el.classList.add(delayClass);
+            }
+        });
+    });
+
+    if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.08,
+            rootMargin: '0px 0px -20px 0px'
+        });
+
+        document.querySelectorAll('.reveal-fade-up, .reveal-fade-left, .reveal-fade-right, .reveal-zoom-in').forEach(el => {
+            revealObserver.observe(el);
+        });
+    } else {
+        // Fallback for older browsers
+        document.querySelectorAll('.reveal-fade-up, .reveal-fade-left, .reveal-fade-right, .reveal-zoom-in').forEach(el => {
+            el.classList.add('is-revealed');
+        });
+    }
+
+    // =========================================================
+    // 10. MOBILE PROFILE SIDEBAR MINIMALIST MENU TOGGLE
+    // =========================================================
+    const profileSidebarToggle = document.getElementById('profileSidebarToggle');
+    const profileMenuList = document.getElementById('profileMenuList');
+
+    if (profileSidebarToggle && profileMenuList) {
+        profileSidebarToggle.addEventListener('click', () => {
+            profileMenuList.classList.toggle('is-open');
+            const icon = profileSidebarToggle.querySelector('.toggle-icon');
+            if (profileMenuList.classList.contains('is-open')) {
+                icon.className = 'fa-solid fa-xmark toggle-icon';
+            } else {
+                icon.className = 'fa-solid fa-bars toggle-icon';
+            }
+        });
+    }
+
+    // =========================================================
+    // 11. INFORMASI PAGE FILTER MODAL DIALOG TOGGLE
+    // =========================================================
+    const informasiFilterToggle = document.getElementById('informasiFilterToggle');
+    const informasiFilterModal = document.getElementById('informasiFilterModal');
+    const filterModalClose = document.getElementById('filterModalClose');
+    const filterModalBackdrop = document.getElementById('filterModalBackdrop');
+    const filterModalApply = document.getElementById('filterModalApply');
+
+    const openFilterModal = () => {
+        if (informasiFilterModal) {
+            informasiFilterModal.classList.add('is-active');
+            informasiFilterModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+    };
+
+    const closeFilterModal = () => {
+        if (informasiFilterModal) {
+            informasiFilterModal.classList.remove('is-active');
+            informasiFilterModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+    };
+
+    if (informasiFilterToggle) {
+        informasiFilterToggle.addEventListener('click', openFilterModal);
+    }
+    if (filterModalClose) {
+        filterModalClose.addEventListener('click', closeFilterModal);
+    }
+    if (filterModalBackdrop) {
+        filterModalBackdrop.addEventListener('click', closeFilterModal);
+    }
+    if (filterModalApply) {
+        filterModalApply.addEventListener('click', closeFilterModal);
+    }
+
+    // Filter Pills Selection Handler (Deferred submit until Cari & Terapkan)
+    const filterJenisInput = document.getElementById('filterJenisInput');
+    const filterKategoriInput = document.getElementById('filterKategoriInput');
+
+    const jenisPillsGroup = document.getElementById('jenisPillsGroup');
+    if (jenisPillsGroup && filterJenisInput) {
+        const jenisBtns = jenisPillsGroup.querySelectorAll('.filter-pill-btn');
+        jenisBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                jenisBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterJenisInput.value = btn.getAttribute('data-val') || '';
+            });
+        });
+    }
+
+    const kategoriPillsGroup = document.getElementById('kategoriPillsGroup');
+    if (kategoriPillsGroup && filterKategoriInput) {
+        const katBtns = kategoriPillsGroup.querySelectorAll('.filter-pill-btn');
+        katBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                katBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterKategoriInput.value = btn.getAttribute('data-val') || '';
+            });
+        });
+    }
+
+    // Clear Search Input Button (Clear text without reloading)
+    const clearSearchInputBtn = document.getElementById('clearSearchInputBtn');
+    const filterQueryInput = document.getElementById('filterQueryInput');
+
+    if (clearSearchInputBtn && filterQueryInput) {
+        filterQueryInput.addEventListener('input', () => {
+            if (filterQueryInput.value.trim().length > 0) {
+                clearSearchInputBtn.style.display = 'block';
+            } else {
+                clearSearchInputBtn.style.display = 'none';
+            }
+        });
+
+        clearSearchInputBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            filterQueryInput.value = '';
+            clearSearchInputBtn.style.display = 'none';
+            filterQueryInput.focus();
+        });
     }
 
 });

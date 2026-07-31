@@ -270,6 +270,15 @@ class Edit extends Component
             return;
         }
 
+        if(count($this->hashtagPost ?? []) >= 3){
+            $this->dispatch('swal',
+                icon:'warning',
+                title:'Perhatian',
+                text:'Maksimal hanya 3 hashtag untuk setiap postingan.'
+            );
+            return;
+        }
+
         $this->postService
             ->tambahHashtag(
                 $this->postId,

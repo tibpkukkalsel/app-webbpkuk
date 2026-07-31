@@ -10,6 +10,11 @@ class HashtagService
 {
     public function tambah($idPost,$tag)
     {
+        $currentCount = PostHashtag::where('id_post', $idPost)->count();
+        if ($currentCount >= 3) {
+            return false;
+        }
+
         $nama=strtolower(trim($tag['value']));
 
         $hashtag=Hashtag::firstOrCreate([
