@@ -19,16 +19,57 @@
             $heroImages = $fallbackImages;
         }
 
-        $siteTitle = isset($identitas)
+        $siteName = 'BALATKOP-UK PROV. KALSEL';
+        $siteBrand = 'Balatkop-UK Prov. Kalsel';
+        $siteNameFull = isset($identitas)
             ? ($identitas->firstWhere('nama', 'Title Website')?->keterangan ?? 'Balai Pelatihan Koperasi & Usaha Kecil Prov. Kalsel')
             : 'Balai Pelatihan Koperasi & Usaha Kecil Prov. Kalsel';
             
-        $siteDesc =
+        $defaultDesc =
             'Website Resmi Balai Pelatihan Koperasi & Usaha Kecil Provinsi Kalimantan Selatan. Temukan informasi publik, layanan koperasi, layanan usaha kecil, dan info pelatihan.';
 
-        $shareLogo = null;
+        $defaultLogo = null;
         if (isset($identitas) && ($logoItem = $identitas->firstWhere('nama', 'Logo Website'))) {
-            $shareLogo = asset('storage/header/' . $logoItem->keterangan);
+            $defaultLogo = asset('storage/header/' . $logoItem->keterangan);
+        }
+
+        // Professional Frontend Page Title Generator
+        $yieldTitle = trim($__env->yieldContent('title'));
+
+        if (!empty($yieldTitle) && $yieldTitle !== 'Beranda') {
+            $metaTitle = $yieldTitle . ' | ' . $siteBrand;
+        } elseif (isset($post) && !empty($post->judul)) {
+            $metaTitle = $post->judul . ' | ' . $siteBrand;
+        } elseif (isset($agenda) && !empty($agenda->nama)) {
+            $metaTitle = $agenda->nama . ' - Agenda Kegiatan | ' . $siteBrand;
+        } else {
+            $metaTitle = 'Website Resmi ' . $siteNameFull;
+        }
+
+        // Dynamic Meta Description & Image
+        if (isset($post)) {
+            $rawSummary = !empty(trim($post->ringkasan ?? ''))
+                ? $post->ringkasan
+                : (!empty(trim($post->isi ?? ''))
+                    ? $post->isi
+                    : $post->judul);
+            
+            $datePrefix = $post->created_at ? $post->created_at->format('d/m/Y') . ' - ' : '';
+            $metaDesc = $datePrefix . Str::limit(strip_tags($rawSummary), 150);
+
+            if (!empty($post->thumbnail)) {
+                $metaImage = asset('storage/post/thumbnail/' . $post->thumbnail);
+            } elseif ($post->galeri && $post->galeri->first()?->gambar) {
+                $metaImage = asset('storage/post/galeri/' . $post->galeri->first()->gambar);
+            } else {
+                $metaImage = $defaultLogo;
+            }
+        } elseif (isset($agenda)) {
+            $metaDesc = Str::limit(strip_tags($agenda->deskripsi ?? $agenda->nama), 150);
+            $metaImage = $defaultLogo;
+        } else {
+            $metaDesc = $defaultDesc;
+            $metaImage = $defaultLogo;
         }
     @endphp
 
@@ -37,31 +78,33 @@
         <link rel="preload" as="image" href="{{ $heroImages[0] }}">
     @endif
 
-    <title>{{ $siteTitle }}</title>
+    <title>{!! $metaTitle !!}</title>
 
     <link rel="shortcut icon" type="image/png"
         @if (isset($identitas) && ($shortcut = $identitas->firstWhere('nama', 'Logo Shortcut'))) href="{{ asset('storage/header/' . $shortcut->keterangan) }}" @endif />
-    <meta name="description" content="{{ $siteDesc }}">
+    <meta name="description" content="{{ $metaDesc }}">
 
     <!-- OPEN GRAPH / WHATSAPP / FACEBOOK SHARE META TAGS -->
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="{{ isset($post) ? 'article' : 'website' }}">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="{{ $siteTitle }}">
-    <meta property="og:description" content="{{ $siteDesc }}">
-    @if ($shareLogo)
-        <meta property="og:image" content="{{ $shareLogo }}">
-        <meta property="og:image:secure_url" content="{{ $shareLogo }}">
-        <meta property="og:image:type" content="image/png">
+    <meta property="og:title" content="{{ $metaTitle }}">
+    <meta property="og:description" content="{{ $metaDesc }}">
+    @if ($metaImage)
+        <meta property="og:image" content="{{ $metaImage }}">
+        <meta property="og:image:secure_url" content="{{ $metaImage }}">
     @endif
-    <meta property="og:site_name" content="BALATKOP-UK KALSEL">
+    <meta property="og:site_name" content="{{ $siteName }}">
+    @if (isset($post) && $post->created_at)
+        <meta property="article:published_time" content="{{ $post->created_at->toIso8601String() }}">
+    @endif
 
     <!-- TWITTER / X CARD META TAGS -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="{{ url()->current() }}">
-    <meta name="twitter:title" content="{{ $siteTitle }}">
-    <meta name="twitter:description" content="{{ $siteDesc }}">
-    @if ($shareLogo)
-        <meta name="twitter:image" content="{{ $shareLogo }}">
+    <meta name="twitter:title" content="{{ $metaTitle }}">
+    <meta name="twitter:description" content="{{ $metaDesc }}">
+    @if ($metaImage)
+        <meta name="twitter:image" content="{{ $metaImage }}">
     @endif
 
     <!-- Google Fonts -->

@@ -1,5 +1,7 @@
 @extends('layouts.websites')
 
+@section('title', 'Struktur Organisasi')
+
 @section('content')
     <!-- PAGE BANNER / BREADCRUMB HEADER -->
     <div class="profile-page-banner"

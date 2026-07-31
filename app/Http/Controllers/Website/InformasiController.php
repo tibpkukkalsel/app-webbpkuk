@@ -71,4 +71,55 @@ class InformasiController extends Controller
             'search'
         ));
     }
+
+    public function detail(Request $request, $slug)
+    {
+        $post = Post::with(['kategori', 'user', 'galeri', 'hashtags'])
+            ->where('status', 2)
+            ->where(function ($q) use ($slug) {
+                $q->where('slug', $slug)
+                  ->orWhere('id_post', $slug);
+            })
+            ->firstOrFail();
+
+        // Increment count view HANYA jika device/browser & jam belum tercatat
+        $ip = $request->ip();
+        $userAgent = md5($request->userAgent() ?? '');
+        $currentHour = date('YmdH');
+        $viewKey = 'viewed_post_' . $post->id_post . '_' . md5($ip . '_' . $userAgent) . '_' . $currentHour;
+
+        if (!$request->session()->has($viewKey) && !cache()->has($viewKey)) {
+            $post->increment('view_count');
+            $request->session()->put($viewKey, true);
+            cache()->put($viewKey, true, now()->addHour());
+        }
+
+        // 5 Informasi Terbaru
+        $latestPosts = Post::with('kategori')
+            ->where('status', 2)
+            ->where('id_post', '!=', $post->id_post)
+            ->latest('created_at')
+            ->take(5)
+            ->get();
+
+        // Tag Populer yang Sering Digunakan (Maksimal 6 Tag)
+        $popularHashtags = Hashtag::withCount('posts')
+            ->orderByDesc('posts_count')
+            ->take(6)
+            ->get();
+
+
+
+        $tentang = Tentang::all();
+        $identitas = Identitas::all();
+
+        return view('websites.informasi.detail', compact(
+            'post',
+            'latestPosts',
+            'popularHashtags',
+            'tentang',
+            'identitas'
+        ));
+    }
 }
+

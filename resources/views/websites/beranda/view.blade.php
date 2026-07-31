@@ -387,7 +387,7 @@
                                 @endphp
                                 <article class="news-card">
                                     <div class="news-image-box">
-                                        <a href="#" class="news-img-link" title="Baca Selengkapnya">
+                                        <a href="{{ route('website.informasi.detail', $b->slug ?? $b->id_post) }}" class="news-img-link" title="Baca Selengkapnya">
                                             @if ($b->thumbnail)
                                                 <img src="{{ asset('storage/post/thumbnail/' . $b->thumbnail) }}"
                                                     alt="{{ $b->judul }}" loading="lazy" decoding="async"
@@ -414,11 +414,15 @@
                                     <div class="news-details">
                                         <span class="news-category-label">
                                             <i class="{{ $jenisIcon }} me-1"></i>
-                                            {{ strtoupper($b->jenis ?? 'BERITA') }} &bull;
-                                            {{ strtoupper($b->kategori?->kategori ?? 'KATEGORI') }}
+                                            {{ strtoupper($b->jenis ?? 'BERITA') }}
+                                            @if ($b->kategori)
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-folder-open me-1"></i>
+                                                {{ strtoupper($b->kategori->kategori) }}
+                                            @endif
                                         </span>
                                         <h3 class="news-title">
-                                            <a href="#">{{ $b->judul }}</a>
+                                            <a
+                                                href="{{ route('website.informasi.detail', $b->slug ?? $b->id_post) }}">{{ $b->judul }}</a>
                                         </h3>
                                         @php
                                             $summaryText = !empty(trim($b->ringkasan ?? ''))
@@ -452,14 +456,16 @@
                                         </div>
                                     </div>
                                     <div class="news-details">
-                                        <span class="news-category-label"><i class="ti ti-article me-1"></i> BERITA
-                                            &bull; UMKM</span>
+                                        <span class="news-category-label"><i
+                                                class="ti ti-article me-1"></i>BERITA&nbsp;&nbsp;<i
+                                                class="fa-solid fa-folder-open me-1"></i>UMKM</span>
                                         <h3 class="news-title">
                                             <a href="#">Pendampingan Digitalisasi dan Fasilitasi Legalitas Usaha
                                                 Mikro Kalimantan Selatan</a>
                                         </h3>
                                         <p class="news-excerpt">
-                                            Balai Pelatihan Koperasi dan Usaha Kecil Provinsi Kalimantan Selatan menyelenggarakan pendampingan digitalisasi dan fasilitasi legalitas usaha mikro.
+                                            Balai Pelatihan Koperasi dan Usaha Kecil Provinsi Kalimantan Selatan
+                                            menyelenggarakan pendampingan digitalisasi dan fasilitasi legalitas usaha mikro.
                                         </p>
                                     </div>
                                 </article>
@@ -485,7 +491,7 @@
                                 @endphp
                                 <article class="news-card">
                                     <div class="news-image-box">
-                                        <a href="#" class="news-img-link"
+                                        <a href="{{ route('website.galeri.detail', $f->slug ?? $f->id_post) }}" class="news-img-link"
                                             title="Lihat Galeri Foto ({{ $totalFoto }} Foto)">
                                             @if ($coverFoto)
                                                 <img src="{{ $coverFoto }}" alt="{{ $f->judul }}" loading="lazy"
@@ -513,7 +519,7 @@
                                         <span class="news-category-label">{{ $f->kategori?->kategori ?? 'GALERI FOTO' }}
                                             &bull; {{ $totalFoto }} FOTO</span>
                                         <h3 class="news-title">
-                                            <a href="#">{{ $f->judul }}</a>
+                                            <a href="{{ route('website.galeri.detail', $f->slug ?? $f->id_post) }}">{{ $f->judul }}</a>
                                         </h3>
                                     </div>
                                 </article>
@@ -548,7 +554,7 @@
                         </div>
 
                         <div class="more-news-btn-wrap">
-                            <a href="#" class="btn-outline-blue">FOTO LAINNYA</a>
+                            <a href="{{ url('/galeri/foto') }}" class="btn-outline-blue">FOTO LAINNYA</a>
                         </div>
                     </div>
 
@@ -621,7 +627,7 @@
                         </div>
 
                         <div class="more-news-btn-wrap">
-                            <a href="#" class="btn-outline-blue">VIDEO LAINNYA</a>
+                            <a href="{{ url('/galeri/video') }}" class="btn-outline-blue">VIDEO LAINNYA</a>
                         </div>
                     </div>
 
@@ -629,7 +635,7 @@
 
                 <!-- Right Column: Berita Terpopuler Sidebar -->
                 <aside class="news-right-sidebar">
-                    <h3 class="sidebar-heading">Berita Terpopuler</h3>
+                    <h3 class="sidebar-heading">Informasi Terpopuler</h3>
 
                     <div class="popular-list">
                         @forelse($beritaTerpopuler as $index => $pop)
@@ -652,7 +658,7 @@
                                     $icon = 'fa-lightbulb';
                                 }
                             @endphp
-                            <a href="#" class="popular-item" title="{{ $pop->judul }}">
+                            <a href="{{ route('website.informasi.detail', $pop->slug ?? $pop->id_post) }}" class="popular-item" title="{{ $pop->judul }}">
                                 <div class="popular-thumb-link">
                                     @if ($pop->thumbnail)
                                         <img src="{{ asset('storage/post/thumbnail/' . $pop->thumbnail) }}"
@@ -813,7 +819,7 @@
 
             <!-- Bottom Action Button -->
             <div class="more-agenda-btn-wrap">
-                <a href="#" class="btn-outline-blue">AGENDA LAINNYA</a>
+                <a href="{{ url('/agenda') }}" class="btn-outline-blue">AGENDA LAINNYA</a>
             </div>
 
         </div>

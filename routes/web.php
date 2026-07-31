@@ -20,19 +20,38 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VisimisiController;
 use App\Http\Controllers\HeroBannerController;
 use App\Http\Controllers\InfografisController;
+use App\Http\Controllers\SeksiController;
+use App\Http\Controllers\JabatanController;
+use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\Website\BerandaController as WebsiteBerandaController;
 use App\Http\Controllers\Website\TentangController as WebsiteTentangController;
 use App\Http\Controllers\Website\VisimisiController as WebsiteVisimisiController;
 use App\Http\Controllers\Website\StorganisasiController as WebsiteStorganisasiController;
 use App\Http\Controllers\Website\InformasiController as WebsiteInformasiController;
+use App\Http\Controllers\Website\GaleriController as WebsiteGaleriController;
+use App\Http\Controllers\Website\AgendaController as WebsiteAgendaController;
+use App\Http\Controllers\Website\PegawaiController as WebsitePegawaiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebsiteBerandaController::class, 'view']);
 Route::get('/profil/tentang', [WebsiteTentangController::class, 'view'])->name('website.profil.tentang');
 Route::get('/profil/visimisi', [WebsiteVisimisiController::class, 'view'])->name('website.profil.visimisi');
 Route::get('/profil/struktur-organisasi', [WebsiteStorganisasiController::class, 'view'])->name('website.profil.storganisasi');
+Route::get('/profil/pegawai', [WebsitePegawaiController::class, 'view'])->name('website.profil.pegawai');
+Route::get('/agenda', [WebsiteAgendaController::class, 'view'])->name('website.agenda');
+Route::get('/agenda/{slug}', [WebsiteAgendaController::class, 'detail'])->name('website.agenda.detail');
 Route::get('/informasi', [WebsiteInformasiController::class, 'view'])->name('website.informasi');
+Route::get('/informasi/{slug}', [WebsiteInformasiController::class, 'detail'])->name('website.informasi.detail');
+Route::get('/galeri', function() { return redirect('/galeri/foto'); })->name('website.galeri');
+Route::get('/galeri/foto', [WebsiteGaleriController::class, 'view'])->name('website.galeri.foto');
+Route::get('/galeri/video', [WebsiteGaleriController::class, 'viewVideo'])->name('website.galeri.video');
+Route::get('/galeri/foto/{slug}', [WebsiteGaleriController::class, 'detail'])->name('website.galeri.detail');
+Route::get('/galeri/{slug}', [WebsiteGaleriController::class, 'detail']);
+Route::get('/gallery/{slug}', [WebsiteGaleriController::class, 'detail']);
+
+
+
 
 
 Route::prefix('cp-x14')
@@ -62,6 +81,21 @@ Route::prefix('cp-x14')
             ->middleware('permission:pengguna.view')
             ->name('kategori.view');
         //end crud KATEGORI
+        //Start Crud SEKSI
+        Route::get('/seksi', [SeksiController::class, 'view'])
+            ->middleware('permission:pengguna.view')
+            ->name('seksi.view');
+        //end crud SEKSI
+        //Start Crud JABATAN
+        Route::get('/jabatan', [JabatanController::class, 'view'])
+            ->middleware('permission:pengguna.view')
+            ->name('jabatan.view');
+        //end crud JABATAN
+        //Start Crud PEGAWAI
+        Route::get('/pegawai', [PegawaiController::class, 'view'])
+            ->middleware('permission:pengguna.view')
+            ->name('pegawai.view');
+        //end crud PEGAWAI
         //Start Crud IDENTITAS
         Route::get('/identitas', [IdentitasController::class, 'view'])
             ->middleware('permission:identitas.view')

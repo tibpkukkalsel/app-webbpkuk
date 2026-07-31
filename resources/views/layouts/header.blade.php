@@ -4,7 +4,8 @@
         <!-- Left: Kalimantan Selatan Emblem Logo -->
         <a href="/" class="brand-logo left-logo">
             @if ($logoleft = $identitas->firstWhere('nama', 'Logo Pemprov'))
-                <img src="{{ asset('storage/header/' . $logoleft->keterangan) }}" class="kalsel-emblem-svg" alt="Logo Pemprov Kalsel">
+                <img src="{{ asset('storage/header/' . $logoleft->keterangan) }}" class="kalsel-emblem-svg"
+                    alt="Logo Pemprov Kalsel">
             @endif
         </a>
 
@@ -18,7 +19,7 @@
                         <li><a href="{{ url('/profil/tentang') }}">Tentang</a></li>
                         <li><a href="{{ url('/profil/visimisi') }}">Visi & Misi</a></li>
                         <li><a href="{{ url('/profil/struktur-organisasi') }}">Struktur Organisasi</a></li>
-                        <li><a href="#">Pegawai</a></li>
+                        <li><a href="{{ url('/profil/pegawai') }}">Data Pegawai</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -27,12 +28,12 @@
                         <li><a href="#">Dashboard Diklat</a></li>
                         <li><a href="#">Identifikasi Kebutuhan Pelatihan</a></li>
                         <li><a href="#">Sertifikat Elektronik</a></li>
-                        <li><a href="#">Layanan Kemasan</a></li>
+                        <li><a href="https://pusatlayanankemasankalsel.com/">Layanan Kemasan</a></li>
                         <li><a href="#">Survei Kepuasan Diklat</a></li>
                         <li><a href="#">Pemanfaatan Fasilitas</a></li>
                     </ul>
                 </li>
-                <li class="nav-item active"><a href="#" class="nav-link">AGENDA</a></li>
+                <li class="nav-item active"><a href="{{ url('/agenda') }}" class="nav-link">AGENDA</a></li>
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link">INFORMASI <i
                             class="fa-solid font-chevron fa-chevron-down"></i></a>
@@ -44,10 +45,11 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a href="#" class="nav-link">GALERI <i class="fa-solid font-chevron fa-chevron-down"></i></a>
+                    <a href="{{ url('/galeri/foto') }}" class="nav-link">GALERI <i
+                            class="fa-solid font-chevron fa-chevron-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Foto</a></li>
-                        <li><a href="#">Video</a></li>
+                        <li><a href="{{ url('/galeri/foto') }}">Foto</a></li>
+                        <li><a href="{{ url('/galeri/video') }}">Video</a></li>
                     </ul>
                 </li>
                 <li class="nav-item"><a href="#" class="nav-link">KONTAK</a></li>
@@ -68,10 +70,12 @@
         <div class="brand-logo right-logo">
             <div class="balatkop-logo-wrap">
                 @if ($logoright = $identitas->firstWhere('nama', 'Logo Balatkop Sec'))
-                    <img src="{{ asset('storage/header/' . $logoright->keterangan) }}" class="logo-img logo-white" alt="Balatkop Kalsel">
+                    <img src="{{ asset('storage/header/' . $logoright->keterangan) }}" class="logo-img logo-white"
+                        alt="Balatkop Kalsel">
                 @endif
                 @if ($logoright = $identitas->firstWhere('nama', 'Logo Balatkop Primary'))
-                    <img src="{{ asset('storage/header/' . $logoright->keterangan) }}" class="logo-img logo-blue" alt="Balatkop Kalsel">
+                    <img src="{{ asset('storage/header/' . $logoright->keterangan) }}" class="logo-img logo-blue"
+                        alt="Balatkop Kalsel">
                 @endif
             </div>
         </div>
@@ -98,7 +102,7 @@
         </button>
 
         <!-- Item 3: Agenda -->
-        <a href="#" class="mobile-nav-item">
+        <a href="{{ url('/agenda') }}" class="mobile-nav-item">
             <div class="mobile-nav-icon">
                 <i class="fa-regular fa-calendar-days"></i>
             </div>
@@ -148,7 +152,7 @@
         <li><a href="{{ url('/profil/visimisi') }}"><i class="fa-solid fa-chevron-right"></i> Visi & Misi</a></li>
         <li><a href="{{ url('/profil/struktur-organisasi') }}"><i class="fa-solid fa-chevron-right"></i> Struktur
                 Organisasi</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Pegawai</a></li>
+        <li><a href="{{ url('/profil/pegawai') }}"><i class="fa-solid fa-chevron-right"></i> Data Pegawai</a></li>
     </ul>
 </div>
 
@@ -165,7 +169,8 @@
         <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Dashboard Diklat</a></li>
         <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Sertifikat Elektronik</a></li>
         <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Identifikasi Kebutuhan Pelatihan</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Layanan Kemasan</a></li>
+        <li><a href="https://pusatlayanankemasankalsel.com/"><i class="fa-solid fa-chevron-right"></i>
+                Layanan Kemasan</a></li>
         <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Survei Kepuasan Diklat</a></li>
         <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Pemanfaatan Fasilitas</a></li>
     </ul>
@@ -182,8 +187,10 @@
     </div>
     <ul class="sheet-menu-list">
         <li><a href="{{ url('/informasi?jenis=Berita') }}"><i class="fa-solid fa-chevron-right"></i> Berita</a></li>
-        <li><a href="{{ url('/informasi?jenis=Artikel') }}"><i class="fa-solid fa-chevron-right"></i> Artikel</a></li>
-        <li><a href="{{ url('/informasi?jenis=Tips') }}"><i class="fa-solid fa-chevron-right"></i> Info dan Tips</a></li>
+        <li><a href="{{ url('/informasi?jenis=Artikel') }}"><i class="fa-solid fa-chevron-right"></i> Artikel</a>
+        </li>
+        <li><a href="{{ url('/informasi?jenis=Tips') }}"><i class="fa-solid fa-chevron-right"></i> Info dan Tips</a>
+        </li>
         <li><a href="{{ url('/informasi') }}"><i class="fa-solid fa-chevron-right"></i> Semua Informasi</a></li>
     </ul>
 </div>
@@ -198,7 +205,7 @@
         <button class="sheet-close-btn" type="button"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <ul class="sheet-menu-list">
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Foto</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Video</a></li>
+        <li><a href="{{ url('/galeri/foto') }}"><i class="fa-solid fa-chevron-right"></i> Foto</a></li>
+        <li><a href="{{ url('/galeri/video') }}"><i class="fa-solid fa-chevron-right"></i> Video</a></li>
     </ul>
 </div>

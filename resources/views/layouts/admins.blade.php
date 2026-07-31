@@ -87,6 +87,44 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow {{ request()->routeIs('seksi*', 'jabatan*', 'pegawai*') ? 'active' : '' }}"
+                                href="javascript:void(0)" aria-expanded="false">
+                                <span class="d-flex">
+                                    <i class="ti ti-user-check"></i>
+                                </span>
+                                <span class="hide-menu">Data Pegawai</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level {{ request()->routeIs('seksi*', 'jabatan*', 'pegawai*') ? 'in' : '' }}">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link {{ request()->routeIs('seksi*') ? 'active' : '' }}"
+                                        href="{{ route('seksi.view') }}" aria-expanded="false">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle"></i>
+                                        </div>
+                                        <span class="hide-menu">Seksi</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link {{ request()->routeIs('jabatan*') ? 'active' : '' }}"
+                                        href="{{ route('jabatan.view') }}" aria-expanded="false">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle"></i>
+                                        </div>
+                                        <span class="hide-menu">Jabatan</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link {{ request()->routeIs('pegawai*') ? 'active' : '' }}"
+                                        href="{{ route('pegawai.view') }}" aria-expanded="false">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle"></i>
+                                        </div>
+                                        <span class="hide-menu">Pegawai</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ route('pengguna.view') }}"
                                 class="sidebar-link {{ request()->routeIs('pengguna*') ? 'active' : '' }}">
                                 <span>
