@@ -94,7 +94,8 @@
                                 </span>
                                 <span class="hide-menu">Data Pegawai</span>
                             </a>
-                            <ul aria-expanded="false" class="collapse first-level {{ request()->routeIs('seksi*', 'jabatan*', 'pegawai*') ? 'in' : '' }}">
+                            <ul aria-expanded="false"
+                                class="collapse first-level {{ request()->routeIs('seksi*', 'jabatan*', 'pegawai*') ? 'in' : '' }}">
                                 <li class="sidebar-item">
                                     <a class="sidebar-link {{ request()->routeIs('seksi*') ? 'active' : '' }}"
                                         href="{{ route('seksi.view') }}" aria-expanded="false">
@@ -211,6 +212,15 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a class="sidebar-link {{ request()->routeIs('agenda*') ? 'active' : '' }}"
+                                href="{{ route('agenda.view') }}" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-calendar"></i>
+                                </span>
+                                <span class="hide-menu">Agenda</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <span class="d-flex">
                                     <i class="ti ti-building"></i>
@@ -245,36 +255,65 @@
                                         <span class="hide-menu">Struktur Organisasi</span>
                                     </a>
                                 </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link {{ request()->routeIs('fasilitas*') ? 'active' : '' }}"
-                                        href="{{ route('fasilitas.view') }}" aria-expanded="false">
-                                        <div class="round-16 d-flex align-items-center justify-content-center">
-                                            <i class="ti ti-circle"></i>
-                                        </div>
-                                        <span class="hide-menu">Fasilitas</span>
-                                    </a>
-                                </li>
                             </ul>
+                        </li>
+                        <li class="nav-small-cap">
+                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                            <span class="hide-menu">Layanan</span>
+                        </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link {{ request()->routeIs('layanan*') ? 'active' : '' }}"
                                 href="{{ route('layanan.view') }}" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-building-community"></i>
                                 </span>
-                                <span class="hide-menu">Layanan UPTD</span>
+                                <span class="hide-menu">Dashboard Diklat</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link {{ request()->routeIs('agenda*') ? 'active' : '' }}"
-                                href="{{ route('agenda.view') }}" aria-expanded="false">
+                            <a class="sidebar-link has-arrow {{ request()->routeIs('fasilitas*') ? 'active' : '' }}"
+                                href="javascript:void(0)" aria-expanded="false">
                                 <span>
-                                    <i class="ti ti-calendar"></i>
+                                    <i class="ti ti-building"></i>
                                 </span>
-                                <span class="hide-menu">Agenda</span>
+                                <span class="hide-menu">Fasilitas</span>
                             </a>
+                            <ul aria-expanded="false" class="collapse first-level {{ request()->routeIs('fasilitas*') ? 'in' : '' }}">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link {{ request()->routeIs('fasilitas.view') ? 'active' : '' }}"
+                                        href="{{ route('fasilitas.view') }}" aria-expanded="false">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle"></i>
+                                        </div>
+                                        <span class="hide-menu">Data Fasilitas</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link {{ request()->routeIs('fasilitas.halaman*') ? 'active' : '' }}" href="{{ route('fasilitas.halaman.view') }}" aria-expanded="false">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle"></i>
+                                        </div>
+                                        <span class="hide-menu">Kelola Halaman</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link {{ request()->routeIs('fasilitas.pemesan*') ? 'active' : '' }}" href="{{ route('fasilitas.pemesan.view') }}" aria-expanded="false">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle"></i>
+                                        </div>
+                                        <span class="hide-menu">Data Pemesan</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link {{ request()->routeIs('fasilitas.riwayat*') ? 'active' : '' }}" href="{{ route('fasilitas.riwayat.view') }}" aria-expanded="false">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle"></i>
+                                        </div>
+                                        <span class="hide-menu">Riwayat</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        </li>
-
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                             <span class="hide-menu">Page</span>

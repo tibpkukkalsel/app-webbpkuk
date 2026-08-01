@@ -26,11 +26,11 @@
                     <a href="#" class="nav-link">LAYANAN <i class="fa-solid font-chevron fa-chevron-down"></i></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">Dashboard Diklat</a></li>
+                        <li><a href="{{ url('/layanan/pemanfaatan-fasilitas') }}">Pemanfaatan Fasilitas</a></li>
+                        <li><a href="https://pusatlayanankemasankalsel.com/">Layanan Kemasan</a></li>
                         <li><a href="#">Identifikasi Kebutuhan Pelatihan</a></li>
                         <li><a href="#">Sertifikat Elektronik</a></li>
-                        <li><a href="https://pusatlayanankemasankalsel.com/">Layanan Kemasan</a></li>
                         <li><a href="#">Survei Kepuasan Diklat</a></li>
-                        <li><a href="#">Pemanfaatan Fasilitas</a></li>
                     </ul>
                 </li>
                 <li class="nav-item active"><a href="{{ url('/agenda') }}" class="nav-link">AGENDA</a></li>
@@ -167,12 +167,11 @@
     </div>
     <ul class="sheet-menu-list">
         <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Dashboard Diklat</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Sertifikat Elektronik</a></li>
+        <li><a href="{{ url('/layanan/pemanfaatan-fasilitas') }}"><i class="fa-solid fa-chevron-right"></i> Pemanfaatan Fasilitas</a></li>
+        <li><a href="https://pusatlayanankemasankalsel.com/"><i class="fa-solid fa-chevron-right"></i> Layanan Kemasan</a></li>
         <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Identifikasi Kebutuhan Pelatihan</a></li>
-        <li><a href="https://pusatlayanankemasankalsel.com/"><i class="fa-solid fa-chevron-right"></i>
-                Layanan Kemasan</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Sertifikat Elektronik</a></li>
         <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Survei Kepuasan Diklat</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Pemanfaatan Fasilitas</a></li>
     </ul>
 </div>
 

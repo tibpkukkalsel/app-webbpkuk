@@ -15,13 +15,25 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
         $superadmin = Role::findByName('Superadmin');
-        $admin = Role::findByName('Admin');
+        $adminWebsite = Role::findByName('Admin Website');
+        $adminFasilitas = Role::findByName('Admin Fasilitas');
+        $adminDiklat = Role::findByName('Admin Diklat');
 
         // Superadmin mendapatkan semua permission
         $superadmin->syncPermissions(Permission::all());
 
-        // Admin mendapatkan permission tertentu
-        $admin->syncPermissions([
+        // Admin Website mendapatkan permission tertentu
+        $adminWebsite->syncPermissions([
+            'dashboard.view',
+        ]);
+
+        // Admin Fasilitas mendapatkan permission tertentu
+        $adminFasilitas->syncPermissions([
+            'dashboard.view',
+        ]);
+
+        // Admin Diklat mendapatkan permission tertentu
+        $adminDiklat->syncPermissions([
             'dashboard.view',
         ]);
     }

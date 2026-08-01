@@ -13,13 +13,26 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
+        // Hapus role 'Admin' lama jika ada
+        Role::where('name', 'Admin')->delete();
+
         Role::firstOrCreate([
             'name' => 'Superadmin',
             'guard_name' => 'web',
         ]);
 
         Role::firstOrCreate([
-            'name' => 'Admin',
+            'name' => 'Admin Website',
+            'guard_name' => 'web',
+        ]);
+
+        Role::firstOrCreate([
+            'name' => 'Admin Fasilitas',
+            'guard_name' => 'web',
+        ]);
+
+        Role::firstOrCreate([
+            'name' => 'Admin Diklat',
             'guard_name' => 'web',
         ]);
     }

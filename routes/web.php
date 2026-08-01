@@ -7,6 +7,11 @@ use App\Http\Controllers\InfoController;
 use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FasilitasController;
+use App\Http\Controllers\FasilitasFotoController;
+use App\Http\Controllers\FasilitasTarifController;
+use App\Http\Controllers\FasilitasHalamanController;
+use App\Http\Controllers\FasilitasPemesanController;
+use App\Http\Controllers\FasilitasRiwayatController;
 use App\Http\Controllers\FooterController;
 use App\Http\Controllers\HalamanutamaController;
 use App\Http\Controllers\HashtagController;
@@ -32,6 +37,7 @@ use App\Http\Controllers\Website\InformasiController as WebsiteInformasiControll
 use App\Http\Controllers\Website\GaleriController as WebsiteGaleriController;
 use App\Http\Controllers\Website\AgendaController as WebsiteAgendaController;
 use App\Http\Controllers\Website\PegawaiController as WebsitePegawaiController;
+use App\Http\Controllers\Website\FasilitasController as WebsiteFasilitasController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebsiteBerandaController::class, 'view']);
@@ -39,6 +45,10 @@ Route::get('/profil/tentang', [WebsiteTentangController::class, 'view'])->name('
 Route::get('/profil/visimisi', [WebsiteVisimisiController::class, 'view'])->name('website.profil.visimisi');
 Route::get('/profil/struktur-organisasi', [WebsiteStorganisasiController::class, 'view'])->name('website.profil.storganisasi');
 Route::get('/profil/pegawai', [WebsitePegawaiController::class, 'view'])->name('website.profil.pegawai');
+Route::get('/layanan/pemanfaatan-fasilitas', [WebsiteFasilitasController::class, 'view'])->name('website.layanan.fasilitas');
+Route::get('/layanan/pemanfaatan-fasilitas/pesan-online', [WebsiteFasilitasController::class, 'pesan'])->name('website.layanan.fasilitas.pesan');
+Route::get('/layanan/pemanfaatan-fasilitas/cek-status', [WebsiteFasilitasController::class, 'cekStatus'])->name('website.layanan.fasilitas.cekStatus');
+Route::get('/layanan/pemanfaatan-fasilitas/{slug}', [WebsiteFasilitasController::class, 'halaman'])->name('website.layanan.fasilitas.halaman');
 Route::get('/agenda', [WebsiteAgendaController::class, 'view'])->name('website.agenda');
 Route::get('/agenda/{slug}', [WebsiteAgendaController::class, 'detail'])->name('website.agenda.detail');
 Route::get('/informasi', [WebsiteInformasiController::class, 'view'])->name('website.informasi');
@@ -144,9 +154,30 @@ Route::prefix('cp-x14')
         Route::get('/profile/strukturorganisasi', [StorganisasiController::class, 'view'])
             ->middleware('permission:profile.konfig')
             ->name('storganisasi.view');
-        Route::get('/profile/fasilitas', [FasilitasController::class, 'view'])
+        Route::get('/fasilitas', [FasilitasController::class, 'view'])
             ->middleware('permission:profile.konfig')
             ->name('fasilitas.view');
+        Route::get('/fasilitas/{id_fasilitas}/foto', [FasilitasFotoController::class, 'view'])
+            ->middleware('permission:profile.konfig')
+            ->name('fasilitas.foto.view');
+        Route::get('/fasilitas/{id_fasilitas}/tarif', [FasilitasTarifController::class, 'view'])
+            ->middleware('permission:profile.konfig')
+            ->name('fasilitas.tarif.view');
+        Route::get('/fasilitas/halaman', [FasilitasHalamanController::class, 'view'])
+            ->middleware('permission:profile.konfig')
+            ->name('fasilitas.halaman.view');
+        Route::get('/fasilitas/halaman/create', [FasilitasHalamanController::class, 'create'])
+            ->middleware('permission:profile.konfig')
+            ->name('fasilitas.halaman.create');
+        Route::get('/fasilitas/halaman/{id}/edit', [FasilitasHalamanController::class, 'edit'])
+            ->middleware('permission:profile.konfig')
+            ->name('fasilitas.halaman.edit');
+        Route::get('/fasilitas/pemesan', [FasilitasPemesanController::class, 'view'])
+            ->middleware('permission:profile.konfig')
+            ->name('fasilitas.pemesan.view');
+        Route::get('/fasilitas/riwayat', [FasilitasRiwayatController::class, 'view'])
+            ->middleware('permission:profile.konfig')
+            ->name('fasilitas.riwayat.view');
         //end Crud PROFILE WEBSITE
         //Start Crud LAYANAN
         Route::get('/layanan', [LayananController::class, 'view'])
