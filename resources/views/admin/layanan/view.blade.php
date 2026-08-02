@@ -1,78 +1,73 @@
 @extends('layouts.admins')
 
 @section('content')
-          <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
-            <div class="card-body px-4 py-3">
-              <div class="row align-items-center">
+    <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
+        <div class="card-body px-4 py-3">
+            <div class="row align-items-center">
                 <div class="col-9">
-                  <h4 class="fw-semibold mb-8">Layanan</h4>
-                  <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                      <li class="breadcrumb-item">
-                        <a class="text-muted text-decoration-none" href="{{ Route('dashboard')}}">Dashboard</a>
-                      </li>
-                      <li class="breadcrumb-item" aria-current="page">Layanan</li>
-                    </ol>
-                  </nav>
+                    <h4 class="fw-semibold mb-8">
+                        @if ($tab === 'wilayah')
+                            Data Wilayah Kalsel
+                        @elseif ($tab === 'jenis_diklat')
+                            Jenis Diklat SDM
+                        @elseif ($tab === 'identifikasi')
+                            Identifikasi Kebutuhan Diklat
+                        @elseif ($tab === 'realisasi')
+                            Realisasi Diklat
+                        @else
+                            Dashboard Diklat
+                        @endif
+                    </h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a class="text-muted text-decoration-none" href="{{ route('dashboard') }}">Dashboard</a>
+                            </li>
+                            <li class="breadcrumb-item text-muted" aria-current="page">Layanan</li>
+                            <li class="breadcrumb-item active" aria-current="page">Dashboard Diklat</li>
+                        </ol>
+                    </nav>
                 </div>
                 <div class="col-3">
-                  <div class="text-center mb-n5">
-                    <img src="{{asset ('admins/images/breadcrumb/ChatBc.png')}}" alt="modernize-img" class="img-fluid mb-n4" />
-                  </div>
+                    <div class="text-center mb-n5">
+                        <img src="{{ asset('admins/images/breadcrumb/ChatBc.png') }}" alt="modernize-img" class="img-fluid mb-n4" />
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-          <div class="datatables">
-            <!-- start Zero Configuration -->
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h4 class="card-title mb-0">Data</h4>
-                  <a href="{{ Route('layanan.create')}}" class="btn btn-primary">+ Buat Baru</a>                  
-                </div>
-                <br>
-                 <div class="table-responsive">
+        </div>
+    </div>
 
-                  <livewire:admin.layanan.table />
-                  <livewire:admin.layanan.delete />
-
+    <div class="datatables">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="card-title mb-0">
+                        @if ($tab === 'wilayah')
+                            Data Wilayah Kalsel
+                        @elseif ($tab === 'jenis_diklat')
+                            Jenis Diklat SDM (Koperasi & UMKM)
+                        @elseif ($tab === 'identifikasi')
+                            Identifikasi Kebutuhan Diklat
+                        @elseif ($tab === 'realisasi')
+                            Realisasi Diklat
+                        @else
+                            Data
+                        @endif
+                    </h4>
                 </div>
-              </div>
+
+                <div class="table-responsive">
+                    @if ($tab === 'wilayah')
+                        <livewire:admin.layanan.gis-wilayah.table />
+                    @elseif ($tab === 'jenis_diklat')
+                        <livewire:admin.layanan.gis-jenis-diklat.table />
+                    @elseif ($tab === 'identifikasi')
+                        <livewire:admin.layanan.gis-identifikasi.table />
+                    @elseif ($tab === 'realisasi')
+                        <livewire:admin.layanan.gis-realisasi.table />
+                    @endif
+                </div>
             </div>
-          </div>     
-
+        </div>
+    </div>
 @endsection
-
-@push('myscript')
-
-<!-- Button Hapus -->
-<script>
-$(document).on('click','.hapus',function(){
-
-    let id=$(this).data('id');
-
-    Swal.fire({
-        title:'Hapus data?',
-        text:'Data yang dihapus tidak dapat dikembalikan.',
-        icon:'warning',
-        showCancelButton:true,
-        confirmButtonText:'Ya, Hapus',
-        cancelButtonText:'Batal'
-    }).then((result)=>{
-
-        if(result.isConfirmed){
-
-            Livewire.dispatch('hapusLayanan',{
-                id_layanan:id
-            });
-
-        }
-
-    });
-
-});
-</script>
-<!-- END Button Hapus -->
-  
-@endpush

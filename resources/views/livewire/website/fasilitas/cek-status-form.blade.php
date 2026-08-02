@@ -14,53 +14,54 @@
         </div>
     </div>
 
-    <!-- SEARCH FORM CARD -->
-    <div class="booking-form-card mb-4">
-        <form wire:submit.prevent="cariStatus">
-            <h3 class="form-section-title mb-2">
-                Verifikasi Pemesanan Anda
-            </h3>
-            <p class="form-section-desc mb-3">
-                Masukkan <strong>Nomor Booking</strong> resmi dan salah satu data verifikasi —
-                <strong>NIK KTP</strong>, <strong>Nomor WhatsApp</strong>, atau <strong>Email</strong>
-                yang Anda daftarkan saat pemesanan.
-            </p>
+    <!-- SEARCH FORM CARD (Hidden when search results are found) -->
+    @if (!($searchExecuted && $foundPemesanId && $foundPemesan))
+        <div class="booking-form-card mb-4">
+            <form wire:submit.prevent="cariStatus">
+                <h3 class="form-section-title mb-2">
+                    Verifikasi Pemesanan Anda
+                </h3>
+                <p class="form-section-desc mb-3">
+                    Masukkan <strong>Nomor Booking</strong> resmi dan salah satu data verifikasi —
+                    <strong>NIK KTP</strong>, <strong>Nomor WhatsApp</strong>, atau <strong>Email</strong>
+                    yang Anda daftarkan saat pemesanan.
+                </p>
 
-            <div class="form-grid-2col">
-                <div class="form-item-group">
-                    <label class="form-item-label">Nomor Booking Resmi <span class="text-red">*</span></label>
-                    <input type="text" class="form-item-input @error('nomor_booking') is-invalid @enderror"
-                        placeholder="Contoh: BK-20260801-0001" wire:model="nomor_booking"
-                        style="font-family: 'Courier New', monospace; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;">
-                    @error('nomor_booking')
-                        <span class="form-error-msg">{{ $message }}</span>
-                    @enderror
+                <div class="form-grid-2col">
+                    <div class="form-item-group">
+                        <label class="form-item-label">Nomor Booking Resmi <span class="text-red">*</span></label>
+                        <input type="text" class="form-item-input @error('nomor_booking') is-invalid @enderror"
+                            placeholder="Contoh: BK-20260801-0001" wire:model="nomor_booking"
+                            style="font-family: 'Courier New', monospace; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;">
+                        @error('nomor_booking')
+                            <span class="form-error-msg">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-item-group">
+                        <label class="form-item-label">NIK KTP / Nomor WA / Email <span class="text-red">*</span></label>
+                        <input type="text" class="form-item-input @error('verifikasi') is-invalid @enderror"
+                            placeholder="Masukkan salah satu sebagai verifikasi" wire:model="verifikasi">
+                        @error('verifikasi')
+                            <span class="form-error-msg">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
 
-                <div class="form-item-group">
-                    <label class="form-item-label">NIK KTP / Nomor WA / Email <span class="text-red">*</span></label>
-                    <input type="text" class="form-item-input @error('verifikasi') is-invalid @enderror"
-                        placeholder="Masukkan salah satu sebagai verifikasi" wire:model="verifikasi">
-                    @error('verifikasi')
-                        <span class="form-error-msg">{{ $message }}</span>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="d-flex align-items-center gap-3 mt-4">
-                <button type="submit" class="btn-pesan-primary" wire:loading.attr="disabled">
-                    <span wire:loading.remove><i class="fa-solid fa-magnifying-glass me-2"></i> Cari Status
-                        Pemesanan</span>
-                    <span wire:loading><i class="fa-solid fa-spinner fa-spin me-2"></i> Memeriksa Data...</span>
-                </button>
-                @if ($searchExecuted)
-                    <button type="button" class="btn-pesan-secondary" wire:click="resetCari">
-                        <i class="fa-solid fa-rotate-left me-2"></i> Cari Lagi
+                <div class="d-flex align-items-center gap-3 mt-4">
+                    <button type="submit" class="btn-pesan-primary" wire:loading.attr="disabled">
+                        <span wire:loading.remove><i class="fa-solid fa-magnifying-glass me-2"></i> Cari</span>
+                        <span wire:loading><i class="fa-solid fa-spinner fa-spin me-2"></i> Memeriksa Data...</span>
                     </button>
-                @endif
-            </div>
-        </form>
-    </div>
+                    @if ($searchExecuted)
+                        <button type="button" class="btn-pesan-secondary" wire:click="resetCari">
+                            <i class="fa-solid fa-rotate-left me-2"></i> Cari Lagi
+                        </button>
+                    @endif
+                </div>
+            </form>
+        </div>
+    @endif
 
     {{-- NOT FOUND --}}
     @if ($searchExecuted && $errorMessage)
@@ -155,13 +156,41 @@
             </div>
         </div>
 
-        {{-- CATATAN ADMIN JIKA DITOLAK --}}
-        @if ($step3Rej && $foundPemesan->catatan)
-            <div class="srm-rejected-note mb-5">
-                <i class="fa-solid fa-circle-exclamation"></i>
-                <div>
-                    <strong>Catatan Admin:</strong>
-                    <span>{{ $foundPemesan->catatan }}</span>
+        {{-- CATATAN ADMIN (tampil untuk semua status) --}}
+        @if ($foundPemesan->catatan)
+            @php
+                if ($step3Rej) {
+                    $noteBg = '#fef2f2';
+                    $noteBorder = '#fca5a5';
+                    $noteAccent = '#dc2626';
+                    $noteIcon = 'fa-circle-xmark';
+                    $noteLabel = 'Alasan Penolakan';
+                } elseif ($step3Done) {
+                    $noteBg = '#f0fdf4';
+                    $noteBorder = '#86efac';
+                    $noteAccent = '#16a34a';
+                    $noteIcon = 'fa-circle-check';
+                    $noteLabel = 'Catatan Persetujuan';
+                } elseif ($statusLower === 'selesai') {
+                    $noteBg = '#eff6ff';
+                    $noteBorder = '#93c5fd';
+                    $noteAccent = '#1d4ed8';
+                    $noteIcon = 'fa-flag-checkered';
+                    $noteLabel = 'Catatan Penyelesaian';
+                } else {
+                    $noteBg = '#fffbeb';
+                    $noteBorder = '#fde68a';
+                    $noteAccent = '#d97706';
+                    $noteIcon = 'fa-comment-dots';
+                    $noteLabel = 'Catatan Admin';
+                }
+            @endphp
+            <br>
+            <div class="csr-catatan-box mb-5"
+                style="background: {{ $noteBg }}; border-left: 4px solid {{ $noteAccent }}; border: 1px solid {{ $noteBorder }}; border-left: 4px solid {{ $noteAccent }};">
+                <div class="csr-catatan-body">
+                    <span class="csr-catatan-label" style="color: {{ $noteAccent }};">{{ $noteLabel }}</span>
+                    <p class="csr-catatan-text">{{ $foundPemesan->catatan }}</p>
                 </div>
             </div>
         @endif
@@ -249,8 +278,7 @@
 
         {{-- ACTION BUTTONS --}}
         <div class="d-flex gap-3 flex-wrap pt-2">
-            <button type="button" class="btn-pesan-secondary"
-                wire:click="resetCari"
+            <button type="button" class="btn-pesan-secondary" wire:click="resetCari"
                 onclick="setTimeout(()=>document.getElementById('cek-status-top').scrollIntoView({behavior:'smooth',block:'start'}),150)">
                 <i class="fa-solid fa-arrow-left me-2"></i> Kembali
             </button>

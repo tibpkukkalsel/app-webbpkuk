@@ -2375,18 +2375,19 @@ a.maps-card:hover .maps-address,
     box-shadow: 0 6px 16px rgba(255, 0, 0, 0.4);
 }
 
-/* Links List */
+/* Links List (Compact & Clean) */
 .footer-links {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 8px;
 }
 
 .footer-links li a {
     color: #cbd5e1;
-    font-size: 0.9rem;
+    font-size: 0.84rem;
     font-weight: 500;
+    line-height: 1.35;
     text-decoration: none;
     transition: all 0.2s ease;
 }
@@ -3074,7 +3075,7 @@ a.maps-card:hover .maps-address,
     background: #0284c7;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
     z-index: 9999;
-    padding: 6px 4px 8px;
+    padding: 0;
     border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
@@ -3084,16 +3085,17 @@ a.maps-card:hover .maps-address,
     }
 
     body {
-        padding-bottom: 65px;
+        padding-bottom: 60px;
     }
 }
 
 .mobile-nav-container {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-around;
     max-width: 600px;
     margin: 0 auto;
+    height: 60px;
 }
 
 .mobile-nav-item {
@@ -3101,16 +3103,20 @@ a.maps-card:hover .maps-address,
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: none;
+    background: transparent;
     border: none;
-    border-right: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ffffff;
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none !important;
     padding: 6px 2px;
     flex: 1;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease;
     outline: none;
+    position: relative;
+    border-radius: 0;
+    margin: 0;
+    height: 100%;
 }
 
 .mobile-nav-item:last-child {
@@ -3119,7 +3125,19 @@ a.maps-card:hover .maps-address,
 
 .mobile-nav-item:active,
 .mobile-nav-item.active {
-    background: rgba(255, 255, 255, 0.18);
+    background: #0369a1;
+    color: #ffffff !important;
+}
+
+.mobile-nav-item.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3.5px;
+    background: #ffffff;
+    box-shadow: 0 1px 6px rgba(255, 255, 255, 0.6);
 }
 
 .mobile-nav-icon {
@@ -3127,21 +3145,29 @@ a.maps-card:hover .maps-address,
     font-weight: 400;
     line-height: 1;
     margin-bottom: 4px;
-    color: #ffffff;
-    transition: transform 0.2s ease;
+    color: rgba(255, 255, 255, 0.85);
+    transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.mobile-nav-item:active .mobile-nav-icon {
-    transform: scale(1.12);
+.mobile-nav-item:active .mobile-nav-icon,
+.mobile-nav-item.active .mobile-nav-icon {
+    color: #ffffff !important;
+    transform: scale(1.08);
 }
 
 .mobile-nav-label {
     font-size: 0.68rem;
     font-weight: 500;
     letter-spacing: 0.1px;
-    color: #ffffff;
+    color: rgba(255, 255, 255, 0.85);
     line-height: 1;
     text-transform: capitalize;
+    transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+.mobile-nav-item.active .mobile-nav-label {
+    color: #ffffff !important;
+    font-weight: 700;
 }
 
 /* Backdrop Overlay for Bottom Sheets */
@@ -3261,6 +3287,19 @@ a.maps-card:hover .maps-address,
     background: #e0f2fe;
     color: #0284c7;
     padding-left: 20px;
+}
+
+.sheet-menu-list li a.active {
+    background: #f0f9ff;
+    border-left: 4px solid #0284c7;
+    color: #0284c7;
+    padding-left: 18px;
+    font-weight: 700;
+}
+
+.sheet-menu-list li a.active i {
+    color: #0284c7;
+    transform: translateX(4px);
 }
 
 .sheet-menu-list li a:hover i {

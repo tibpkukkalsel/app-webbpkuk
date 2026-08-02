@@ -257,7 +257,7 @@ class PesanForm extends Component
             'jam_selesai'     => $this->jam_selesai,
             'foto_ktp'        => $ktpPath,
             'status'          => 'Menunggu Konfirmasi',
-            'catatan'         => 'Pengajuan dibuat secara online melalui website resmi UPTD Balatkop & UKM Kalsel.',
+            'catatan'         => 'Pengajuan telah diajukan melalui website resmi UPTD Balatkop-uk Prov. Kalsel.',
         ]);
 
         // Create Multi-Item Details

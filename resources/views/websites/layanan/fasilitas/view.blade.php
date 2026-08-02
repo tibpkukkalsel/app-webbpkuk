@@ -16,11 +16,10 @@
                 <span class="separator">/</span>
                 <a href="{{ url('/layanan/pemanfaatan-fasilitas') }}">LAYANAN</a>
                 <span class="separator">/</span>
-                <span
-                    class="current">{{ strtoupper($currentHalaman ? $currentHalaman->judul : 'PEMANFAATAN FASILITAS') }}</span>
+                <span class="current">PEMANFAATAN FASILITAS</span>
             </div>
             <h1 class="profile-banner-title">
-                {{ $currentHalaman ? $currentHalaman->judul : 'Pemanfaatan Fasilitas Balatkop' }}</h1>
+                Pemanfaatan Fasilitas</h1>
         </div>
     </div>
 
@@ -41,7 +40,7 @@
                         <ul class="profile-menu-list" id="profileMenuList">
                             <li>
                                 <a href="{{ url('/layanan/pemanfaatan-fasilitas') }}"
-                                    class="profile-menu-item {{ (is_null($currentHalaman) && !$isPesanOnline) ? 'active' : '' }}">
+                                    class="profile-menu-item {{ is_null($currentHalaman) && !$isPesanOnline && !$isCekStatus ? 'active' : '' }}">
                                     <span class="num">01</span>
                                     <span class="label">Katalog Fasilitas</span>
                                 </a>

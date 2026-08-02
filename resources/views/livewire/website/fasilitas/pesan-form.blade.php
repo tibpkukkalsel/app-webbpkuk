@@ -259,7 +259,7 @@
 
                     <div class="form-action-footer mt-4">
                         <button type="button" class="btn-pesan-primary ms-auto" wire:click="nextStep">
-                            Lanjut ke Jadwal & Fasilitas <i class="fa-solid fa-arrow-right ms-2"></i>
+                            Lanjut ke Jadwal & Fasilitas &nbsp; <i class="fa-solid fa-arrow-right ms-2"></i>
                         </button>
                     </div>
                 </div>
@@ -279,7 +279,8 @@
                         <!-- ROW 1: TANGGAL -->
                         <div class="form-item-group">
                             <label class="form-item-label">Tanggal Mulai <span class="text-red">*</span></label>
-                            <input type="date" min="{{ date('Y-m-d') }}" class="form-item-input @error('tanggal_mulai') is-invalid @enderror"
+                            <input type="date" min="{{ date('Y-m-d') }}"
+                                class="form-item-input @error('tanggal_mulai') is-invalid @enderror"
                                 wire:model.live="tanggal_mulai">
                             @error('tanggal_mulai')
                                 <span class="form-error-msg">{{ $message }}</span>
@@ -418,7 +419,7 @@
                             <i class="fa-solid fa-arrow-left me-2"></i> Kembali
                         </button>
                         <button type="button" class="btn-pesan-primary ms-auto" wire:click="nextStep">
-                            Lanjut ke Konfirmasi <i class="fa-solid fa-arrow-right ms-2"></i>
+                            Lanjut ke Konfirmasi &nbsp; <i class="fa-solid fa-arrow-right ms-2"></i>
                         </button>
                     </div>
                 </div>

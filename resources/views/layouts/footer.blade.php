@@ -116,9 +116,12 @@
             <div class="footer-col col-layanan">
                 <h3 class="footer-heading">Layanan</h3>
                 <ul class="footer-links">
-                    <li><a href="#">Dashboard Diklat</a></li>
-                    <li><a href="#">Sertifikat Elektronik</a></li>
-                    <li><a href="#">Layanan Kemasan</a></li>
+                    <li><a href="{{ url('/layanan/dashboard-diklat') }}">Dashboard Diklat</a></li>
+                    <li><a href="{{ url('/layanan/pemanfaatan-fasilitas') }}">Pemanfaatan Fasilitas</a></li>
+                    <li><a href="https://pusatlayanankemasankalsel.com/" target="_blank">Layanan Kemasan</a></li>
+                    <li><a href="{{ url('/layanan/identifikasi-kebutuhan-diklat') }}">Identifikasi Kebutuhan Pelatihan</a></li>
+                    <li><a href="{{ url('/layanan/sertifikat-elektronik') }}">Sertifikat Elektronik</a></li>
+                    <li><a href="{{ url('/layanan/survei-kepuasan-diklat') }}">Survei Kepuasan Diklat</a></li>
                 </ul>
             </div>
 

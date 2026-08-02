@@ -262,13 +262,51 @@
                             <span class="hide-menu">Layanan</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link {{ request()->routeIs('layanan*') ? 'active' : '' }}"
-                                href="{{ route('layanan.view') }}" aria-expanded="false">
+                            <a class="sidebar-link has-arrow {{ request()->routeIs('layanan*') ? 'active' : '' }}"
+                                href="javascript:void(0)" aria-expanded="false">
                                 <span>
-                                    <i class="ti ti-building-community"></i>
+                                    <i class="ti ti-map-2"></i>
                                 </span>
                                 <span class="hide-menu">Dashboard Diklat</span>
                             </a>
+                            <ul aria-expanded="false" class="collapse first-level {{ request()->routeIs('layanan*') ? 'in' : '' }}">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link {{ request()->routeIs('layanan*') && request()->get('tab', 'wilayah') === 'wilayah' ? 'active' : '' }}"
+                                        href="{{ route('layanan.view', ['tab' => 'wilayah']) }}" aria-expanded="false">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle"></i>
+                                        </div>
+                                        <span class="hide-menu">Data Wilayah Kalsel</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link {{ request()->get('tab') === 'jenis_diklat' ? 'active' : '' }}"
+                                        href="{{ route('layanan.view', ['tab' => 'jenis_diklat']) }}" aria-expanded="false">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle"></i>
+                                        </div>
+                                        <span class="hide-menu">Jenis Diklat SDM</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link {{ request()->get('tab') === 'identifikasi' ? 'active' : '' }}"
+                                        href="{{ route('layanan.view', ['tab' => 'identifikasi']) }}" aria-expanded="false">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle"></i>
+                                        </div>
+                                        <span class="hide-menu">Identifikasi Kebutuhan</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link {{ request()->get('tab') === 'realisasi' ? 'active' : '' }}"
+                                        href="{{ route('layanan.view', ['tab' => 'realisasi']) }}" aria-expanded="false">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle"></i>
+                                        </div>
+                                        <span class="hide-menu">Realisasi Diklat</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow {{ request()->routeIs('fasilitas*') ? 'active' : '' }}"

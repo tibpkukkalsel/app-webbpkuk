@@ -38,6 +38,7 @@ use App\Http\Controllers\Website\GaleriController as WebsiteGaleriController;
 use App\Http\Controllers\Website\AgendaController as WebsiteAgendaController;
 use App\Http\Controllers\Website\PegawaiController as WebsitePegawaiController;
 use App\Http\Controllers\Website\FasilitasController as WebsiteFasilitasController;
+use App\Http\Controllers\Website\DiklatController as WebsiteDiklatController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebsiteBerandaController::class, 'view']);
@@ -45,6 +46,11 @@ Route::get('/profil/tentang', [WebsiteTentangController::class, 'view'])->name('
 Route::get('/profil/visimisi', [WebsiteVisimisiController::class, 'view'])->name('website.profil.visimisi');
 Route::get('/profil/struktur-organisasi', [WebsiteStorganisasiController::class, 'view'])->name('website.profil.storganisasi');
 Route::get('/profil/pegawai', [WebsitePegawaiController::class, 'view'])->name('website.profil.pegawai');
+Route::get('/layanan/dashboard-diklat', [WebsiteDiklatController::class, 'view'])->name('website.layanan.diklat');
+Route::redirect('/layanan/peta-dan-dashboard-diklat', '/layanan/dashboard-diklat');
+Route::get('/layanan/identifikasi-kebutuhan-diklat', [WebsiteDiklatController::class, 'view'])->name('website.layanan.identifikasi');
+Route::get('/layanan/sertifikat-elektronik', [WebsiteDiklatController::class, 'view'])->name('website.layanan.sertifikat');
+Route::get('/layanan/survei-kepuasan-diklat', [WebsiteDiklatController::class, 'view'])->name('website.layanan.survei');
 Route::get('/layanan/pemanfaatan-fasilitas', [WebsiteFasilitasController::class, 'view'])->name('website.layanan.fasilitas');
 Route::get('/layanan/pemanfaatan-fasilitas/pesan-online', [WebsiteFasilitasController::class, 'pesan'])->name('website.layanan.fasilitas.pesan');
 Route::get('/layanan/pemanfaatan-fasilitas/cek-status', [WebsiteFasilitasController::class, 'cekStatus'])->name('website.layanan.fasilitas.cekStatus');

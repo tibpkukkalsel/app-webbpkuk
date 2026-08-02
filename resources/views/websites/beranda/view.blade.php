@@ -94,8 +94,8 @@
 
                 <!-- Feature Quick Action Cards (3 Column) -->
                 <div class="action-cards-grid">
-                    <!-- Blue Card: Statistik Layanan -->
-                    <a href="#" class="action-card card-blue">
+                    <!-- Blue Card: Dashboard Diklat -->
+                    <a href="{{ url('/layanan/dashboard-diklat') }}" class="action-card card-blue">
                         <div class="card-icon-box">
                             <i class="fa-solid fa-chart-column"></i>
                         </div>
