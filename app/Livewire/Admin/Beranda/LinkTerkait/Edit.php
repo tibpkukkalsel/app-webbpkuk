@@ -47,7 +47,7 @@ class Edit extends Component
         $rules = [
             'nama'       => 'required|string|max:150',
             'url'        => 'required|url|max:255',
-            'gambarBaru' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg|max:2048',
+            'gambarBaru' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'urutan'     => 'required|integer|min:1|max:20',
             'status'     => 'required|in:aktif,nonaktif',
         ];

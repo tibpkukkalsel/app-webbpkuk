@@ -16,4 +16,28 @@ class DiklatController extends Controller
 
         return view('websites.layanan.diklat.view', compact('identitas', 'tentang'));
     }
+
+    public function identifikasi()
+    {
+        $identitas = Identitas::all();
+        $tentang   = Tentang::all();
+
+        return view('pengembangan.view', compact('identitas', 'tentang'));
+    }
+
+    public function sertifikat()
+    {
+        $identitas = Identitas::all();
+        $tentang   = Tentang::all();
+
+        return view('pengembangan.view', compact('identitas', 'tentang'));
+    }
+
+    public function survei()
+    {
+        $identitas = Identitas::all();
+        $tentang   = Tentang::all();
+
+        return view('pengembangan.view', compact('identitas', 'tentang'));
+    }
 }

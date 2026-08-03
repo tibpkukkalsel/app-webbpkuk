@@ -57,9 +57,6 @@
                     <form action="{{ url('/profil/pegawai') }}" method="GET" id="mobile-seksi-form">
                         <div class="mobile-seksi-select-card">
                             <div class="mobile-seksi-select-header">
-                                <div class="mobile-seksi-icon">
-                                    <i class="fa-solid fa-sitemap"></i>
-                                </div>
                                 <div class="mobile-seksi-label">
                                     <span class="mobile-label-title">Filter Unit Kerja</span>
                                     <span class="mobile-label-subtitle">Pilih seksi untuk menampilkan data pegawai</span>

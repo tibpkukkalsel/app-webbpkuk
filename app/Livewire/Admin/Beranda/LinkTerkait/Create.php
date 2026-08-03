@@ -18,7 +18,7 @@ class Create extends Component
 
     protected $rules = [
         'nama'   => 'required|string|max:150',
-        'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg|max:2048',
+        'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         'url'    => 'required|url|max:255',
         'urutan' => 'required|integer|min:1|max:20',
         'status' => 'required|in:aktif,nonaktif',

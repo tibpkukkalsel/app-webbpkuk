@@ -106,11 +106,11 @@ class UsersController extends Controller
         
     }
 
-    public function delete(string $id){
+    public function delete(Request $request)
+    {
+        $id = Crypt::decrypt($request->id);
 
-        $id = Crypt::decrypt($id);
-
-        $delete = User::where('id',$id)->delete();
+        $delete = User::where('id', $id)->delete();
 
         if ($delete) {
             return Redirect::back()->with(['success' => 'Data Berhasil Dihapus']);

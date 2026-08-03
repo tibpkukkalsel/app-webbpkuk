@@ -18,6 +18,7 @@ use App\Http\Controllers\HashtagController;
 use App\Http\Controllers\IdentitasController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LayananController;
+use App\Http\Controllers\ProdukUmkmController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StorganisasiController;
 use App\Http\Controllers\TentangController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\SeksiController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\VideoController;
+use App\Http\Controllers\KontakController;
 use App\Http\Controllers\Website\BerandaController as WebsiteBerandaController;
 use App\Http\Controllers\Website\TentangController as WebsiteTentangController;
 use App\Http\Controllers\Website\VisimisiController as WebsiteVisimisiController;
@@ -39,6 +41,7 @@ use App\Http\Controllers\Website\AgendaController as WebsiteAgendaController;
 use App\Http\Controllers\Website\PegawaiController as WebsitePegawaiController;
 use App\Http\Controllers\Website\FasilitasController as WebsiteFasilitasController;
 use App\Http\Controllers\Website\DiklatController as WebsiteDiklatController;
+use App\Http\Controllers\Website\KontakController as WebsiteKontakController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebsiteBerandaController::class, 'view']);
@@ -48,16 +51,24 @@ Route::get('/profil/struktur-organisasi', [WebsiteStorganisasiController::class,
 Route::get('/profil/pegawai', [WebsitePegawaiController::class, 'view'])->name('website.profil.pegawai');
 Route::get('/layanan/dashboard-diklat', [WebsiteDiklatController::class, 'view'])->name('website.layanan.diklat');
 Route::redirect('/layanan/peta-dan-dashboard-diklat', '/layanan/dashboard-diklat');
-Route::get('/layanan/identifikasi-kebutuhan-diklat', [WebsiteDiklatController::class, 'view'])->name('website.layanan.identifikasi');
-Route::get('/layanan/sertifikat-elektronik', [WebsiteDiklatController::class, 'view'])->name('website.layanan.sertifikat');
-Route::get('/layanan/survei-kepuasan-diklat', [WebsiteDiklatController::class, 'view'])->name('website.layanan.survei');
+Route::get('/layanan/identifikasi-kebutuhan-diklat', [WebsiteDiklatController::class, 'identifikasi'])->name('website.layanan.identifikasi');
+Route::get('/layanan/sertifikat-elektronik', [WebsiteDiklatController::class, 'sertifikat'])->name('website.layanan.sertifikat');
+Route::get('/layanan/survei-kepuasan-diklat', [WebsiteDiklatController::class, 'survei'])->name('website.layanan.survei');
 Route::get('/layanan/pemanfaatan-fasilitas', [WebsiteFasilitasController::class, 'view'])->name('website.layanan.fasilitas');
-Route::get('/layanan/pemanfaatan-fasilitas/pesan-online', [WebsiteFasilitasController::class, 'pesan'])->name('website.layanan.fasilitas.pesan');
-Route::get('/layanan/pemanfaatan-fasilitas/cek-status', [WebsiteFasilitasController::class, 'cekStatus'])->name('website.layanan.fasilitas.cekStatus');
+Route::get('/layanan/pemanfaatan-fasilitas/pesan-online', [WebsiteFasilitasController::class, 'pesan'])
+    ->middleware('throttle:15,1')
+    ->name('website.layanan.fasilitas.pesan');
+Route::get('/layanan/pemanfaatan-fasilitas/cek-status', [WebsiteFasilitasController::class, 'cekStatus'])
+    ->middleware('throttle:20,1')
+    ->name('website.layanan.fasilitas.cekStatus');
 Route::get('/layanan/pemanfaatan-fasilitas/{slug}', [WebsiteFasilitasController::class, 'halaman'])->name('website.layanan.fasilitas.halaman');
-Route::get('/agenda', [WebsiteAgendaController::class, 'view'])->name('website.agenda');
+Route::get('/agenda', [WebsiteAgendaController::class, 'view'])
+    ->middleware('throttle:30,1')
+    ->name('website.agenda');
 Route::get('/agenda/{slug}', [WebsiteAgendaController::class, 'detail'])->name('website.agenda.detail');
-Route::get('/informasi', [WebsiteInformasiController::class, 'view'])->name('website.informasi');
+Route::get('/informasi', [WebsiteInformasiController::class, 'view'])
+    ->middleware('throttle:30,1')
+    ->name('website.informasi');
 Route::get('/informasi/{slug}', [WebsiteInformasiController::class, 'detail'])->name('website.informasi.detail');
 Route::get('/galeri', function() { return redirect('/galeri/foto'); })->name('website.galeri');
 Route::get('/galeri/foto', [WebsiteGaleriController::class, 'view'])->name('website.galeri.foto');
@@ -65,6 +76,10 @@ Route::get('/galeri/video', [WebsiteGaleriController::class, 'viewVideo'])->name
 Route::get('/galeri/foto/{slug}', [WebsiteGaleriController::class, 'detail'])->name('website.galeri.detail');
 Route::get('/galeri/{slug}', [WebsiteGaleriController::class, 'detail']);
 Route::get('/gallery/{slug}', [WebsiteGaleriController::class, 'detail']);
+Route::get('/kontak', [WebsiteKontakController::class, 'view'])->name('website.kontak');
+Route::post('/kontak/kirim', [WebsiteKontakController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('website.kontak.kirim');
 
 
 
@@ -88,7 +103,7 @@ Route::prefix('cp-x14')
         Route::post('/pengguna/update', [UsersController::class, 'update'])
             ->middleware('permission:pengguna.update')
             ->name('pengguna.update');
-        Route::get('/pengguna/hapus/{id}', [UsersController::class, 'delete'])
+        Route::post('/pengguna/hapus', [UsersController::class, 'delete'])
             ->middleware('permission:pengguna.delete')
             ->name('pengguna.delete');
         //end crud PENGGUNA
@@ -181,6 +196,9 @@ Route::prefix('cp-x14')
         Route::get('/fasilitas/pemesan', [FasilitasPemesanController::class, 'view'])
             ->middleware('permission:profile.konfig')
             ->name('fasilitas.pemesan.view');
+        Route::get('/fasilitas/pemesan/{id}/ktp', [FasilitasPemesanController::class, 'viewKtp'])
+            ->middleware('permission:profile.konfig')
+            ->name('fasilitas.pemesan.ktp');
         Route::get('/fasilitas/riwayat', [FasilitasRiwayatController::class, 'view'])
             ->middleware('permission:profile.konfig')
             ->name('fasilitas.riwayat.view');
@@ -196,6 +214,11 @@ Route::prefix('cp-x14')
             ->middleware('permission:layanan.konfig')
             ->name('layanan.edit');
         //end Crud LAYANAN
+        //Start Crud PRODUK UMKM
+        Route::get('/produk-umkm', [ProdukUmkmController::class, 'view'])
+            ->middleware('permission:layanan.konfig')
+            ->name('produk-umkm.view');
+        //end Crud PRODUK UMKM
         //Start Crud HASHTAG
         Route::get('/hashtag', [HashtagController::class, 'view'])
             ->middleware('permission:profile.konfig')
@@ -252,6 +275,11 @@ Route::prefix('cp-x14')
             ->middleware('permission:post.konfig')
             ->name('video.edit');
         //end Crud VIDEO
+        //Start Crud KONTAK HELPDESK
+        Route::get('/kontak', [KontakController::class, 'view'])
+            ->middleware('permission:kontak.view')
+            ->name('kontak.view');
+        //end Crud KONTAK HELPDESK
     });
 
 Route::middleware('auth')->group(function () {

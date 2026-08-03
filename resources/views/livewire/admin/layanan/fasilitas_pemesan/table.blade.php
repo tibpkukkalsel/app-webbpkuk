@@ -70,9 +70,9 @@
                             @if($d->no_hp)
                                 <div class="small text-muted"><i class="ti ti-phone me-1 text-success"></i>{{ $d->no_hp }}</div>
                             @endif
-                            @if ($d->foto_ktp && Storage::disk('public')->exists($d->foto_ktp))
+                            @if ($d->foto_ktp)
                                 <div class="mt-1">
-                                    <a href="{{ asset('storage/' . $d->foto_ktp) }}" target="_blank" class="badge bg-info-subtle text-info text-decoration-none border border-info-subtle">
+                                    <a href="{{ route('fasilitas.pemesan.ktp', Crypt::encrypt($d->id_pemesanan)) }}" target="_blank" class="badge bg-info-subtle text-info text-decoration-none border border-info-subtle">
                                         <i class="ti ti-id me-1"></i> Lihat Foto KTP
                                     </a>
                                 </div>
@@ -125,9 +125,9 @@
                                             <i class="ti ti-eye text-primary fs-5"></i> Verifikasi / Edit
                                         </a>
                                     </li>
-                                    @if ($d->foto_ktp && Storage::disk('public')->exists($d->foto_ktp))
+                                    @if ($d->foto_ktp)
                                         <li>
-                                            <a class="dropdown-item d-flex align-items-center gap-2" href="{{ asset('storage/' . $d->foto_ktp) }}" target="_blank">
+                                            <a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('fasilitas.pemesan.ktp', Crypt::encrypt($d->id_pemesanan)) }}" target="_blank">
                                                 <i class="ti ti-id text-info fs-5"></i> Lihat Foto KTP
                                             </a>
                                         </li>

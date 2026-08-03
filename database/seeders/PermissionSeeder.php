@@ -40,6 +40,10 @@ class PermissionSeeder extends Seeder
             'agenda.konfig',
             //post
             'post.konfig',
+            //kontak / helpdesk
+            'kontak.view',
+            'kontak.reply',
+            'kontak.delete',
          ];
          
          foreach ($permissions as $permission) {

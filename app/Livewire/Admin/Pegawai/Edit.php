@@ -48,7 +48,7 @@ class Edit extends Component
             'nama' => 'required|string|max:255',
             'nip' => 'nullable|string|max:50',
             'jenis' => 'nullable|in:1,2,3,4',
-            'foto' => 'nullable|image|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'id_jabatan' => 'nullable|exists:jabatan,id_jabatan',
             'id_seksi' => 'nullable|exists:seksi,id_seksi',
             'status' => 'required|in:0,1',

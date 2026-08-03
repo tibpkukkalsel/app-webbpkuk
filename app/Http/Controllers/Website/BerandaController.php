@@ -10,6 +10,7 @@ use App\Models\Identitas;
 use App\Models\Infografis;
 use App\Models\LinkTerkait;
 use App\Models\Post;
+use App\Models\ProdukUmkm;
 use App\Models\Video;
 use Illuminate\Support\Facades\Cache;
 
@@ -85,6 +86,11 @@ class BerandaController extends Controller
             ->take(6)
             ->get();
 
+        $produkUmkms = ProdukUmkm::with('wilayah')
+            ->where('status', 1)
+            ->orderBy('id_produkumkm', 'desc')
+            ->get();
+
         return view('websites.beranda.view', compact(
             'heroBanners',
             'heroImages',
@@ -95,7 +101,8 @@ class BerandaController extends Controller
             'beritaTerpopuler',
             'galeriFoto',
             'galeriVideo',
-            'agendas'
+            'agendas',
+            'produkUmkms'
         ));
     }
 }

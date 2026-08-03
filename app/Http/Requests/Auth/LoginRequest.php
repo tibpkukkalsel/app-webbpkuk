@@ -43,10 +43,34 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+            $attempts = RateLimiter::attempts($this->throttleKey()) + 1;
+
+            // Penentuan durasi penalti (lockout) secara bertahap / eksponensial:
+            // Percobaan 1-5  : Penalti 1 Menit (60s)
+            // Percobaan 6    : Penalti 5 Menit (300s)
+            // Percobaan 7    : Penalti 15 Menit (900s)
+            // Percobaan 8+   : Penalti 60 Menit (3600s / 1 Jam)
+            if ($attempts >= 8) {
+                $decaySeconds = 3600; // 1 Jam
+            } elseif ($attempts == 7) {
+                $decaySeconds = 900;  // 15 Menit
+            } elseif ($attempts == 6) {
+                $decaySeconds = 300;  // 5 Menit
+            } else {
+                $decaySeconds = 60;   // 1 Menit default
+            }
+
+            RateLimiter::hit($this->throttleKey(), $decaySeconds);
+
+            $sisaPercobaan = 5 - $attempts;
+            $pesanEror = trans('auth.failed');
+
+            if ($sisaPercobaan > 0) {
+                $pesanEror .= " (Sisa percobaan login: {$sisaPercobaan}x sebelum akun/perangkat terkunci).";
+            }
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'email' => $pesanEror,
             ]);
         }
 
@@ -67,12 +91,16 @@ class LoginRequest extends FormRequest
         event(new Lockout($this));
 
         $seconds = RateLimiter::availableIn($this->throttleKey());
+        $minutes = ceil($seconds / 60);
+
+        if ($seconds >= 60) {
+            $waktuTunggu = "{$minutes} menit";
+        } else {
+            $waktuTunggu = "{$seconds} detik";
+        }
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
+            'email' => "Terlalu banyak percobaan login yang salah. Perangkat/Akun terkunci sementara. Silakan tunggu {$waktuTunggu} sebelum mencoba login kembali.",
         ]);
     }
 

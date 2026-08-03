@@ -8,6 +8,7 @@ use App\Models\FasilitasPemesananDetail;
 use App\Models\FasilitasRiwayat;
 use App\Models\FasilitasTarif;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -137,7 +138,7 @@ class PesanForm extends Component
                 'no_hp'        => 'required|numeric|digits_between:10,15',
                 'alamat'       => 'required|string',
                 'keperluan'    => 'required|string',
-                'foto_ktp'     => 'required|image|max:3072', // Max 3MB
+                'foto_ktp'     => 'required|image|mimes:jpg,jpeg,png,webp|max:3072', // Max 3MB
             ], [
                 'nama_pemohon.required' => 'Nama pemohon wajib diisi.',
                 'nik.required'          => 'NIK NIK wajib diisi 16 digit angka.',
@@ -219,6 +220,18 @@ class PesanForm extends Component
 
     public function kirimPemesanan()
     {
+        // Rate limiting protection: maksimal 3 pengajuan per 10 menit per IP
+        $executedRateKey = 'submit-booking|' . request()->ip();
+        if (RateLimiter::tooManyAttempts($executedRateKey, 3)) {
+            $seconds = RateLimiter::availableIn($executedRateKey);
+            $minutes = ceil($seconds / 60);
+            $this->addError('email', "Terlalu banyak pengajuan dari perangkat Anda. Silakan tunggu {$minutes} menit sebelum mencoba mengajukan kembali.");
+            $this->showConfirmModal = false;
+            return;
+        }
+
+        RateLimiter::hit($executedRateKey, 600); // 10 menit decay (600 detik)
+
         // Honeypot protection check
         if (!empty($this->fax_hp)) {
             $this->showConfirmModal = false;
@@ -233,7 +246,7 @@ class PesanForm extends Component
         $ktpPath = null;
         if ($this->foto_ktp) {
             $fileName = 'ktp_' . time() . '_' . rand(1000, 9999) . '.' . $this->foto_ktp->getClientOriginalExtension();
-            $ktpPath = $this->foto_ktp->storeAs('ktp', $fileName, 'public');
+            $ktpPath = $this->foto_ktp->storeAs('ktp', $fileName, 'local');
         }
 
         // Generate unique booking number

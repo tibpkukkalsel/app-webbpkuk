@@ -185,6 +185,11 @@
                       </div>
                     </div>
                   </div>
+                  {{-- Form Delete POST dengan CSRF Token --}}
+                  <form id="formDeletePengguna" action="{{ route('pengguna.delete') }}" method="POST" style="display: none;">
+                    @csrf
+                    <input type="hidden" name="id" id="deletePenggunaId">
+                  </form>
                   {{-- End Edit --}}
                 </div>
               </div>
@@ -198,7 +203,7 @@
 <script src="{{asset ('admins/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{asset ('admins/js/datatable/datatable-basic.init.js') }}"></script>
 
-<!-- Button Edit -->
+<!-- Button Edit & Hapus -->
 <script>
 $('#zero_config').DataTable({
   destroy: true,
@@ -250,7 +255,8 @@ $('#zero_config').DataTable({
         confirmButtonText: "Ya, Hapus Saja!"
       }).then((result) => {
         if (result.isConfirmed) {
-          window.location = "/cp-x14/pengguna/hapus/"+id
+          $('#deletePenggunaId').val(id);
+          $('#formDeletePengguna').submit();
         }
       });
     });

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (heroBgSlides.length > 1) {
         let currentHeroIndex = 0;
         const totalHeroSlides = heroBgSlides.length;
-        const displayDuration = 7000;
+        const displayDuration = 6500;
 
         setInterval(() => {
             const prevSlide = heroBgSlides[currentHeroIndex];
@@ -15,7 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const nextSlide = heroBgSlides[currentHeroIndex];
 
             prevSlide.classList.remove('active');
+            prevSlide.classList.add('exiting');
+
+            nextSlide.classList.remove('exiting');
             nextSlide.classList.add('active');
+
+            setTimeout(() => {
+                prevSlide.classList.remove('exiting');
+            }, 1800);
         }, displayDuration);
     }
 

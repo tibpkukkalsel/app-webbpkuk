@@ -16,8 +16,16 @@ class Delete extends Component
     {
         $pemesan = FasilitasPemesan::findOrFail($id_pemesanan);
 
-        if ($pemesan->foto_ktp && Storage::disk('public')->exists('pemesan_ktp/' . $pemesan->foto_ktp)) {
-            Storage::disk('public')->delete('pemesan_ktp/' . $pemesan->foto_ktp);
+        if ($pemesan->foto_ktp) {
+            if (Storage::disk('local')->exists($pemesan->foto_ktp)) {
+                Storage::disk('local')->delete($pemesan->foto_ktp);
+            } elseif (Storage::disk('local')->exists('pemesan_ktp/' . $pemesan->foto_ktp)) {
+                Storage::disk('local')->delete('pemesan_ktp/' . $pemesan->foto_ktp);
+            } elseif (Storage::disk('public')->exists('pemesan_ktp/' . $pemesan->foto_ktp)) {
+                Storage::disk('public')->delete('pemesan_ktp/' . $pemesan->foto_ktp);
+            } elseif (Storage::disk('public')->exists($pemesan->foto_ktp)) {
+                Storage::disk('public')->delete($pemesan->foto_ktp);
+            }
         }
 
         $pemesan->delete();

@@ -387,7 +387,8 @@
                                 @endphp
                                 <article class="news-card">
                                     <div class="news-image-box">
-                                        <a href="{{ route('website.informasi.detail', $b->slug ?? $b->id_post) }}" class="news-img-link" title="Baca Selengkapnya">
+                                        <a href="{{ route('website.informasi.detail', $b->slug ?? $b->id_post) }}"
+                                            class="news-img-link" title="Baca Selengkapnya">
                                             @if ($b->thumbnail)
                                                 <img src="{{ asset('storage/post/thumbnail/' . $b->thumbnail) }}"
                                                     alt="{{ $b->judul }}" loading="lazy" decoding="async"
@@ -491,8 +492,8 @@
                                 @endphp
                                 <article class="news-card">
                                     <div class="news-image-box">
-                                        <a href="{{ route('website.galeri.detail', $f->slug ?? $f->id_post) }}" class="news-img-link"
-                                            title="Lihat Galeri Foto ({{ $totalFoto }} Foto)">
+                                        <a href="{{ route('website.galeri.detail', $f->slug ?? $f->id_post) }}"
+                                            class="news-img-link" title="Lihat Galeri Foto ({{ $totalFoto }} Foto)">
                                             @if ($coverFoto)
                                                 <img src="{{ $coverFoto }}" alt="{{ $f->judul }}" loading="lazy"
                                                     decoding="async" style="width:100%; height:100%; object-fit:cover;">
@@ -519,7 +520,8 @@
                                         <span class="news-category-label">{{ $f->kategori?->kategori ?? 'GALERI FOTO' }}
                                             &bull; {{ $totalFoto }} FOTO</span>
                                         <h3 class="news-title">
-                                            <a href="{{ route('website.galeri.detail', $f->slug ?? $f->id_post) }}">{{ $f->judul }}</a>
+                                            <a
+                                                href="{{ route('website.galeri.detail', $f->slug ?? $f->id_post) }}">{{ $f->judul }}</a>
                                         </h3>
                                     </div>
                                 </article>
@@ -658,7 +660,8 @@
                                     $icon = 'fa-lightbulb';
                                 }
                             @endphp
-                            <a href="{{ route('website.informasi.detail', $pop->slug ?? $pop->id_post) }}" class="popular-item" title="{{ $pop->judul }}">
+                            <a href="{{ route('website.informasi.detail', $pop->slug ?? $pop->id_post) }}"
+                                class="popular-item" title="{{ $pop->judul }}">
                                 <div class="popular-thumb-link">
                                     @if ($pop->thumbnail)
                                         <img src="{{ asset('storage/post/thumbnail/' . $pop->thumbnail) }}"
@@ -854,55 +857,74 @@
                 <div class="products-carousel-side">
                     <div class="products-carousel-wrapper">
                         <div class="products-track" id="productsTrack">
+                            @forelse($produkUmkms as $prod)
+                                <div class="product-card">
+                                    <div class="product-img-box"
+                                        style="position: relative; overflow: hidden; height: 180px; border-radius: 12px 12px 0 0;">
+                                        @if ($prod->foto && Storage::disk('public')->exists($prod->foto))
+                                            <img src="{{ asset('storage/' . $prod->foto) }}"
+                                                alt="{{ $prod->nama_produk }}" class="product-img"
+                                                style="width: 100%; height: 100%; object-fit: cover;">
+                                        @else
+                                            <img src="{{ asset('admins/images/products/s1.jpg') }}"
+                                                alt="{{ $prod->nama_produk }}" class="product-img"
+                                                style="width: 100%; height: 100%; object-fit: cover;">
+                                        @endif
+                                        <!-- BADGE READY DI SUDUT KANAN ATAS THUMBNAIL -->
+                                        <span class="badge-ready"
+                                            style="position: absolute; top: 10px; right: 10px; background: #28a745; color: #ffffff; padding: 4px 10px; font-weight: 700; font-size: 11px; border-radius: 6px; letter-spacing: 0.5px; text-transform: uppercase; box-shadow: 0 2px 6px rgba(0,0,0,0.2); z-index: 2;">
+                                            <i class="fa-solid fa-check-circle me-1"></i> Ready
+                                        </span>
+                                    </div>
+                                    <div class="product-info-box">
+                                        <div>
+                                            <span class="product-tag">{{ $prod->nama_umkm }}</span>
+                                            <h3 class="product-title"
+                                                style="margin-top: 6px; margin-bottom: 12px; font-size: 1.05rem; font-weight: 700; line-height: 1.35;">
+                                                {{ $prod->nama_produk }}</h3>
+                                        </div>
 
-                            <!-- Product Card 1: Sukahijab -->
-                            <div class="product-card">
-                                <div class="product-img-box">
-                                    <img src="prod1.jpg" alt="Sukahijab Modest Fashion" class="product-img">
-                                </div>
-                                <div class="product-info-box">
-                                    <span class="product-tag">ADMIN</span>
-                                    <h3 class="product-title"><a href="#">Sukahijab</a></h3>
-                                    <p class="product-location">KAB TANAH LAUT, Kalimantan Selatan</p>
-                                </div>
-                            </div>
+                                        <div class="product-meta-list"
+                                            style="margin-top: auto; display: flex; flex-direction: column; gap: 9px; border-top: 1px solid #e2e8f0; padding-top: 14px; font-size: 0.8rem;">
+                                            <!-- Wilayah / Lokasi (Tanpa frasa Kalimantan Selatan) -->
+                                            <div class="meta-item" style="display: flex; align-items: center; gap: 10px;">
+                                                <i class="fa-solid fa-location-dot"
+                                                    style="color: #e11d48; width: 16px; text-align: center; font-size: 0.9rem; flex-shrink: 0;"></i>
+                                                <span>{{ ucwords(strtolower($prod->wilayah->nama ?? 'Kalimantan Selatan')) }}</span>
+                                            </div>
 
-                            <!-- Product Card 2: Sae Nadhilah -->
-                            <div class="product-card">
-                                <div class="product-img-box">
-                                    <img src="prod2.jpg" alt="Sae Nadhilah Batik Denim" class="product-img">
-                                </div>
-                                <div class="product-info-box">
-                                    <span class="product-tag">ZN</span>
-                                    <h3 class="product-title"><a href="#">Sae Nadhilah</a></h3>
-                                    <p class="product-location">KAB BANJAR, Kalimantan Selatan</p>
-                                </div>
-                            </div>
+                                            <!-- Ukuran -->
+                                            @if ($prod->ukuran)
+                                                <div class="meta-item"
+                                                    style="display: flex; align-items: center; gap: 10px;">
+                                                    <i class="fa-solid fa-box-open"
+                                                        style="color: #6366f1; width: 16px; text-align: center; font-size: 0.85rem; flex-shrink: 0;"></i>
+                                                    <span>Ukuran: {{ $prod->ukuran }}</span>
+                                                </div>
+                                            @endif
 
-                            <!-- Product Card 3: Mister Jenky -->
-                            <div class="product-card">
-                                <div class="product-img-box">
-                                    <img src="prod3.jpg" alt="Mister Jenky Snack" class="product-img">
-                                </div>
-                                <div class="product-info-box">
-                                    <span class="product-tag">ZN</span>
-                                    <h3 class="product-title"><a href="#">Mister Jenky</a></h3>
-                                    <p class="product-location">KAB TABALONG, Kalimantan Selatan</p>
-                                </div>
-                            </div>
+                                            <!-- Ketahanan -->
+                                            @if ($prod->ketahanan)
+                                                <div class="meta-item"
+                                                    style="display: flex; align-items: center; gap: 10px;">
+                                                    <i class="fa-solid fa-clock"
+                                                        style="color: #d97706; width: 16px; text-align: center; font-size: 0.85rem; flex-shrink: 0;"></i>
+                                                    <span>Ketahanan: {{ $prod->ketahanan }}</span>
+                                                </div>
+                                            @endif
 
-                            <!-- Product Card 4: Jabal Handicraft -->
-                            <div class="product-card">
-                                <div class="product-img-box">
-                                    <img src="prod4.jpg" alt="Jabal Handicraft" class="product-img">
+                                            <!-- Pengiriman -->
+                                            <div class="meta-item" style="display: flex; align-items: center; gap: 10px;">
+                                                <i class="fa-solid fa-truck-fast"
+                                                    style="color: #0284c7; width: 16px; text-align: center; font-size: 0.85rem; flex-shrink: 0;"></i>
+                                                <span>Pengiriman: {{ $prod->pengiriman ?: 'Seluruh Indonesia' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="product-info-box">
-                                    <span class="product-tag">ZN</span>
-                                    <h3 class="product-title"><a href="#">Jabal Handicraft</a></h3>
-                                    <p class="product-location">KAB KUNINGAN, Kalimantan Selatan</p>
-                                </div>
-                            </div>
-
+                            @empty
+                                <div class="p-4 text-muted text-center w-100">Belum ada data produk UMKM.</div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -911,7 +933,9 @@
 
             <!-- Bottom Action Button -->
             <div class="more-products-btn-wrap">
-                <a href="#" class="btn-outline-blue">PRODUK LAINNYA</a>
+                <a href="https://pusatlayanankemasankalsel.com/galeri-produk" target="_blank"
+                    class="btn-outline-blue">PRODUK
+                    LAINNYA</a>
             </div>
 
         </div>

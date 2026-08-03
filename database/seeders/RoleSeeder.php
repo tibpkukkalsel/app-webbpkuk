@@ -35,5 +35,15 @@ class RoleSeeder extends Seeder
             'name' => 'Admin Diklat',
             'guard_name' => 'web',
         ]);
+
+        Role::firstOrCreate([
+            'name' => 'Admin Layanan Kemasan',
+            'guard_name' => 'web',
+        ]);
+
+        Role::firstOrCreate([
+            'name' => 'Admin Helpdesk',
+            'guard_name' => 'web',
+        ]);
     }
 }

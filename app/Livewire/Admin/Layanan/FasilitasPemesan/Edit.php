@@ -163,11 +163,17 @@ class Edit extends Component
         $namaKtp = $this->fotoKtpLama;
 
         if ($this->foto_ktp) {
-            if ($this->fotoKtpLama && Storage::disk('public')->exists('pemesan_ktp/' . $this->fotoKtpLama)) {
-                Storage::disk('public')->delete('pemesan_ktp/' . $this->fotoKtpLama);
+            if ($this->fotoKtpLama) {
+                if (Storage::disk('local')->exists('pemesan_ktp/' . $this->fotoKtpLama)) {
+                    Storage::disk('local')->delete('pemesan_ktp/' . $this->fotoKtpLama);
+                } elseif (Storage::disk('local')->exists($this->fotoKtpLama)) {
+                    Storage::disk('local')->delete($this->fotoKtpLama);
+                } elseif (Storage::disk('public')->exists('pemesan_ktp/' . $this->fotoKtpLama)) {
+                    Storage::disk('public')->delete('pemesan_ktp/' . $this->fotoKtpLama);
+                }
             }
             $namaKtp = time() . '_ktp_' . uniqid() . '.' . $this->foto_ktp->getClientOriginalExtension();
-            $this->foto_ktp->storeAs('pemesan_ktp', $namaKtp, 'public');
+            $this->foto_ktp->storeAs('pemesan_ktp', $namaKtp, 'local');
         }
 
         $pemesan->update([

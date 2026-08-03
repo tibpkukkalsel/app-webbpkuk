@@ -103,12 +103,13 @@
 
             <!-- Col 2: Profil -->
             <div class="footer-col col-profil">
-                <h3 class="footer-heading">Profil</h3>
+                <h3 class="footer-heading">Profil & Kontak</h3>
                 <ul class="footer-links">
-                    <li><a href="#">Tentang</a></li>
-                    <li><a href="#">Visi dan Misi</a></li>
-                    <li><a href="#">Struktur Organisasi</a></li>
-                    <li><a href="#">Fasilitas</a></li>
+                    <li><a href="{{ url('/profil/tentang') }}">Tentang</a></li>
+                    <li><a href="{{ url('/profil/visimisi') }}">Visi dan Misi</a></li>
+                    <li><a href="{{ url('/profil/struktur-organisasi') }}">Struktur Organisasi</a></li>
+                    <li><a href="{{ url('/profil/pegawai') }}">Data Pegawai</a></li>
+                    <li><a href="{{ url('/kontak') }}">Kontak Kami</a></li>
                 </ul>
             </div>
 

@@ -126,7 +126,7 @@ class Create extends Component
         $namaKtp = null;
         if ($this->foto_ktp) {
             $namaKtp = time() . '_ktp_' . uniqid() . '.' . $this->foto_ktp->getClientOriginalExtension();
-            $this->foto_ktp->storeAs('pemesan_ktp', $namaKtp, 'public');
+            $this->foto_ktp->storeAs('pemesan_ktp', $namaKtp, 'local');
         }
 
         $nomorBooking = FasilitasPemesan::generateNomorBooking();

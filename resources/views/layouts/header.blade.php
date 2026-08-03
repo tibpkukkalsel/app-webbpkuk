@@ -52,7 +52,7 @@
                         <li><a href="{{ url('/galeri/video') }}">Video</a></li>
                     </ul>
                 </li>
-                <li class="nav-item {{ request()->is('kontak*') ? 'active' : '' }}"><a href="#" class="nav-link">KONTAK</a></li>
+                <li class="nav-item {{ request()->is('kontak*') ? 'active' : '' }}"><a href="{{ url('/kontak') }}" class="nav-link">KONTAK</a></li>
             </ul>
         </nav>
 
@@ -126,7 +126,7 @@
         </button>
 
         <!-- Item 6: Kontak -->
-        <a href="#" class="mobile-nav-item {{ request()->is('kontak*') ? 'active' : '' }}">
+        <a href="{{ url('/kontak') }}" class="mobile-nav-item {{ request()->is('kontak*') ? 'active' : '' }}">
             <div class="mobile-nav-icon">
                 <i class="fa-solid fa-headset"></i>
             </div>

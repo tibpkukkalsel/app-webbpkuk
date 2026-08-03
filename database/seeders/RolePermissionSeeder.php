@@ -18,6 +18,8 @@ class RolePermissionSeeder extends Seeder
         $adminWebsite = Role::findByName('Admin Website');
         $adminFasilitas = Role::findByName('Admin Fasilitas');
         $adminDiklat = Role::findByName('Admin Diklat');
+        $adminKemasan = Role::findByName('Admin Layanan Kemasan');
+        $adminHelpdesk = Role::findByName('Admin Helpdesk');
 
         // Superadmin mendapatkan semua permission
         $superadmin->syncPermissions(Permission::all());
@@ -35,6 +37,19 @@ class RolePermissionSeeder extends Seeder
         // Admin Diklat mendapatkan permission tertentu
         $adminDiklat->syncPermissions([
             'dashboard.view',
+        ]);
+
+        // Admin Layanan Kemasan mendapatkan permission tertentu
+        $adminKemasan->syncPermissions([
+            'dashboard.view',
+        ]);
+
+        // Admin Helpdesk mendapatkan permission kontak
+        $adminHelpdesk->syncPermissions([
+            'dashboard.view',
+            'kontak.view',
+            'kontak.reply',
+            'kontak.delete',
         ]);
     }
 }

@@ -352,6 +352,26 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link {{ request()->routeIs('produk-umkm*') ? 'active' : '' }}"
+                                href="{{ route('produk-umkm.view') }}" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-shopping-cart"></i>
+                                </span>
+                                <span class="hide-menu">Produk UMKM</span>
+                            </a>
+                        </li>
+                        @can('kontak.view')
+                        <li class="sidebar-item">
+                            <a class="sidebar-link {{ request()->routeIs('kontak*') ? 'active' : '' }}"
+                                href="{{ route('kontak.view') }}" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-mail-opened"></i>
+                                </span>
+                                <span class="hide-menu">Kontak & Helpdesk</span>
+                            </a>
+                        </li>
+                        @endcan
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                             <span class="hide-menu">Page</span>

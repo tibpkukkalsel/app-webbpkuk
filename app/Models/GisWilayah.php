@@ -37,4 +37,9 @@ class GisWilayah extends Model
     {
         return $this->hasMany(GisRealisasi::class, 'id_wilayah', 'id_wilayah');
     }
+
+    public function produkUmkms(): HasMany
+    {
+        return $this->hasMany(ProdukUmkm::class, 'id_wilayah', 'id_wilayah');
+    }
 }
