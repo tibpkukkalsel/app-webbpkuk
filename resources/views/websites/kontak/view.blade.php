@@ -248,7 +248,7 @@
                         <div class="kt-form-actions">
                             <button type="submit" class="kt-btn-submit" id="btnSubmitKontak">
                                 <span id="btnSubmitText">
-                                    <i class="fa-solid fa-paper-plane"></i> Kirim Pesan Online
+                                    <i class="fa-regular fa-paper-plane me-1"></i> Kirim Pesan Online
                                 </span>
                                 <span id="btnSubmitLoading" style="display: none;">
                                     <i class="fa-solid fa-circle-notch fa-spin"></i> Mengirim Pesan...

@@ -95,6 +95,7 @@ class Table extends Component
 
         $msg = $this->isEdit ? 'Data wilayah berhasil diperbarui.' : 'Data wilayah baru berhasil ditambahkan.';
         session()->flash('success', $msg);
+        $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
 
         $this->showModal = false;
         $this->resetForm();
@@ -106,7 +107,9 @@ class Table extends Component
         $wilayah->status = $wilayah->status == 1 ? 0 : 1;
         $wilayah->save();
 
-        session()->flash('success', 'Status wilayah ' . $wilayah->nama . ' berhasil diubah.');
+        $msg = 'Status wilayah ' . $wilayah->nama . ' berhasil diubah.';
+        session()->flash('success', $msg);
+        $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
     }
 
     public function confirmDelete($id)
@@ -121,7 +124,9 @@ class Table extends Component
     {
         if ($this->deleteId) {
             GisWilayah::destroy($this->deleteId);
-            session()->flash('success', 'Wilayah ' . $this->deleteNama . ' berhasil dihapus.');
+            $msg = 'Wilayah ' . $this->deleteNama . ' berhasil dihapus.';
+            session()->flash('success', $msg);
+            $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
         }
 
         $this->showDeleteModal = false;

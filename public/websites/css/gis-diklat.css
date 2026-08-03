@@ -166,12 +166,30 @@
 .gis-kpi-icon-box {
     width: 54px;
     height: 54px;
+    min-width: 54px;
+    min-height: 54px;
     border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid !important;
+    place-items: center !important;
+    place-content: center !important;
     font-size: 1.5rem;
+    line-height: 1 !important;
     flex-shrink: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.gis-kpi-icon-box i {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 1em !important;
+    height: 1em !important;
+    text-align: center !important;
 }
 
 .card-blue .gis-kpi-icon-box { background: #e0f2fe; color: #0284c7; }

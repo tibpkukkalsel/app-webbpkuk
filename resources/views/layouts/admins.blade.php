@@ -298,6 +298,15 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
+                                    <a class="sidebar-link {{ request()->get('tab') === 'target' ? 'active' : '' }}"
+                                        href="{{ route('layanan.view', ['tab' => 'target']) }}" aria-expanded="false">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle"></i>
+                                        </div>
+                                        <span class="hide-menu">Target Diklat</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
                                     <a class="sidebar-link {{ request()->get('tab') === 'realisasi' ? 'active' : '' }}"
                                         href="{{ route('layanan.view', ['tab' => 'realisasi']) }}" aria-expanded="false">
                                         <div class="round-16 d-flex align-items-center justify-content-center">

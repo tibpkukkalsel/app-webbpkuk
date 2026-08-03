@@ -2,11 +2,12 @@
 
 namespace App\Livewire\Website\Diklat;
 
-use App\Models\GisWilayah;
-use App\Models\GisJenisDiklat;
 use App\Models\GisIdentifikasi;
 use App\Models\GisIdentifikasiDetail;
+use App\Models\GisJenisDiklat;
 use App\Models\GisRealisasi;
+use App\Models\GisTarget;
+use App\Models\GisWilayah;
 use Livewire\Component;
 
 class Dashboard extends Component
@@ -77,14 +78,20 @@ class Dashboard extends Component
         $identifikasiIds = (clone $identifikasiQuery)->pluck('id_identifikasi');
         $totalKebutuhan = GisIdentifikasiDetail::whereIn('id_identifikasi', $identifikasiIds)->sum('jumlah_responden');
 
-        // 2. Filtered Realisasi Query
+        // 2. Filtered Target Query (Global target, not bound to region)
+        $targetQuery = GisTarget::query()
+            ->when($this->filterTahun, fn($q) => $q->where('tahun', $this->filterTahun))
+            ->when($this->filterJenisSdm, fn($q) => $q->whereHas('jenisDiklat', fn($j) => $j->where('jenis_sdm', $this->filterJenisSdm)));
+
+        $totalTargetPeserta = (clone $targetQuery)->sum('target_peserta');
+
+        // 3. Filtered Realisasi Query
         $realisasiQuery = GisRealisasi::query()
             ->when($this->filterTahun, fn($q) => $q->where('tahun', $this->filterTahun))
             ->when($this->filterJenisSdm, fn($q) => $q->whereHas('jenisDiklat', fn($j) => $j->where('jenis_sdm', $this->filterJenisSdm)))
             ->when($this->filterWilayahId, fn($q) => $q->where('id_wilayah', $this->filterWilayahId));
 
         $totalPeserta = (clone $realisasiQuery)->sum('jumlah_peserta');
-        $totalKegiatan = (clone $realisasiQuery)->sum('jumlah_kegiatan');
 
         // 3. Wilayahs & Map Data
         $wilayahs = GisWilayah::where('status', 1)->orderBy('nama')->get();
@@ -101,7 +108,6 @@ class Dashboard extends Component
                 ->when($this->filterJenisSdm, fn($q) => $q->whereHas('jenisDiklat', fn($j) => $j->where('jenis_sdm', $this->filterJenisSdm)));
 
             $wPeserta = (clone $wReal)->sum('jumlah_peserta');
-            $wKegiatan = (clone $wReal)->sum('jumlah_kegiatan');
 
             $mapData[] = [
                 'id_wilayah' => $w->id_wilayah,
@@ -112,7 +118,6 @@ class Dashboard extends Component
                 'longitude'  => $w->longitude,
                 'responden'  => $wResp,
                 'peserta'    => $wPeserta,
-                'kegiatan'   => $wKegiatan,
             ];
         }
 
@@ -189,6 +194,13 @@ class Dashboard extends Component
             ->groupBy('id_jenis_diklat')
             ->pluck('total_responden', 'id_jenis_diklat');
 
+        $allTrgDetails = GisTarget::query()
+            ->when($this->filterTahun, fn($q) => $q->where('tahun', $this->filterTahun))
+            ->when($this->filterJenisSdm, fn($q) => $q->whereHas('jenisDiklat', fn($j) => $j->where('jenis_sdm', $this->filterJenisSdm)))
+            ->selectRaw('id_jenis_diklat, SUM(target_peserta) as total_target')
+            ->groupBy('id_jenis_diklat')
+            ->pluck('total_target', 'id_jenis_diklat');
+
         $allRealDetails = GisRealisasi::query()
             ->when($this->filterTahun, fn($q) => $q->where('tahun', $this->filterTahun))
             ->when($this->filterJenisSdm, fn($q) => $q->whereHas('jenisDiklat', fn($j) => $j->where('jenis_sdm', $this->filterJenisSdm)))
@@ -196,31 +208,70 @@ class Dashboard extends Component
             ->groupBy('id_jenis_diklat')
             ->pluck('total_peserta', 'id_jenis_diklat');
 
-        $allJenisIds = $allIdntDetails->keys()->merge($allRealDetails->keys())->unique();
+        $allJenisIds = $allIdntDetails->keys()->merge($allTrgDetails->keys())->merge($allRealDetails->keys())->unique();
         $allJenisDiklats = GisJenisDiklat::whereIn('id_jenis_diklat', $allJenisIds)->get();
 
         foreach ($allJenisDiklats as $jd) {
             $resp = $allIdntDetails->get($jd->id_jenis_diklat, 0);
+            $target = $allTrgDetails->get($jd->id_jenis_diklat, 0);
             $alumni = $allRealDetails->get($jd->id_jenis_diklat, 0);
-            $persen = $resp > 0 ? round(($alumni / $resp) * 100) : ($alumni > 0 ? 100 : 0);
+            $persen = $target > 0 ? round(($alumni / $target) * 100) : ($resp > 0 ? round(($alumni / $resp) * 100) : ($alumni > 0 ? 100 : 0));
 
             $overallSummaryTable->push([
                 'nama_diklat' => $jd->nama,
                 'jenis_sdm'   => $jd->jenis_sdm,
                 'responden'   => $resp,
+                'target'      => $target,
                 'alumni'      => $alumni,
                 'persen'      => $persen,
             ]);
         }
 
-        // 6. Dropdown Filter Options
-        $tahunOptions = GisIdentifikasi::select('tahun')->union(GisRealisasi::select('tahun'))->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+        // 6. Target List with Realisasi & Percentage when filterTahun is selected
+        $targetList = collect();
+        if ($this->filterTahun) {
+            $realisasiMap = GisRealisasi::where('tahun', $this->filterTahun)
+                ->when($this->filterJenisSdm, fn($q) => $q->whereHas('jenisDiklat', fn($j) => $j->where('jenis_sdm', $this->filterJenisSdm)))
+                ->selectRaw('id_jenis_diklat, SUM(jumlah_peserta) as total_alumni')
+                ->groupBy('id_jenis_diklat')
+                ->pluck('total_alumni', 'id_jenis_diklat');
+
+            $targets = GisTarget::with('jenisDiklat')
+                ->where('tahun', $this->filterTahun)
+                ->when($this->filterJenisSdm, fn($q) => $q->whereHas('jenisDiklat', fn($j) => $j->where('jenis_sdm', $this->filterJenisSdm)))
+                ->where('status', 1)
+                ->orderBy('id_target', 'desc')
+                ->get();
+
+            foreach ($targets as $t) {
+                $alumni = $realisasiMap->get($t->id_jenis_diklat, 0);
+                $target = $t->target_peserta;
+                $persen = $target > 0 ? round(($alumni / $target) * 100) : ($alumni > 0 ? 100 : 0);
+
+                $targetList->push([
+                    'id_target'   => $t->id_target,
+                    'nama_diklat' => $t->jenisDiklat->nama ?? '-',
+                    'jenis_sdm'   => $t->jenisDiklat->jenis_sdm ?? '',
+                    'target'      => $target,
+                    'alumni'      => $alumni,
+                    'persen'      => $persen,
+                ]);
+            }
+        }
+
+        // 7. Dropdown Filter Options
+        $tahunOptions = GisIdentifikasi::select('tahun')
+            ->union(GisTarget::select('tahun'))
+            ->union(GisRealisasi::select('tahun'))
+            ->distinct()
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun');
 
         return view('livewire.website.diklat.dashboard', compact(
             'totalResponden',
             'totalKebutuhan',
+            'totalTargetPeserta',
             'totalPeserta',
-            'totalKegiatan',
             'wilayahs',
             'mapData',
             'selectedWilayah',
@@ -228,7 +279,8 @@ class Dashboard extends Component
             'selectedRealisasis',
             'selectedSummaryTable',
             'overallSummaryTable',
-            'tahunOptions'
+            'tahunOptions',
+            'targetList'
         ));
     }
 }

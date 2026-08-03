@@ -187,6 +187,7 @@ class Table extends Component
 
         $msg = $this->isEdit ? 'Data identifikasi berhasil diperbarui.' : 'Data identifikasi kebutuhan diklat baru berhasil disimpan.';
         session()->flash('success', $msg);
+        $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
 
         $this->showModal = false;
         $this->resetForm();
@@ -204,7 +205,9 @@ class Table extends Component
         $data->status = $data->status == 1 ? 0 : 1;
         $data->save();
 
-        session()->flash('success', 'Status identifikasi berhasil diubah.');
+        $msg = 'Status identifikasi berhasil diubah.';
+        session()->flash('success', $msg);
+        $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
     }
 
     public function confirmDelete($id)
@@ -217,7 +220,9 @@ class Table extends Component
     {
         if ($this->deleteId) {
             GisIdentifikasi::destroy($this->deleteId);
-            session()->flash('success', 'Data identifikasi berhasil dihapus.');
+            $msg = 'Data identifikasi berhasil dihapus.';
+            session()->flash('success', $msg);
+            $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
         }
 
         $this->showDeleteModal = false;

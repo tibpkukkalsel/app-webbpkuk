@@ -381,27 +381,28 @@ textarea.kt-input {
 .kt-btn-submit {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px 28px;
-    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    gap: 8px;
+    padding: 11px 22px;
+    background: #0284c7;
     color: #ffffff;
-    border: none;
-    border-radius: 12px;
-    font-size: 0.92rem;
-    font-weight: 800;
+    border: 1px solid #0284c7;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 400;
     cursor: pointer;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+    transition: background 0.2s ease;
+    box-shadow: none;
 }
 
 .kt-btn-submit:hover {
-    background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4);
+    background: #0369a1;
+    border-color: #0369a1;
+    transform: none;
+    box-shadow: none;
 }
 
 .kt-btn-submit:active {
-    transform: translateY(0);
+    background: #075985;
 }
 
 /* ALERT MESSAGES */

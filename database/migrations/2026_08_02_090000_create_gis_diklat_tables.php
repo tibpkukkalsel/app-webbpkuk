@@ -78,7 +78,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_jenis_diklat');
             $table->integer('tahun');
             $table->integer('jumlah_peserta')->default(0);
-            $table->integer('jumlah_kegiatan')->default(1);
+            $table->integer('jumlah_kegiatan')->nullable();
             $table->text('keterangan')->nullable();
             $table->timestamps();
 

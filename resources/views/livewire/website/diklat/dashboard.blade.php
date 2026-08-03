@@ -16,9 +16,9 @@
         </div>
     </div>
 
-    <!-- 4 SUMMARY KPI STATS CARDS -->
+    <!-- 3 SUMMARY KPI STATS CARDS -->
     <div class="gis-kpi-grid mb-4">
-        <!-- 1. Total Responden IKP -->
+        <!-- 1. Total Responden IKP (KIRI) -->
         <div class="gis-kpi-card card-blue">
             <div class="gis-kpi-icon-box">
                 <i class="fa-solid fa-people-group"></i>
@@ -30,7 +30,19 @@
             </div>
         </div>
 
-        <!-- 2. Total Peserta Dilatih -->
+        <!-- 2. Target Tahun Anggaran (DITENGAH) -->
+        <div class="gis-kpi-card card-amber">
+            <div class="gis-kpi-icon-box">
+                <i class="fa-solid fa-bullseye"></i>
+            </div>
+            <div class="gis-kpi-info">
+                <span class="gis-kpi-label">Target Tahun Anggaran</span>
+                <h3 class="gis-kpi-value">{{ number_format($totalTargetPeserta) }}</h3>
+                <span class="gis-kpi-badge">Target Kuota Peserta Diklat</span>
+            </div>
+        </div>
+
+        <!-- 3. Total Peserta Dilatih (KANAN) -->
         <div class="gis-kpi-card card-green">
             <div class="gis-kpi-icon-box">
                 <i class="fa-solid fa-user-graduate"></i>
@@ -39,38 +51,6 @@
                 <span class="gis-kpi-label">Peserta Telah Dilatih</span>
                 <h3 class="gis-kpi-value">{{ number_format($totalPeserta) }}</h3>
                 <span class="gis-kpi-badge">Realisasi Alumni</span>
-            </div>
-        </div>
-
-        <!-- 4. Donut Chart Perbandingan Responden vs Alumni -->
-        @php
-            $chartResp = $totalResponden;
-            $chartAlum = $totalPeserta;
-            $chartSum = $chartResp + $chartAlum;
-            $pctResp = $chartSum > 0 ? round(($chartResp / $chartSum) * 100) : 50;
-        @endphp
-        <div class="gis-kpi-card card-donut">
-            <div class="gis-donut-chart-box">
-                <div class="gis-donut-visual"
-                    style="background: conic-gradient(#0284c7 0% {{ $pctResp }}%, #16a34a {{ $pctResp }}% 100%);">
-                    <div class="gis-donut-hole">
-                        <span
-                            class="gis-donut-center-val">{{ $totalResponden > 0 ? round(($totalPeserta / $totalResponden) * 100) : 0 }}%</span>
-                    </div>
-                </div>
-            </div>
-            <div class="gis-kpi-info flex-grow-1">
-                <span class="gis-kpi-label mb-1">Rasio Survei Kebutuhan & Realisasi</span>
-                <div class="gis-donut-legend">
-                    <div class="legend-item d-flex align-items-center gap-2 mb-1">
-                        <span class="legend-dot dot-blue"></span>
-                        <span class="legend-text">Responden: <strong>{{ number_format($chartResp) }}</strong></span>
-                    </div>
-                    <div class="legend-item d-flex align-items-center gap-2">
-                        <span class="legend-dot dot-green"></span>
-                        <span class="legend-text">Alumni: <strong>{{ number_format($chartAlum) }}</strong></span>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -118,6 +98,82 @@
             </div>
         @endif
     </div>
+
+    <!-- TARGET TABLE SECTION (POSISI SEMULA DI BAWAH FILTER BAR) -->
+    @if ($filterTahun)
+        <div class="gis-detail-card mb-4" wire:key="target-table-top-{{ $filterTahun }}">
+            <div class="gis-summary-matrix-card">
+                <div class="gis-summary-header mb-3">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-warning fs-4"></i>
+                            <div>
+                                <h5 class="fw-bold text-dark mb-0">Tabel Target Kuota Diklat T.A. {{ $filterTahun }}</h5>
+                                <small class="text-muted">Target kuota peserta pelatihan Balatkop Kalsel untuk Tahun Anggaran {{ $filterTahun }}</small>
+                            </div>
+                        </div>
+                        <span class="gis-badge badge-blue-pill">
+                            <i class="fa-regular fa-calendar me-1"></i> Tahun {{ $filterTahun }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="gis-matrix-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;" class="text-center">No</th>
+                                <th>Nama Program Pelatihan / Diklat Target</th>
+                                <th style="width: 150px;" class="text-center">Kategori SDM</th>
+                                <th style="width: 180px;" class="text-center">Target Kuota Peserta</th>
+                                <th>Status / Keterangan Alokasi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($targetList as $idx => $tRow)
+                                <tr>
+                                    <td class="text-center font-monospace fw-bold text-muted">{{ $idx + 1 }}</td>
+                                    <td>
+                                        <strong class="text-dark">{{ $tRow['nama_diklat'] }}</strong>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="gis-badge {{ $tRow['jenis_sdm'] === 'sdm_koperasi' ? 'badge-blue-pill' : 'badge-green-pill' }}">
+                                            {{ $tRow['jenis_sdm'] === 'sdm_koperasi' ? 'SDM KOP' : 'SDM UMKM' }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="fw-bold text-warning fs-6">
+                                            <i class="fa-solid fa-users me-1"></i>{{ number_format($tRow['target']) }} Orang
+                                        </span>
+                                    </td>
+                                    <td class="small text-muted">
+                                        Target Kuota APBD T.A. {{ $filterTahun }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">
+                                        Belum ada data target kuota peserta diklat untuk Tahun {{ $filterTahun }}.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                        @if ($targetList->count() > 0)
+                            <tfoot>
+                                <tr class="fw-bold bg-light">
+                                    <td colspan="3" class="text-end text-dark pe-3">TOTAL TARGET KUOTA PESERTA T.A. {{ $filterTahun }}:</td>
+                                    <td class="text-center text-warning fs-6">
+                                        {{ number_format($targetList->sum('target')) }} Peserta
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        @endif
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- MAP CONTAINER & QUICK SELECTOR ROW -->
     <div class="gis-map-row mb-4">
@@ -516,6 +572,130 @@
             </div>
         @endif
     </div>
+
+    <!-- TABEL KESIMPULAN PENYANDINGAN 3 DATA (IKP vs TARGET ANGGARAN vs REALISASI ALUMNI) DI PALING BAWAH HALAMAN -->
+    @if ($filterTahun)
+        <div class="gis-detail-card mb-4" wire:key="kesimpulan-table-bottom-{{ $filterTahun }}">
+            <div class="gis-summary-matrix-card">
+                <div class="gis-summary-header mb-3">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-primary fs-4"></i>
+                            <div>
+                                <h5 class="fw-bold text-dark mb-0">Tabel Kesimpulan Matriks Evaluasi & Sanding Data Diklat T.A. {{ $filterTahun }}</h5>
+                                <small class="text-muted">Penyandingan 3 Data Utama: Usulan Kebutuhan (IKP) vs Target Kuota Anggaran vs Realisasi Alumni Terlatih</small>
+                            </div>
+                        </div>
+                        <span class="gis-badge badge-blue-pill">
+                            <i class="fa-solid fa-layer-group me-1"></i> Matriks Monev T.A. {{ $filterTahun }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="gis-matrix-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;" class="text-center">No</th>
+                                <th>Nama Program Pelatihan / Diklat</th>
+                                <th style="width: 140px;" class="text-center">Kategori SDM</th>
+                                <th style="width: 150px;" class="text-center">Kebutuhan (IKP)</th>
+                                <th style="width: 150px;" class="text-center">Target Anggaran</th>
+                                <th style="width: 150px;" class="text-center">Realisasi Alumni</th>
+                                <th style="width: 160px;" class="text-center">Capaian / Target</th>
+                                <th style="width: 160px;" class="text-center">Pemenuhan IKP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($overallSummaryTable as $idx => $row)
+                                <tr>
+                                    <td class="text-center font-monospace fw-bold text-muted">{{ $idx + 1 }}</td>
+                                    <td>
+                                        <strong class="text-dark">{{ $row['nama_diklat'] }}</strong>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="gis-badge {{ $row['jenis_sdm'] === 'sdm_koperasi' ? 'badge-blue-pill' : 'badge-green-pill' }}">
+                                            {{ $row['jenis_sdm'] === 'sdm_koperasi' ? 'SDM KOP' : 'SDM UMKM' }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="fw-bold text-primary">{{ number_format($row['responden']) }} Responden</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="fw-bold text-warning">{{ number_format($row['target']) }} Target</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="fw-bold text-success">{{ number_format($row['alumni']) }} Alumni</span>
+                                    </td>
+                                    <td class="text-center">
+                                        @if ($row['target'] > 0)
+                                            @php $pctTrg = round(($row['alumni'] / $row['target']) * 100); @endphp
+                                            <span class="gis-status-pill {{ $pctTrg >= 100 ? 'pill-success' : ($pctTrg > 0 ? 'pill-info' : 'pill-muted') }}">
+                                                {{ $pctTrg }}% Target
+                                            </span>
+                                        @else
+                                            <span class="gis-status-pill pill-muted">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if ($row['responden'] > 0)
+                                            @php $pctIkp = round(($row['alumni'] / $row['responden']) * 100); @endphp
+                                            <span class="gis-status-pill {{ $pctIkp >= 100 ? 'pill-success' : ($pctIkp > 0 ? 'pill-info' : 'pill-muted') }}">
+                                                {{ $pctIkp }}% IKP
+                                            </span>
+                                        @else
+                                            <span class="gis-status-pill pill-muted">-</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="8" class="text-center py-4 text-muted">
+                                        Belum ada data kesimpulan matriks untuk Tahun {{ $filterTahun }}.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                        @if ($overallSummaryTable->count() > 0)
+                            <tfoot>
+                                <tr class="fw-bold bg-light">
+                                    <td colspan="3" class="text-end text-dark pe-3">TOTAL KESELURUHAN T.A. {{ $filterTahun }}:</td>
+                                    <td class="text-center text-primary fs-6">
+                                        {{ number_format($overallSummaryTable->sum('responden')) }} Responden
+                                    </td>
+                                    <td class="text-center text-warning fs-6">
+                                        {{ number_format($overallSummaryTable->sum('target')) }} Target
+                                    </td>
+                                    <td class="text-center text-success fs-6">
+                                        {{ number_format($overallSummaryTable->sum('alumni')) }} Alumni
+                                    </td>
+                                    <td class="text-center">
+                                        @php
+                                            $totTrg = $overallSummaryTable->sum('target');
+                                            $totAlm = $overallSummaryTable->sum('alumni');
+                                            $totPctTrg = $totTrg > 0 ? round(($totAlm / $totTrg) * 100) : 0;
+                                        @endphp
+                                        <span class="gis-status-pill {{ $totPctTrg >= 100 ? 'pill-success' : 'pill-info' }}">
+                                            {{ $totPctTrg }}% Target Ratio
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        @php
+                                            $totResp = $overallSummaryTable->sum('responden');
+                                            $totPctIkp = $totResp > 0 ? round(($totAlm / $totResp) * 100) : 0;
+                                        @endphp
+                                        <span class="gis-status-pill {{ $totPctIkp >= 100 ? 'pill-success' : 'pill-info' }}">
+                                            {{ $totPctIkp }}% IKP Ratio
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        @endif
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- EMBED SCRIPT TO PASS DATA TO LEAFLET JS -->
     <script>

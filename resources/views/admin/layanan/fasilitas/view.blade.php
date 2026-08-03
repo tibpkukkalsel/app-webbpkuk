@@ -121,20 +121,37 @@ $(document).on('click','.hapus',function(){
 <!-- END Button Hapus -->
 <script>
   document.addEventListener('livewire:init', () => {
-      Livewire.on('fasilitas-created', () => {
-          bootstrap.Modal.getInstance(document.getElementById('tambah-modal')).hide();
+      Livewire.on('swal', (data) => {
+          const evt = Array.isArray(data) ? data[0] : data;
+          if (typeof Swal !== 'undefined') {
+              Swal.fire({
+                  title: evt.title || 'Berhasil!',
+                  text: evt.text || 'Data berhasil diproses.',
+                  icon: evt.icon || 'success',
+                  timer: 2000,
+                  showConfirmButton: false,
+                  customClass: {
+                      popup: 'rounded-4 shadow-lg'
+                  }
+              });
+          }
       });
-  });
-</script>
-<script>
-  document.addEventListener('livewire:init',()=>{
 
-    Livewire.on('close-edit-modal',()=>{
+      Livewire.on('fasilitas-created', () => {
+          const el = document.getElementById('tambah-modal');
+          if (el && typeof bootstrap !== 'undefined') {
+              const modal = bootstrap.Modal.getInstance(el);
+              if (modal) modal.hide();
+          }
+      });
 
-        bootstrap.Modal.getInstance(document.getElementById('editdata')).hide();
-
-    });
-
+      Livewire.on('close-edit-modal', () => {
+          const el = document.getElementById('editdata');
+          if (el && typeof bootstrap !== 'undefined') {
+              const modal = bootstrap.Modal.getInstance(el);
+              if (modal) modal.hide();
+          }
+      });
   });
 </script>
   

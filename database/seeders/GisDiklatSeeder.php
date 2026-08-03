@@ -279,7 +279,6 @@ class GisDiklatSeeder extends Seeder
                 'id_jenis_diklat' => $createdJenisDiklat[0]->id_jenis_diklat, // Manajerial Koperasi
                 'tahun'           => 2025,
                 'jumlah_peserta'  => 30,
-                'jumlah_kegiatan' => 1,
                 'keterangan'      => 'Dilaksanakan di Hotel Grand Palace Banjarmasin angkatan I.',
             ],
             [
@@ -287,7 +286,6 @@ class GisDiklatSeeder extends Seeder
                 'id_jenis_diklat' => $createdJenisDiklat[5]->id_jenis_diklat, // Digital Marketing UMKM
                 'tahun'           => 2025,
                 'jumlah_peserta'  => 60,
-                'jumlah_kegiatan' => 2,
                 'keterangan'      => 'Pelatihan digital marketing angkatan I & II di LabKom Balatkop Kalsel.',
             ],
             [
@@ -295,7 +293,6 @@ class GisDiklatSeeder extends Seeder
                 'id_jenis_diklat' => $createdJenisDiklat[4]->id_jenis_diklat, // Legalitas UMKM
                 'tahun'           => 2025,
                 'jumlah_peserta'  => 35,
-                'jumlah_kegiatan' => 1,
                 'keterangan'      => 'Fasilitasi NIB & Sertifikasi Halal gratis kerjasama Dinas Koperasi Banjarbaru.',
             ],
             [
@@ -303,7 +300,6 @@ class GisDiklatSeeder extends Seeder
                 'id_jenis_diklat' => $createdJenisDiklat[1]->id_jenis_diklat, // Akuntansi Koperasi
                 'tahun'           => 2025,
                 'jumlah_peserta'  => 25,
-                'jumlah_kegiatan' => 1,
                 'keterangan'      => 'Bimtek penyusunan laporan keuangan Koperasi KUD Martapura.',
             ],
             [
@@ -311,7 +307,6 @@ class GisDiklatSeeder extends Seeder
                 'id_jenis_diklat' => $createdJenisDiklat[7]->id_jenis_diklat, // Kemasan UMKM
                 'tahun'           => 2025,
                 'jumlah_peserta'  => 30,
-                'jumlah_kegiatan' => 1,
                 'keterangan'      => 'Pelatihan dan cetak sampel kemasan olahan kerupuk ikan.',
             ],
             [
@@ -319,7 +314,6 @@ class GisDiklatSeeder extends Seeder
                 'id_jenis_diklat' => $createdJenisDiklat[6]->id_jenis_diklat, // HPP UMKM
                 'tahun'           => 2025,
                 'jumlah_peserta'  => 30,
-                'jumlah_kegiatan' => 1,
                 'keterangan'      => 'Pelatihan akuntansi sederhana dan penetapan harga jual usaha mikro.',
             ],
             // 2026 (Tahun Berjalan)
@@ -328,7 +322,6 @@ class GisDiklatSeeder extends Seeder
                 'id_jenis_diklat' => $createdJenisDiklat[1]->id_jenis_diklat, // Akuntansi Koperasi
                 'tahun'           => 2026,
                 'jumlah_peserta'  => 30,
-                'jumlah_kegiatan' => 1,
                 'keterangan'      => 'Realisasi angkatan I tahun 2026 di Balatkop Kalsel.',
             ],
             [
@@ -336,7 +329,6 @@ class GisDiklatSeeder extends Seeder
                 'id_jenis_diklat' => $createdJenisDiklat[5]->id_jenis_diklat, // Digital Marketing UMKM
                 'tahun'           => 2026,
                 'jumlah_peserta'  => 30,
-                'jumlah_kegiatan' => 1,
                 'keterangan'      => 'Realisasi angkatan I tahun 2026 bidang digitalisasi.',
             ],
         ];

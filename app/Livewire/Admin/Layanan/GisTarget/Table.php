@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Livewire\Admin\Layanan\GisRealisasi;
+namespace App\Livewire\Admin\Layanan\GisTarget;
 
-use App\Models\GisRealisasi;
+use App\Models\GisTarget;
 use App\Models\GisWilayah;
 use App\Models\GisJenisDiklat;
 use Livewire\Component;
@@ -15,7 +15,6 @@ class Table extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $search = '';
-    public $filterWilayah = '';
     public $filterTahun = '';
     public $filterJenisSdm = '';
     public $perPage = 10;
@@ -23,12 +22,12 @@ class Table extends Component
     // Form Modal Properties
     public $showModal = false;
     public $isEdit = false;
-    public $id_realisasi;
-    public $id_wilayah;
+    public $id_target;
     public $id_jenis_diklat;
     public $tahun;
-    public $jumlah_peserta = 0;
+    public $target_peserta = 30;
     public $keterangan;
+    public $status = 1;
 
     // Confirm Delete Modal
     public $showDeleteModal = false;
@@ -40,11 +39,6 @@ class Table extends Component
     }
 
     public function updatingSearch()
-    {
-        $this->resetPage();
-    }
-
-    public function updatingFilterWilayah()
     {
         $this->resetPage();
     }
@@ -68,13 +62,13 @@ class Table extends Component
 
     public function edit($id)
     {
-        $realisasi = GisRealisasi::findOrFail($id);
-        $this->id_realisasi     = $realisasi->id_realisasi;
-        $this->id_wilayah       = $realisasi->id_wilayah;
-        $this->id_jenis_diklat  = $realisasi->id_jenis_diklat;
-        $this->tahun            = $realisasi->tahun;
-        $this->jumlah_peserta   = $realisasi->jumlah_peserta;
-        $this->keterangan       = $realisasi->keterangan;
+        $target = GisTarget::findOrFail($id);
+        $this->id_target       = $target->id_target;
+        $this->id_jenis_diklat = $target->id_jenis_diklat;
+        $this->tahun           = $target->tahun;
+        $this->target_peserta  = $target->target_peserta;
+        $this->keterangan      = $target->keterangan;
+        $this->status          = $target->status ? 1 : 0;
 
         $this->isEdit = true;
         $this->showModal = true;
@@ -83,35 +77,45 @@ class Table extends Component
     public function save()
     {
         $this->validate([
-            'id_wilayah'      => 'required|exists:gis_wilayah,id_wilayah',
             'id_jenis_diklat' => 'required|exists:gis_jenis_diklat,id_jenis_diklat',
             'tahun'           => 'required|integer|min:2010|max:2050',
-            'jumlah_peserta'  => 'required|integer|min:0',
+            'target_peserta'  => 'required|integer|min:0',
             'keterangan'      => 'nullable|string',
+            'status'          => 'required|boolean',
         ], [
-            'id_wilayah.required'      => 'Pilih wilayah kabupaten/kota.',
             'id_jenis_diklat.required' => 'Pilih jenis diklat.',
-            'tahun.required'           => 'Isi tahun pelaksanaan.',
-            'jumlah_peserta.min'       => 'Jumlah peserta minimal 0.',
+            'tahun.required'           => 'Isi tahun anggaran.',
+            'target_peserta.min'       => 'Target peserta minimal 0.',
         ]);
 
-        GisRealisasi::updateOrCreate(
-            ['id_realisasi' => $this->id_realisasi],
+        GisTarget::updateOrCreate(
+            ['id_target' => $this->id_target],
             [
-                'id_wilayah'      => $this->id_wilayah,
                 'id_jenis_diklat' => $this->id_jenis_diklat,
                 'tahun'           => $this->tahun,
-                'jumlah_peserta'  => $this->jumlah_peserta,
+                'target_peserta'  => $this->target_peserta,
                 'keterangan'      => $this->keterangan,
+                'status'          => $this->status,
             ]
         );
 
-        $msg = $this->isEdit ? 'Data realisasi diklat berhasil diperbarui.' : 'Data realisasi diklat baru berhasil disimpan.';
+        $msg = $this->isEdit ? 'Data target diklat berhasil diperbarui.' : 'Data target diklat baru berhasil disimpan.';
         session()->flash('success', $msg);
         $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
 
         $this->showModal = false;
         $this->resetForm();
+    }
+
+    public function toggleStatus($id)
+    {
+        $target = GisTarget::findOrFail($id);
+        $target->status = !$target->status;
+        $target->save();
+
+        $msg = 'Status target diklat berhasil diubah.';
+        session()->flash('success', $msg);
+        $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
     }
 
     public function confirmDelete($id)
@@ -123,8 +127,8 @@ class Table extends Component
     public function delete()
     {
         if ($this->deleteId) {
-            GisRealisasi::destroy($this->deleteId);
-            $msg = 'Data realisasi diklat berhasil dihapus.';
+            GisTarget::destroy($this->deleteId);
+            $msg = 'Data target diklat berhasil dihapus.';
             session()->flash('success', $msg);
             $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
         }
@@ -146,23 +150,20 @@ class Table extends Component
 
     private function resetForm()
     {
-        $this->reset(['id_realisasi', 'id_wilayah', 'id_jenis_diklat', 'tahun', 'jumlah_peserta', 'keterangan']);
+        $this->reset(['id_target', 'id_jenis_diklat', 'tahun', 'target_peserta', 'keterangan', 'status']);
         $this->tahun = date('Y');
+        $this->target_peserta = 30;
+        $this->status = 1;
         $this->resetErrorBag();
     }
 
     public function render()
     {
-        $realisasis = GisRealisasi::with(['wilayah', 'jenisDiklat'])
+        $targets = GisTarget::with(['jenisDiklat'])
             ->when($this->search, function ($q) {
-                $q->whereHas('wilayah', function ($w) {
-                    $w->where('nama', 'like', '%' . $this->search . '%');
-                })->orWhereHas('jenisDiklat', function ($j) {
+                $q->whereHas('jenisDiklat', function ($j) {
                     $j->where('nama', 'like', '%' . $this->search . '%');
                 })->orWhere('keterangan', 'like', '%' . $this->search . '%');
-            })
-            ->when($this->filterWilayah, function ($q) {
-                $q->where('id_wilayah', $this->filterWilayah);
             })
             ->when($this->filterTahun, function ($q) {
                 $q->where('tahun', $this->filterTahun);
@@ -173,12 +174,11 @@ class Table extends Component
                 });
             })
             ->orderBy('tahun', 'desc')
-            ->orderBy('id_realisasi', 'desc')
+            ->orderBy('id_target', 'desc')
             ->paginate($this->perPage);
 
-        $wilayahOptions = GisWilayah::where('status', 1)->orderBy('nama')->get();
         $jenisDiklatOptions = GisJenisDiklat::where('status', 1)->orderBy('jenis_sdm')->orderBy('nama')->get();
 
-        return view('livewire.admin.layanan.gis_realisasi.table', compact('realisasis', 'wilayahOptions', 'jenisDiklatOptions'));
+        return view('livewire.admin.layanan.gis_target.table', compact('targets', 'jenisDiklatOptions'));
     }
 }

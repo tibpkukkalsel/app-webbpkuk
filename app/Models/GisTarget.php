@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class GisRealisasi extends Model
+class GisTarget extends Model
 {
-    protected $table = 'gis_realisasi';
-    protected $primaryKey = 'id_realisasi';
+    protected $table = 'gis_target';
+    protected $primaryKey = 'id_target';
     public $incrementing = true;
     protected $keyType = 'int';
 
@@ -16,13 +16,15 @@ class GisRealisasi extends Model
         'id_wilayah',
         'id_jenis_diklat',
         'tahun',
-        'jumlah_peserta',
+        'target_peserta',
         'keterangan',
+        'status',
     ];
 
     protected $casts = [
         'tahun'          => 'integer',
-        'jumlah_peserta' => 'integer',
+        'target_peserta' => 'integer',
+        'status'         => 'boolean',
     ];
 
     public function wilayah(): BelongsTo

@@ -1,11 +1,45 @@
 <div>
-    <!-- FLASH MESSAGE -->
+    <!-- FLASH MESSAGE / SWEETALERT NOTIFICATION -->
     @if (session()->has('success'))
+        <script>
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: "{{ session('success') }}",
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    customClass: {
+                        popup: 'rounded-4 shadow-lg'
+                    }
+                });
+            }
+        </script>
         <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
             <i class="ti ti-check-circle me-2 fs-5"></i>{{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            Livewire.on('show-swal', (data) => {
+                if (typeof Swal !== 'undefined') {
+                    const evt = Array.isArray(data) ? data[0] : data;
+                    Swal.fire({
+                        title: evt.title || 'Berhasil!',
+                        text: evt.text || 'Data berhasil diproses.',
+                        icon: evt.icon || 'success',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        customClass: {
+                            popup: 'rounded-4 shadow-lg'
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 
     <!-- TOP CONTROLS -->
     <div class="row mb-3 align-items-center">

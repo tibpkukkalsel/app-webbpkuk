@@ -62,8 +62,7 @@
                 <th class="text-center">Program Jenis Diklat</th>
                 <th width="120" class="text-center">Kategori SDM</th>
                 <th width="90" class="text-center">Tahun</th>
-                <th width="130" class="text-center">Jumlah Kegiatan</th>
-                <th width="130" class="text-center">Jumlah Peserta</th>
+                <th width="150" class="text-center">Jumlah Peserta</th>
                 <th class="text-center">Keterangan Pelaksanaan</th>
                 <th width="120" class="text-center">Aksi</th>
             </tr>
@@ -90,9 +89,6 @@
                         <span class="badge bg-info-subtle text-info fw-semibold">{{ $r->tahun }}</span>
                     </td>
                     <td class="text-center">
-                        <span class="badge bg-secondary-subtle text-dark fw-bold">{{ $r->jumlah_kegiatan }} Angkatan</span>
-                    </td>
-                    <td class="text-center">
                         <span class="badge bg-success-subtle text-success fw-bold">
                             {{ number_format($r->jumlah_peserta) }} Orang
                         </span>
@@ -111,7 +107,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="9" class="text-center">Tidak ada data.</td>
+                    <td colspan="8" class="text-center">Tidak ada data.</td>
                 </tr>
             @endforelse
         </tbody>
@@ -122,7 +118,6 @@
                 <th class="text-center">Program Jenis Diklat</th>
                 <th class="text-center">Kategori SDM</th>
                 <th class="text-center">Tahun</th>
-                <th class="text-center">Jumlah Kegiatan</th>
                 <th class="text-center">Jumlah Peserta</th>
                 <th class="text-center">Keterangan Pelaksanaan</th>
                 <th class="text-center">Aksi</th>
@@ -174,19 +169,13 @@
                                     </select>
                                     @error('id_jenis_diklat') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label class="form-label fw-semibold">Tahun Pelaksanaan <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control @error('tahun') is-invalid @enderror"
                                         placeholder="2026" wire:model="tahun">
                                     @error('tahun') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold">Jumlah Kegiatan <span class="text-danger">*</span></label>
-                                    <input type="number" min="1" class="form-control text-center @error('jumlah_kegiatan') is-invalid @enderror"
-                                        placeholder="1" wire:model="jumlah_kegiatan">
-                                    @error('jumlah_kegiatan') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label class="form-label fw-semibold">Jumlah Peserta <span class="text-danger">*</span></label>
                                     <input type="number" min="0" class="form-control text-center fw-bold @error('jumlah_peserta') is-invalid @enderror"
                                         placeholder="30" wire:model="jumlah_peserta">
@@ -194,7 +183,7 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label fw-semibold">Keterangan / Lokasi Pelaksanaan</label>
-                                    <textarea class="form-control" rows="3" placeholder="Contoh: Dilaksanakan di Hotel Grand Palace Banjarmasin angkatan I..." wire:model="keterangan"></textarea>
+                                    <textarea class="form-control" rows="3" placeholder="Contoh: Dilaksanakan di Hotel Grand Palace Banjarmasin..." wire:model="keterangan"></textarea>
                                 </div>
                             </div>
                         </div>

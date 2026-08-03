@@ -83,6 +83,7 @@ class Table extends Component
 
         $msg = $this->isEdit ? 'Jenis diklat berhasil diperbarui.' : 'Jenis diklat baru berhasil ditambahkan.';
         session()->flash('success', $msg);
+        $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
 
         $this->showModal = false;
         $this->resetForm();
@@ -94,7 +95,9 @@ class Table extends Component
         $data->status = $data->status == 1 ? 0 : 1;
         $data->save();
 
-        session()->flash('success', 'Status jenis diklat ' . $data->nama . ' berhasil diubah.');
+        $msg = 'Status jenis diklat ' . $data->nama . ' berhasil diubah.';
+        session()->flash('success', $msg);
+        $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
     }
 
     public function confirmDelete($id)
@@ -109,7 +112,9 @@ class Table extends Component
     {
         if ($this->deleteId) {
             GisJenisDiklat::destroy($this->deleteId);
-            session()->flash('success', 'Jenis diklat ' . $this->deleteNama . ' berhasil dihapus.');
+            $msg = 'Jenis diklat ' . $this->deleteNama . ' berhasil dihapus.';
+            session()->flash('success', $msg);
+            $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
         }
 
         $this->showDeleteModal = false;

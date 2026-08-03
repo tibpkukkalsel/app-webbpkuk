@@ -12,6 +12,8 @@
                             Jenis Diklat SDM
                         @elseif ($tab === 'identifikasi')
                             Identifikasi Kebutuhan Diklat
+                        @elseif ($tab === 'target')
+                            Target Diklat
                         @elseif ($tab === 'realisasi')
                             Realisasi Diklat
                         @else
@@ -47,7 +49,9 @@
                         @elseif ($tab === 'jenis_diklat')
                             Jenis Diklat SDM (Koperasi & UMKM)
                         @elseif ($tab === 'identifikasi')
-                            Identifikasi Kebutuhan Diklat
+                            Identifikasi Kebutuhan Diklat (Responden)
+                        @elseif ($tab === 'target')
+                            Target Diklat (Tahun Anggaran)
                         @elseif ($tab === 'realisasi')
                             Realisasi Diklat
                         @else
@@ -63,6 +67,8 @@
                         <livewire:admin.layanan.gis-jenis-diklat.table />
                     @elseif ($tab === 'identifikasi')
                         <livewire:admin.layanan.gis-identifikasi.table />
+                    @elseif ($tab === 'target')
+                        <livewire:admin.layanan.gis-target.table />
                     @elseif ($tab === 'realisasi')
                         <livewire:admin.layanan.gis-realisasi.table />
                     @endif
@@ -71,3 +77,25 @@
         </div>
     </div>
 @endsection
+
+@push('myscript')
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('show-swal', (data) => {
+                const evt = Array.isArray(data) ? data[0] : data;
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: evt.title || 'Berhasil!',
+                        text: evt.text || 'Data berhasil diproses.',
+                        icon: evt.icon || 'success',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        customClass: {
+                            popup: 'rounded-4 shadow-lg'
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+@endpush

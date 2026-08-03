@@ -52,6 +52,7 @@ class Create extends Component
 
         $this->dispatch('fasilitas-refresh');
         $this->dispatch('fasilitas-created');
+        $this->dispatch('swal', icon: 'success', title: 'Berhasil!', text: 'Data fasilitas baru berhasil ditambahkan.');
     }
 
     public function render()

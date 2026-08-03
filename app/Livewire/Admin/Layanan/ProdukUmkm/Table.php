@@ -142,6 +142,7 @@ class Table extends Component
 
         $msg = $this->isEdit ? 'Data produk UMKM berhasil diperbarui.' : 'Data produk UMKM baru berhasil ditambahkan.';
         session()->flash('success', $msg);
+        $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
 
         $this->showModal = false;
         $this->resetForm();
@@ -153,7 +154,9 @@ class Table extends Component
         $produk->status = $produk->status == 1 ? 0 : 1;
         $produk->save();
 
-        session()->flash('success', 'Status produk ' . $produk->nama_produk . ' berhasil diubah.');
+        $msg = 'Status produk ' . $produk->nama_produk . ' berhasil diubah.';
+        session()->flash('success', $msg);
+        $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
     }
 
     public function confirmDelete($id)
@@ -174,7 +177,9 @@ class Table extends Component
                 }
                 $produk->delete();
             }
-            session()->flash('success', 'Produk UMKM ' . $this->deleteNama . ' berhasil dihapus.');
+            $msg = 'Produk UMKM ' . $this->deleteNama . ' berhasil dihapus.';
+            session()->flash('success', $msg);
+            $this->dispatch('show-swal', icon: 'success', title: 'Berhasil!', text: $msg);
         }
 
         $this->showDeleteModal = false;
