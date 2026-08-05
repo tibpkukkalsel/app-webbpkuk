@@ -79,6 +79,7 @@
     @endif
 
     <title>{!! $metaTitle !!}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="shortcut icon" type="image/png"
         @if (isset($identitas) && ($shortcut = $identitas->firstWhere('nama', 'Logo Shortcut'))) href="{{ asset('storage/header/' . $shortcut->keterangan) }}" @endif />
@@ -131,6 +132,11 @@
 
     <!-- Site Footer -->
     @include('layouts.footer')
+
+    {{-- 
+    <!-- Asisten AI Balatkop Floating Chatbot Widget (Aira) -->
+    @include('layouts.partials.ai-chat-widget') 
+    --}}
 
     <script src="{{ asset('websites/js/script.js') }}"></script>
     @stack('scripts')

@@ -20,6 +20,16 @@ class Delete extends Component
 
     public function hapusVideo($id_video)
     {
+        $video = \App\Models\Video::find($id_video);
+        if ($video && $video->id_user != auth()->id() && !auth()->user()->hasRole('Superadmin')) {
+            $this->dispatch('swal',
+                icon: 'error',
+                title: 'Akses Ditolak',
+                text: 'Anda tidak berhak menghapus video milik pengguna lain.'
+            );
+            return;
+        }
+
         $this->videoService->hapus($id_video);
 
         $this->dispatch('video-refresh');

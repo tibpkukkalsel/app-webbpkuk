@@ -18,6 +18,11 @@
     @if (!($searchExecuted && $foundPemesanId && $foundPemesan))
         <div class="booking-form-card mb-4">
             <form wire:submit.prevent="cariStatus">
+                <!-- HONEYPOT HIDDEN FIELD FOR BOT PROTECTION -->
+                <div style="display:none !important; opacity:0; position:absolute; left:-9999px;" aria-hidden="true">
+                    <input type="text" wire:model="fax_hp" tabindex="-1" autocomplete="off" placeholder="Leave empty">
+                </div>
+
                 <h3 class="form-section-title mb-2">
                     Verifikasi Pemesanan Anda
                 </h3>
@@ -243,36 +248,24 @@
             <table class="summary-item-table">
                 <thead>
                     <tr>
-                        <th>Nama Fasilitas</th>
-                        <th class="text-center">Jumlah Unit</th>
-                        <th class="text-end">Subtotal Biaya</th>
+                        <th style="text-align: center !important;">Nama Fasilitas</th>
+                        <th style="text-align: center !important;">Jumlah Unit</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($foundPemesan->details as $dt)
                         <tr>
-                            <td><strong>{{ $dt->fasilitas ? $dt->fasilitas->nama : 'Fasilitas' }}</strong></td>
-                            <td class="text-center">{{ $dt->jumlah }} Unit</td>
-                            <td class="text-end" style="color: #059669; font-weight: 700;">
-                                Rp {{ number_format($dt->subtotal, 0, ',', '.') }}
-                            </td>
+                            <td style="text-align: center !important;"><strong>{{ $dt->fasilitas ? $dt->fasilitas->nama : 'Fasilitas' }}</strong></td>
+                            <td style="text-align: center !important;">{{ $dt->jumlah }} Unit</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="text-center text-muted py-3">
+                            <td colspan="2" style="text-align: center !important;" class="text-muted py-3">
                                 <i class="fa-solid fa-inbox me-2"></i> Tidak ada detail fasilitas
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="2" class="text-end">Total Estimasi Biaya:</th>
-                        <th class="text-end" style="color: #059669;">
-                            Rp {{ number_format($foundPemesan->total_harga, 0, ',', '.') }}
-                        </th>
-                    </tr>
-                </tfoot>
             </table>
         </div>
 

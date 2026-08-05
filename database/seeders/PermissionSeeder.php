@@ -36,10 +36,16 @@ class PermissionSeeder extends Seeder
             'profile.konfig',
             //layanan
             'layanan.konfig',
+            //fasilitas
+            'fasilitas.konfig',
+            //produk umkm
+            'produk_umkm.view',
             //agenda
             'agenda.konfig',
             //post
             'post.konfig',
+            //video
+            'video.konfig',
             //kontak / helpdesk
             'kontak.view',
             'kontak.reply',

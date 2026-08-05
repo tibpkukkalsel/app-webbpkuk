@@ -47,14 +47,14 @@ class BerandaController extends Controller
 
         $tagline = Beranda::all();
 
-        $beritaTerbaru = Post::select(['id_post', 'judul', 'slug', 'thumbnail', 'jenis', 'id_kategori', 'created_at'])
+        $beritaTerbaru = Post::select(['id_post', 'judul', 'slug', 'thumbnail', 'jenis', 'ringkasan', 'isi', 'id_kategori', 'created_at'])
             ->with('kategori:id_kategori,kategori')
             ->where('status', 2)
             ->latest('created_at')
             ->take(4)
             ->get();
 
-        $beritaTerpopuler = Post::select(['id_post', 'judul', 'slug', 'thumbnail', 'jenis', 'id_kategori', 'created_at', 'view_count'])
+        $beritaTerpopuler = Post::select(['id_post', 'judul', 'slug', 'thumbnail', 'jenis', 'ringkasan', 'isi', 'id_kategori', 'created_at', 'view_count'])
             ->with('kategori:id_kategori,kategori')
             ->where('status', 2)
             ->orderByDesc('view_count')

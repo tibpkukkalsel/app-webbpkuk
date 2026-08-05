@@ -220,6 +220,15 @@ class Edit extends Component
             nomorBooking: $pemesan->nomor_booking
         );
 
+        // Kirim Email Konfirmasi Status Resmi ke Pemesan
+        if (!empty($pemesan->email)) {
+            try {
+                \Illuminate\Support\Facades\Mail::to($pemesan->email)->send(new \App\Mail\KonfirmasiStatusPemesananToPemesan($pemesan));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error("Gagal mengirim email konfirmasi status ke pemesan: " . $e->getMessage());
+            }
+        }
+
         $this->dispatch('pemesan-refresh');
         $this->dispatch('close-edit-pemesan-modal');
     }

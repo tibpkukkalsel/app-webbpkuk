@@ -555,4 +555,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Clean Empty Query Parameters on Form Submit (Prevents sending &q= or empty params)
+    const filterModalForm = document.getElementById('filterModalForm');
+    if (filterModalForm) {
+        filterModalForm.addEventListener('submit', () => {
+            const inputs = filterModalForm.querySelectorAll('input');
+            inputs.forEach(input => {
+                if (!input.value || input.value.trim() === '') {
+                    input.disabled = true;
+                }
+            });
+        });
+    }
+
 });

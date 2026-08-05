@@ -300,6 +300,16 @@ class PesanForm extends Component
             userId: null
         );
 
+        // Kirim Email Notifikasi Otomatis ke Seluruh Admin Fasilitas & Superadmin
+        try {
+            $adminEmails = \App\Models\User::role(['Admin Fasilitas', 'Superadmin'])->pluck('email')->filter()->unique()->toArray();
+            if (!empty($adminEmails)) {
+                \Illuminate\Support\Facades\Mail::to($adminEmails)->send(new \App\Mail\NotifikasiPemesananBaruToAdmin($pemesan));
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Gagal mengirim email notifikasi pemesanan ke admin: " . $e->getMessage());
+        }
+
         $this->createdNomorBooking = $nomorBooking;
         $this->createdPemesan = $pemesan;
         $this->bookingBerhasil = true;

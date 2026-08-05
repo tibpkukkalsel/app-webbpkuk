@@ -21,6 +21,7 @@ class Edit extends Component
 
     public $lastSavedAt = '';
     public $isDirty = false;
+    public $isReadOnly = false;
 
     protected $listeners = [
         'auto-save' => 'autoSave'
@@ -34,6 +35,9 @@ class Edit extends Component
     public function mount($id)
     {
         $video = $this->videoService->load($id);
+
+        $this->isReadOnly = ($video->id_user != auth()->id() && !auth()->user()->hasRole('Superadmin'));
+
         $this->loadVideo($video);
     }
 
@@ -80,6 +84,10 @@ class Edit extends Component
 
     protected function saveDraft()
     {
+        if ($this->isReadOnly) {
+            return false;
+        }
+
         if (blank($this->judul) || blank($this->id_kategori) || blank($this->url_youtube)) {
             return false;
         }

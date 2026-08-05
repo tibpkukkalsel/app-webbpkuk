@@ -79,7 +79,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Filter Group: Jenis -->
+                                 <!-- Filter Group: Jenis -->
                                 <div class="filter-group">
                                     <label class="filter-group-label"><i class="fa-solid fa-layer-group me-1"></i> Jenis
                                         Informasi:</label>
@@ -89,13 +89,13 @@
                                             data-val="">Semua</button>
                                         <button type="button"
                                             class="filter-pill-btn {{ strtolower($selectedJenis ?? '') === 'berita' ? 'active' : '' }}"
-                                            data-val="Berita">Berita</button>
+                                            data-val="berita">Berita</button>
                                         <button type="button"
                                             class="filter-pill-btn {{ in_array(strtolower($selectedJenis ?? ''), ['tips', 'info']) ? 'active' : '' }}"
-                                            data-val="Tips">Info & Tips</button>
+                                            data-val="tips">Info & Tips</button>
                                         <button type="button"
                                             class="filter-pill-btn {{ strtolower($selectedJenis ?? '') === 'artikel' ? 'active' : '' }}"
-                                            data-val="Artikel">Artikel</button>
+                                            data-val="artikel">Artikel</button>
                                     </div>
                                 </div>
 
@@ -110,8 +110,8 @@
                                                 data-val="">Semua Kategori</button>
                                             @foreach ($kategoriList as $kat)
                                                 <button type="button"
-                                                    class="filter-pill-btn {{ (string) ($selectedKategori ?? '') === (string) $kat->id_kategori ? 'active' : '' }}"
-                                                    data-val="{{ $kat->id_kategori }}">
+                                                    class="filter-pill-btn {{ in_array(($selectedKategori ?? ''), [$kat->slug, (string)$kat->id_kategori]) ? 'active' : '' }}"
+                                                    data-val="{{ $kat->slug ?? $kat->id_kategori }}">
                                                     {{ $kat->kategori }}
                                                 </button>
                                             @endforeach
@@ -194,14 +194,11 @@
                             </h3>
 
                             @php
-                                $summaryText = !empty(trim($b->ringkasan ?? ''))
-                                    ? $b->ringkasan
-                                    : (!empty(trim($b->isi ?? ''))
-                                        ? $b->isi
-                                        : $b->judul);
+                                $rawSummary = !empty(trim($b->ringkasan ?? '')) ? $b->ringkasan : $b->isi;
+                                $cleanSummary = trim(html_entity_decode(strip_tags($rawSummary ?? '')));
                             @endphp
                             <p class="news-excerpt">
-                                {{ Str::limit(strip_tags($summaryText), 120) }}
+                                {{ Str::limit($cleanSummary, 120) }}
                             </p>
                             @if ($b->hashtags && $b->hashtags->count() > 0)
                                 <div class="news-card-hashtags mt-2">

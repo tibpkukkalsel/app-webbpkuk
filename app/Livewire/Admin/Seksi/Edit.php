@@ -31,8 +31,10 @@ class Edit extends Component
             'status' => 'required|in:0,1',
         ]);
 
-        Seksi::where('id_seksi', $this->id_seksi)->update([
+        $seksiItem = Seksi::findOrFail($this->id_seksi);
+        $seksiItem->update([
             'seksi' => $this->seksi,
+            'slug' => \Illuminate\Support\Str::slug($this->seksi),
             'status' => $this->status,
         ]);
 

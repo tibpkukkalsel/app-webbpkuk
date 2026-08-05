@@ -23,16 +23,26 @@ class InformasiController extends Controller
 
         // Filter by Jenis (Berita, Tips/Info, Artikel)
         if (!empty($selectedJenis)) {
-            if (strtolower($selectedJenis) === 'tips' || strtolower($selectedJenis) === 'info') {
+            $jLower = strtolower($selectedJenis);
+            if ($jLower === 'tips' || $jLower === 'info' || $jLower === 'info-dan-tips') {
                 $query->whereIn('jenis', ['Tips', 'Info', 'Info dan Tips']);
+            } elseif ($jLower === 'berita') {
+                $query->where('jenis', 'Berita');
+            } elseif ($jLower === 'artikel') {
+                $query->where('jenis', 'Artikel');
             } else {
                 $query->where('jenis', $selectedJenis);
             }
         }
 
-        // Filter by Kategori ID
+        // Filter by Kategori Slug or ID
         if (!empty($selectedKategori)) {
-            $query->where('id_kategori', $selectedKategori);
+            $katObj = Kategori::where('slug', $selectedKategori)
+                ->orWhere('id_kategori', $selectedKategori)
+                ->first();
+            if ($katObj) {
+                $query->where('id_kategori', $katObj->id_kategori);
+            }
         }
 
         // Filter by Search Query & Hashtags (Querying post_hashtag pivot table as well)
@@ -54,7 +64,11 @@ class InformasiController extends Controller
         $posts = $query->latest('created_at')->paginate(9);
 
         $kategoriList = Kategori::all();
-        $popularHashtags = Hashtag::withCount('posts')->orderByDesc('posts_count')->take(10)->get();
+        $popularHashtags = Hashtag::whereHas('posts', function ($query) {
+            $query->where('status', 2);
+        })->withCount(['posts' => function ($query) {
+            $query->where('status', 2);
+        }])->orderByDesc('posts_count')->take(10)->get();
         $jenisList = ['Berita', 'Tips', 'Artikel'];
         $tentang = Tentang::all();
         $identitas = Identitas::all();
@@ -103,7 +117,12 @@ class InformasiController extends Controller
             ->get();
 
         // Tag Populer yang Sering Digunakan (Maksimal 6 Tag)
-        $popularHashtags = Hashtag::withCount('posts')
+        $popularHashtags = Hashtag::whereHas('posts', function ($query) {
+            $query->where('status', 2);
+        })
+            ->withCount(['posts' => function ($query) {
+                $query->where('status', 2);
+            }])
             ->orderByDesc('posts_count')
             ->take(6)
             ->get();

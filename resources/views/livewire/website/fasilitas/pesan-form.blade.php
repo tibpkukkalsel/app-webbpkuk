@@ -86,11 +86,7 @@
                         <td>Tujuan Pemakaian</td>
                         <td>: {{ $createdPemesan->keperluan }}</td>
                     </tr>
-                    <tr class="border-top">
-                        <td class="pt-3">Total Estimasi Biaya</td>
-                        <td class="pt-3">: <strong class="text-green fs-5">Rp
-                                {{ number_format($this->totalBiaya, 0, ',', '.') }}</strong></td>
-                    </tr>
+
                 </table>
             </div>
 
@@ -347,10 +343,10 @@
                                 </div>
 
                                 <!-- INPUT FIELDS GRID -->
-                                <div class="row g-4">
+                                <div class="row g-3 align-items-center">
                                     <!-- SELECT FASILITAS -->
-                                    <div class="col-lg-6 col-12">
-                                        <div class="form-item-group mb-3">
+                                    <div class="col-md-8 col-12">
+                                        <div class="form-item-group mb-0">
                                             <label class="form-item-label">Pilih Gedung / Sarana <span
                                                     class="text-red">*</span></label>
                                             <select class="form-item-input"
@@ -365,53 +361,18 @@
                                         </div>
                                     </div>
 
-                                    <!-- JUMLAH UNIT & ESTIMASI TARIF -->
-                                    <div class="col-lg-6 col-12">
-                                        <div class="row g-3">
-                                            <div class="col-6">
-                                                <div class="form-item-group mb-3">
-                                                    <label class="form-item-label text-center d-block">Jumlah
-                                                        Unit</label>
-                                                    <input type="number" min="1"
-                                                        class="form-item-input text-center"
-                                                        wire:model.live="selectedItems.{{ $index }}.jumlah">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-6">
-                                                <div class="form-item-group mb-3">
-                                                    <label class="form-item-label">Estimasi Tarif per Unit</label>
-                                                    <div class="subtotal-val-box">
-                                                        <span class="subtotal-val">
-                                                            Rp {{ number_format($item['tarif'] ?? 0, 0, ',', '.') }}
-                                                            <small class="text-muted">/
-                                                                {{ $item['satuan'] ?? 'hari' }}</small>
-                                                        </span>
-                                                        <span class="subtotal-calc">
-                                                            Subtotal: <strong>Rp
-                                                                {{ number_format(($item['jumlah'] ?? 1) * ($item['tarif'] ?? 0), 0, ',', '.') }}</strong>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <!-- JUMLAH UNIT -->
+                                    <div class="col-md-4 col-12">
+                                        <div class="form-item-group mb-0">
+                                            <label class="form-item-label text-center d-block">Jumlah Unit</label>
+                                            <input type="number" min="1"
+                                                class="form-item-input text-center"
+                                                wire:model.live="selectedItems.{{ $index }}.jumlah">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
-                    </div>
-
-                    <!-- TOTAL ESTIMATED PRICE BANNER -->
-                    <div class="total-estimate-card my-5">
-                        <div>
-                            <span class="estimate-label"><i class="fa-solid fa-calculator me-1"></i> Total Estimasi
-                                Biaya Sewa</span>
-                            <div class="estimate-note">Sesuai Peraturan Daerah (Perda) / Peraturan Gubernur Kalsel
-                            </div>
-                        </div>
-                        <div class="estimate-value">
-                            Rp {{ number_format($this->totalBiaya, 0, ',', '.') }}
-                        </div>
                     </div>
 
                     <div class="form-action-footer mt-5 pt-4">
@@ -496,46 +457,28 @@
 
                     <!-- SUMMARY ITEM LIST TABLE -->
                     <h4 class="form-subsection-title mt-6 mb-3 pt-3"><i
-                            class="fa-solid fa-receipt text-blue me-2"></i> Rincian Fasilitas & Tarif Sewa</h4>
+                            class="fa-solid fa-boxes-stacked text-blue me-2"></i> Rincian Fasilitas yang Dipesan</h4>
                     <div class="summary-table-wrap summary-section-spacer">
                         <table class="summary-item-table">
                             <thead>
                                 <tr>
-                                    <th>Fasilitas / Gedung</th>
-                                    <th class="text-center">Jumlah Unit</th>
-                                    <th class="text-end">Tarif per Unit</th>
-                                    <th class="text-end">Subtotal Biaya</th>
+                                    <th style="text-align: center !important;">Fasilitas / Gedung</th>
+                                    <th style="text-align: center !important;">Jumlah Unit</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($selectedItems as $st)
                                     @php
                                         $fObj = \App\Models\Fasilitas::find($st['id_fasilitas']);
-                                        $sub = ($st['jumlah'] ?? 1) * ($st['tarif'] ?? 0);
                                     @endphp
                                     <tr>
-                                        <td>
+                                        <td style="text-align: center !important;">
                                             <strong>{{ $fObj ? $fObj->nama : 'Fasilitas' }}</strong>
-                                            @if ($fObj && $fObj->kapasitas)
-                                                <small class="d-block text-muted">Kapasitas: {{ $fObj->kapasitas }}
-                                                    Orang</small>
-                                            @endif
                                         </td>
-                                        <td class="text-center">{{ $st['jumlah'] ?? 1 }} Unit</td>
-                                        <td class="text-end">Rp {{ number_format($st['tarif'] ?? 0, 0, ',', '.') }} /
-                                            {{ $st['satuan'] ?? 'hari' }}</td>
-                                        <td class="text-end font-bold text-green">Rp
-                                            {{ number_format($sub, 0, ',', '.') }}</td>
+                                        <td style="text-align: center !important;">{{ $st['jumlah'] ?? 1 }} Unit</td>
                                     </tr>
                                 @endforeach
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="3" class="text-end">TOTAL ESTIMASI BIAYA SEWA:</th>
-                                    <th class="text-end text-green font-bold fs-5">Rp
-                                        {{ number_format($this->totalBiaya, 0, ',', '.') }}</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
 
@@ -545,9 +488,8 @@
                         </button>
                         <button type="button" class="btn-pesan-submit ms-auto" wire:click="bukaModalKonfirmasi"
                             wire:loading.attr="disabled">
-                            <span wire:loading.remove><i class="fa-solid fa-paper-plane me-2"></i> Kirim Pengajuan
-                                Pemesanan</span>
-                            <span wire:loading><i class="fa-solid fa-spinner fa-spin me-2"></i> Memproses...</span>
+                            <span wire:loading.remove><i class="fa-regular fa-paper-plane me-1"></i> Kirim Pengajuan Pemesanan</span>
+                            <span wire:loading><i class="fa-solid fa-spinner fa-spin me-1"></i> Memproses...</span>
                         </button>
                     </div>
                 </div>

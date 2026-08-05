@@ -20,6 +20,16 @@ class Delete extends Component
 
     public function hapusBerita($id_post)
     {
+        $post = \App\Models\Post::find($id_post);
+        if ($post && $post->id_user != auth()->id() && !auth()->user()->hasRole('Superadmin')) {
+            $this->dispatch('swal',
+                icon: 'error',
+                title: 'Akses Ditolak',
+                text: 'Anda tidak berhak menghapus berita milik pengguna lain.'
+            );
+            return;
+        }
+
         $this->postService
             ->hapus($id_post);
 

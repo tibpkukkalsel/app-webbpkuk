@@ -12,7 +12,8 @@
         <!-- Middle Nav Links -->
         <nav class="nav-menu">
             <ul class="nav-list">
-                <li class="nav-item {{ request()->is('/') ? 'active' : '' }}"><a href="/" class="nav-link">BERANDA</a></li>
+                <li class="nav-item {{ request()->is('/') ? 'active' : '' }}"><a href="/"
+                        class="nav-link">BERANDA</a></li>
                 <li class="nav-item dropdown {{ request()->is('profil*') ? 'active' : '' }}">
                     <a href="#" class="nav-link">PROFIL <i class="fa-solid font-chevron fa-chevron-down"></i></a>
                     <ul class="dropdown-menu">
@@ -27,21 +28,23 @@
                     <ul class="dropdown-menu">
                         <li><a href="{{ url('/layanan/dashboard-diklat') }}">Dashboard Diklat</a></li>
                         <li><a href="{{ url('/layanan/pemanfaatan-fasilitas') }}">Pemanfaatan Fasilitas</a></li>
-                        <li><a href="https://pusatlayanankemasankalsel.com/">Layanan Kemasan</a></li>
-                        <li><a href="{{ url('/layanan/identifikasi-kebutuhan-diklat') }}">Identifikasi Kebutuhan Pelatihan</a></li>
+                        <li><a href="https://pusatlayanankemasankalsel.com/" target="_BLANK">Layanan Kemasan</a></li>
+                        <li><a href="{{ url('/layanan/identifikasi-kebutuhan-diklat') }}">Identifikasi Kebutuhan
+                                Pelatihan</a></li>
                         <li><a href="{{ url('/layanan/sertifikat-elektronik') }}">Sertifikat Elektronik</a></li>
                         <li><a href="{{ url('/layanan/survei-kepuasan-diklat') }}">Survei Kepuasan Diklat</a></li>
                     </ul>
                 </li>
-                <li class="nav-item {{ request()->is('agenda*') ? 'active' : '' }}"><a href="{{ url('/agenda') }}" class="nav-link">AGENDA</a></li>
+                <li class="nav-item {{ request()->is('agenda*') ? 'active' : '' }}"><a href="{{ url('/agenda') }}"
+                        class="nav-link">AGENDA</a></li>
                 <li class="nav-item dropdown {{ request()->is('informasi*') ? 'active' : '' }}">
                     <a href="#" class="nav-link">INFORMASI <i
                             class="fa-solid font-chevron fa-chevron-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ url('/informasi?jenis=Berita') }}">Berita</a></li>
-                        <li><a href="{{ url('/informasi?jenis=Artikel') }}">Artikel</a></li>
-                        <li><a href="{{ url('/informasi?jenis=Tips') }}">Info dan Tips</a></li>
                         <li><a href="{{ url('/informasi') }}">Semua Informasi</a></li>
+                        <li><a href="{{ url('/informasi?jenis=berita') }}">Berita</a></li>
+                        <li><a href="{{ url('/informasi?jenis=artikel') }}">Artikel</a></li>
+                        <li><a href="{{ url('/informasi?jenis=tips') }}">Info dan Tips</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown {{ request()->is('galeri*') ? 'active' : '' }}">
@@ -52,7 +55,8 @@
                         <li><a href="{{ url('/galeri/video') }}">Video</a></li>
                     </ul>
                 </li>
-                <li class="nav-item {{ request()->is('kontak*') ? 'active' : '' }}"><a href="{{ url('/kontak') }}" class="nav-link">KONTAK</a></li>
+                <li class="nav-item {{ request()->is('kontak*') ? 'active' : '' }}"><a href="{{ url('/kontak') }}"
+                        class="nav-link">KONTAK</a></li>
             </ul>
         </nav>
 
@@ -86,7 +90,8 @@
 <div class="mobile-bottom-nav">
     <div class="mobile-nav-container">
         <!-- Item 1: Profil -->
-        <button class="mobile-nav-item {{ request()->is('profil*') ? 'active' : '' }}" data-sheet="sheet-profil" type="button">
+        <button class="mobile-nav-item {{ request()->is('profil*') ? 'active' : '' }}" data-sheet="sheet-profil"
+            type="button">
             <div class="mobile-nav-icon">
                 <i class="fa-regular fa-building"></i>
             </div>
@@ -94,7 +99,8 @@
         </button>
 
         <!-- Item 2: Layanan -->
-        <button class="mobile-nav-item {{ request()->is('layanan*') ? 'active' : '' }}" data-sheet="sheet-layanan" type="button">
+        <button class="mobile-nav-item {{ request()->is('layanan*') ? 'active' : '' }}" data-sheet="sheet-layanan"
+            type="button">
             <div class="mobile-nav-icon">
                 <i class="fa-solid fa-list-check"></i>
             </div>
@@ -110,7 +116,8 @@
         </a>
 
         <!-- Item 4: Informasi -->
-        <button class="mobile-nav-item {{ request()->is('informasi*') ? 'active' : '' }}" data-sheet="sheet-informasi" type="button">
+        <button class="mobile-nav-item {{ request()->is('informasi*') ? 'active' : '' }}" data-sheet="sheet-informasi"
+            type="button">
             <div class="mobile-nav-icon">
                 <i class="fa-regular fa-newspaper"></i>
             </div>
@@ -118,7 +125,8 @@
         </button>
 
         <!-- Item 5: Galeri -->
-        <button class="mobile-nav-item {{ request()->is('galeri*') ? 'active' : '' }}" data-sheet="sheet-galeri" type="button">
+        <button class="mobile-nav-item {{ request()->is('galeri*') ? 'active' : '' }}" data-sheet="sheet-galeri"
+            type="button">
             <div class="mobile-nav-icon">
                 <i class="fa-solid fa-photo-film"></i>
             </div>
@@ -148,11 +156,17 @@
         <button class="sheet-close-btn" type="button"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <ul class="sheet-menu-list">
-        <li><a href="{{ url('/profil/tentang') }}" class="{{ request()->is('profil/tentang') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Tentang</a></li>
-        <li><a href="{{ url('/profil/visimisi') }}" class="{{ request()->is('profil/visimisi') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Visi & Misi</a></li>
-        <li><a href="{{ url('/profil/struktur-organisasi') }}" class="{{ request()->is('profil/struktur-organisasi') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Struktur
+        <li><a href="{{ url('/profil/tentang') }}" class="{{ request()->is('profil/tentang') ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Tentang</a></li>
+        <li><a href="{{ url('/profil/visimisi') }}"
+                class="{{ request()->is('profil/visimisi') ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Visi & Misi</a></li>
+        <li><a href="{{ url('/profil/struktur-organisasi') }}"
+                class="{{ request()->is('profil/struktur-organisasi') ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Struktur
                 Organisasi</a></li>
-        <li><a href="{{ url('/profil/pegawai') }}" class="{{ request()->is('profil/pegawai') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Data Pegawai</a></li>
+        <li><a href="{{ url('/profil/pegawai') }}" class="{{ request()->is('profil/pegawai') ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Data Pegawai</a></li>
     </ul>
 </div>
 
@@ -166,12 +180,23 @@
         <button class="sheet-close-btn" type="button"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <ul class="sheet-menu-list">
-        <li><a href="{{ url('/layanan/dashboard-diklat') }}" class="{{ request()->is('layanan/dashboard-diklat*') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Dashboard Diklat</a></li>
-        <li><a href="{{ url('/layanan/pemanfaatan-fasilitas') }}" class="{{ request()->is('layanan/pemanfaatan-fasilitas*') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Pemanfaatan Fasilitas</a></li>
-        <li><a href="https://pusatlayanankemasankalsel.com/"><i class="fa-solid fa-chevron-right"></i> Layanan Kemasan</a></li>
-        <li><a href="{{ url('/layanan/identifikasi-kebutuhan-diklat') }}" class="{{ request()->is('layanan/identifikasi-kebutuhan-diklat*') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Identifikasi Kebutuhan Pelatihan</a></li>
-        <li><a href="{{ url('/layanan/sertifikat-elektronik') }}" class="{{ request()->is('layanan/sertifikat-elektronik*') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Sertifikat Elektronik</a></li>
-        <li><a href="{{ url('/layanan/survei-kepuasan-diklat') }}" class="{{ request()->is('layanan/survei-kepuasan-diklat*') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Survei Kepuasan Diklat</a></li>
+        <li><a href="{{ url('/layanan/dashboard-diklat') }}"
+                class="{{ request()->is('layanan/dashboard-diklat*') ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Dashboard Diklat</a></li>
+        <li><a href="{{ url('/layanan/pemanfaatan-fasilitas') }}"
+                class="{{ request()->is('layanan/pemanfaatan-fasilitas*') ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Pemanfaatan Fasilitas</a></li>
+        <li><a href="https://pusatlayanankemasankalsel.com/" target="_blank"><i
+                    class="fa-solid fa-chevron-right"></i> Layanan Kemasan</a></li>
+        <li><a href="{{ url('/layanan/identifikasi-kebutuhan-diklat') }}"
+                class="{{ request()->is('layanan/identifikasi-kebutuhan-diklat*') ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Identifikasi Kebutuhan Pelatihan</a></li>
+        <li><a href="{{ url('/layanan/sertifikat-elektronik') }}"
+                class="{{ request()->is('layanan/sertifikat-elektronik*') ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Sertifikat Elektronik</a></li>
+        <li><a href="{{ url('/layanan/survei-kepuasan-diklat') }}"
+                class="{{ request()->is('layanan/survei-kepuasan-diklat*') ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Survei Kepuasan Diklat</a></li>
     </ul>
 </div>
 
@@ -185,12 +210,18 @@
         <button class="sheet-close-btn" type="button"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <ul class="sheet-menu-list">
-        <li><a href="{{ url('/informasi?jenis=Berita') }}" class="{{ request()->fullUrlIs('*jenis=Berita*') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Berita</a></li>
-        <li><a href="{{ url('/informasi?jenis=Artikel') }}" class="{{ request()->fullUrlIs('*jenis=Artikel*') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Artikel</a>
-        </li>
-        <li><a href="{{ url('/informasi?jenis=Tips') }}" class="{{ request()->fullUrlIs('*jenis=Tips*') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Info dan Tips</a>
-        </li>
-        <li><a href="{{ url('/informasi') }}" class="{{ request()->is('informasi') && !request()->has('jenis') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Semua Informasi</a></li>
+        <li><a href="{{ url('/informasi') }}"
+                class="{{ request()->is('informasi') && !request()->has('jenis') ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Semua Informasi</a></li>
+        <li><a href="{{ url('/informasi?jenis=berita') }}"
+                class="{{ strtolower(request('jenis') ?? '') === 'berita' ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Berita</a></li>
+        <li><a href="{{ url('/informasi?jenis=artikel') }}"
+                class="{{ strtolower(request('jenis') ?? '') === 'artikel' ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Artikel</a></li>
+        <li><a href="{{ url('/informasi?jenis=tips') }}"
+                class="{{ in_array(strtolower(request('jenis') ?? ''), ['tips', 'info']) ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Info dan Tips</a></li>
     </ul>
 </div>
 
@@ -204,8 +235,9 @@
         <button class="sheet-close-btn" type="button"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <ul class="sheet-menu-list">
-        <li><a href="{{ url('/galeri/foto') }}" class="{{ request()->is('galeri/foto*') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Foto</a></li>
-        <li><a href="{{ url('/galeri/video') }}" class="{{ request()->is('galeri/video*') ? 'active' : '' }}"><i class="fa-solid fa-chevron-right"></i> Video</a></li>
+        <li><a href="{{ url('/galeri/foto') }}" class="{{ request()->is('galeri/foto*') ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Foto</a></li>
+        <li><a href="{{ url('/galeri/video') }}" class="{{ request()->is('galeri/video*') ? 'active' : '' }}"><i
+                    class="fa-solid fa-chevron-right"></i> Video</a></li>
     </ul>
 </div>
-

@@ -107,16 +107,16 @@
                   {{-- End Modal Tambah --}}
                 </div>
                 <div class="table-responsive">
-                  <table id="zero_config" class="table table-striped table-bordered text-nowrap align-middle">
+                  <table id="zero_config" class="table table-striped table-bordered align-middle w-100">
                     <thead>
                       <!-- start row -->
                       <tr>
-                        <th class="text-center">No.</th>
+                        <th class="text-center" style="width: 50px;">No.</th>
                         <th class="text-center">Nama</th>
                         <th class="text-center">Email</th>
                         <th class="text-center">Role</th>
                         <th class="text-center">Login Terakhir</th>
-                        <th class="text-center">Aksi</th>
+                        <th class="text-center" style="width: 100px;">Aksi</th>
                       </tr>
                       <!-- end row -->
                     </thead>
@@ -125,18 +125,23 @@
                       <!-- start row -->
                       <tr>
                         <td style="text-align:center;">{{ $loop->iteration }}</td>
-                        <td style="text-align:center;">{{ $d->name }}</td>
-                        <td style="text-align:center;">{{ $d->email }}</td>
+                        <td>{{ $d->name }}</td>
+                        <td>{{ $d->email }}</td>
                         <td class="text-center">
-                            {{ $d->getRoleNames()->first() }}
+                            <span class="badge bg-primary-subtle text-primary fw-semibold px-2 py-1 fs-2">
+                                {{ $d->getRoleNames()->first() ?? 'Administrator' }}
+                            </span>
                         </td>
-                        <td style="text-align:center;">IP: {{ $d->last_ip }}<br>Tgl: {{ \Carbon\Carbon::parse($d->last_login)->locale('id')->translatedFormat('d F Y H:i') }}</td>
-                        <td style="text-align:center;">
-                          <a title="Edit" data-id="{{ Crypt::encrypt($d->id) }}" class="edit btn mb-1 bg-primary-subtle rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#editdata" data-bs-whatever="@getbootstrap">
-                              <i class="fs-5 ti ti-pencil"></i>
+                        <td class="text-center fs-2" style="white-space: nowrap;">
+                            <span class="fw-semibold">IP:</span> {{ $d->last_ip ?: '-' }}<br>
+                            <span class="text-muted">{{ \Carbon\Carbon::parse($d->last_login)->locale('id')->translatedFormat('d M Y H:i') }}</span>
+                        </td>
+                        <td style="text-align:center; white-space: nowrap;">
+                          <a title="Edit" data-id="{{ Crypt::encrypt($d->id) }}" class="edit btn bg-primary-subtle text-primary btn-sm d-inline-flex align-items-center justify-content-center me-1" style="width: 35px; height: 35px; min-width: 35px; padding: 0; border-radius: 50% !important;" data-bs-toggle="modal" data-bs-target="#editdata" data-bs-whatever="@getbootstrap">
+                              <i class="fs-4 ti ti-pencil"></i>
                           </a>
-                          <a title="Hapus" data-id="{{ Crypt::encrypt($d->id) }}" class="hapus btn mb-1 bg-danger-subtle rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center">
-                              <i class="fs-5 ti ti-trash"></i>
+                          <a title="Hapus" data-id="{{ Crypt::encrypt($d->id) }}" class="hapus btn bg-danger-subtle text-danger btn-sm d-inline-flex align-items-center justify-content-center" style="width: 35px; height: 35px; min-width: 35px; padding: 0; border-radius: 50% !important;">
+                              <i class="fs-4 ti ti-trash"></i>
                           </a>
                         </td>
                       </tr>
@@ -156,42 +161,43 @@
                       <!-- end row -->
                     </tfoot>
                   </table>
-                  {{-- Modal Edit --}}
-                  <div class="modal fade" id="editdata" tabindex="-1" aria-labelledby="exampleModalLabel1">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header d-flex align-items-center">
-                          <h4 class="modal-title" id="exampleModalLabel1">
-                            Edit Data
-                          </h4>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form action="{{ Route('pengguna.update') }}" method="POST" id="formStore">
-                        @csrf
-                        <div class="modal-body" id="loadedit">
+                </div>
 
-                          {{-- Isi Data Edit --}}
-
-                        </div>
-                        <div class="modal-footer">
-                          <button type="submit" class="btn bg-primary-subtle text-primary">
-                            Simpan
-                          </button>
-                          <button type="button" class="btn bg-danger-subtle text-danger" data-bs-dismiss="modal">
-                            Batal
-                          </button>
-                        </div>
-                        </form>
+                {{-- Modal Edit --}}
+                <div class="modal fade" id="editdata" tabindex="-1" aria-labelledby="exampleModalLabel1">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header d-flex align-items-center">
+                        <h4 class="modal-title" id="exampleModalLabel1">
+                          Edit Data
+                        </h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
+                      <form action="{{ Route('pengguna.update') }}" method="POST" id="formStore">
+                      @csrf
+                      <div class="modal-body" id="loadedit">
+
+                        {{-- Isi Data Edit --}}
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn bg-primary-subtle text-primary">
+                          Simpan
+                        </button>
+                        <button type="button" class="btn bg-danger-subtle text-danger" data-bs-dismiss="modal">
+                          Batal
+                        </button>
+                      </div>
+                      </form>
                     </div>
                   </div>
-                  {{-- Form Delete POST dengan CSRF Token --}}
-                  <form id="formDeletePengguna" action="{{ route('pengguna.delete') }}" method="POST" style="display: none;">
-                    @csrf
-                    <input type="hidden" name="id" id="deletePenggunaId">
-                  </form>
-                  {{-- End Edit --}}
                 </div>
+                {{-- Form Delete POST dengan CSRF Token --}}
+                <form id="formDeletePengguna" action="{{ route('pengguna.delete') }}" method="POST" style="display: none;">
+                  @csrf
+                  <input type="hidden" name="id" id="deletePenggunaId">
+                </form>
+                {{-- End Edit --}}
               </div>
             </div>
           </div>     

@@ -24,24 +24,29 @@ class RolePermissionSeeder extends Seeder
         // Superadmin mendapatkan semua permission
         $superadmin->syncPermissions(Permission::all());
 
-        // Admin Website mendapatkan permission tertentu
+        // Admin Website mendapatkan permission berita, artikel, info tips
         $adminWebsite->syncPermissions([
             'dashboard.view',
+            'post.konfig',
         ]);
 
-        // Admin Fasilitas mendapatkan permission tertentu
+        // Admin Fasilitas mendapatkan permission fasilitas
         $adminFasilitas->syncPermissions([
             'dashboard.view',
+            'fasilitas.konfig',
         ]);
 
-        // Admin Diklat mendapatkan permission tertentu
+        // Admin Diklat mendapatkan permission dashboard diklat
         $adminDiklat->syncPermissions([
             'dashboard.view',
+            'layanan.konfig',
         ]);
 
-        // Admin Layanan Kemasan mendapatkan permission tertentu
+        // Admin Layanan Kemasan mendapatkan permission post dan produk umkm
         $adminKemasan->syncPermissions([
             'dashboard.view',
+            'post.konfig',
+            'produk_umkm.view',
         ]);
 
         // Admin Helpdesk mendapatkan permission kontak

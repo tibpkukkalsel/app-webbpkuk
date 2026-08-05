@@ -30,6 +30,30 @@ class Table extends Component
         $this->resetPage();
     }
 
+    public function accPost($id)
+    {
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $this->dispatch('swal', icon: 'error', title: 'Akses Ditolak', text: 'Hanya Superadmin yang dapat me-ACC postingan.');
+            return;
+        }
+
+        Post::where('id_post', $id)->update(['status' => 2]);
+        $this->dispatch('swal', icon: 'success', title: 'Berhasil ACC', text: 'Berita berhasil di-ACC dan dipublikasikan.');
+        $this->dispatch('berita-refresh');
+    }
+
+    public function cancelPost($id)
+    {
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $this->dispatch('swal', icon: 'error', title: 'Akses Ditolak', text: 'Hanya Superadmin yang dapat membatalkan postingan.');
+            return;
+        }
+
+        Post::where('id_post', $id)->update(['status' => 0]);
+        $this->dispatch('swal', icon: 'info', title: 'Dibatalkan', text: 'Status berita dikembalikan ke Draft.');
+        $this->dispatch('berita-refresh');
+    }
+
     public function render()
     {
         $post=Post::with(['kategori','user'])
@@ -40,7 +64,6 @@ class Table extends Component
 
         return view('livewire.admin.berita.table', compact('post'));
     }
-
 }
 
 

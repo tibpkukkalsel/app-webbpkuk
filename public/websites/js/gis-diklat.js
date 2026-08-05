@@ -1,6 +1,6 @@
 /**
  * DEDICATED GIS MAP SCRIPT FOR KALIMANTAN SELATAN
- * Sleek Vector SVG Pin Markers & Dynamic Panning
+ * Sleek Vector SVG Pin Markers & Smooth Dynamic Zoom Animation
  * UPTD Balatkop & UKM Provinsi Kalimantan Selatan
  */
 
@@ -14,37 +14,31 @@
         const mapContainer = document.getElementById('gisMap');
         if (!mapContainer) return;
 
-        // Reset previous map instance if re-rendered
-        if (mapInstance !== null) {
-            mapInstance.remove();
-            mapInstance = null;
+        // Create Leaflet map instance once if not created yet
+        if (mapInstance === null) {
+            const kalselCenter = [-2.95, 115.35];
+            mapInstance = L.map('gisMap', {
+                center: kalselCenter,
+                zoom: 8.5,
+                minZoom: 7.5,
+                maxZoom: 14,
+                zoomControl: true,
+                scrollWheelZoom: false
+            });
+
+            window.gisMapInstance = mapInstance;
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors | Balatkop-uk Prov. Kalsel'
+            }).addTo(mapInstance);
+
+            markersLayer = L.layerGroup().addTo(mapInstance);
+        } else {
+            markersLayer.clearLayers();
         }
 
         markersMap = {};
-
-        // South Kalimantan Center Coordinates & Zoom
-        const kalselCenter = [-2.95, 115.35];
-
-        mapInstance = L.map('gisMap', {
-            center: kalselCenter,
-            zoom: 8.5,
-            minZoom: 7.5,
-            maxZoom: 14,
-            zoomControl: true,
-            scrollWheelZoom: false
-        });
-
-        window.gisMapInstance = mapInstance;
-
-        // OpenStreetMap Tile Layer (Natural Blue Water & Green Terrain)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; OpenStreetMap contributors | Balatkop-uk Prov. Kalsel'
-        }).addTo(mapInstance);
-
-        markersLayer = L.layerGroup().addTo(mapInstance);
-
-        // Fit bounds to cover all 13 regencies/cities
         const latLngBounds = L.latLngBounds();
 
         // Render Location Pin Markers for 13 Regencies/Cities
@@ -58,7 +52,7 @@
             const isKota = region.jenis === 'kota';
             const pinColor = isKota ? '#0284c7' : '#16a34a';
 
-            // Custom Vector SVG Location Pin Icon (100% Perfectly Centered Dot & Clean Pill Label)
+            // Custom Vector SVG Location Pin Icon
             const customIcon = L.divIcon({
                 className: 'gis-custom-svg-pin',
                 html: `
@@ -79,10 +73,12 @@
 
             // Rich Tooltip on Hover
             const tooltipContent = `
-                <div style="font-weight: 800; font-size: 0.88rem; color: #0f172a;">${region.nama}</div>
-                <div style="font-size: 0.76rem; color: #64748b;">${isKota ? 'Kota' : 'Kabupaten'} &bull; Kode BPS: ${region.kode_bps || '-'}</div>
-                <div style="font-size: 0.76rem; color: #0284c7; font-weight: 700; margin-top: 2px;">
-                    ${(region.responden || 0).toLocaleString()} Responden &bull; ${(region.peserta || 0).toLocaleString()} Alumni
+                <div style="font-weight: 800; font-size: 0.92rem; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 6px;">${region.nama}</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; font-size: 0.75rem; text-align: left;">
+                    <div><span style="color: #64748b;">Responden:</span> <strong style="color: #0284c7;">${(region.responden || 0).toLocaleString('id-ID')}</strong></div>
+                    <div><span style="color: #64748b;">Kebutuhan:</span> <strong style="color: #0891b2;">${(region.kebutuhan || 0).toLocaleString('id-ID')}</strong></div>
+                    <div><span style="color: #64748b;">Target:</span> <strong style="color: #d97706;">${(region.target || 0).toLocaleString('id-ID')}</strong></div>
+                    <div><span style="color: #64748b;">Realisasi:</span> <strong style="color: #16a34a;">${(region.realisasi || 0).toLocaleString('id-ID')}</strong></div>
                 </div>
             `;
             marker.bindTooltip(tooltipContent, {
@@ -91,9 +87,9 @@
                 offset: [0, -35]
             });
 
-            // Handle Click: Select Region & Scroll
+            // Handle Click: FlyTo Zoom & Select Region & Scroll
             marker.on('click', function () {
-                mapInstance.setView([lat, lng], 10, { animate: true });
+                mapInstance.flyTo([lat, lng], 11, { duration: 1.2 });
                 if (livewireComponent && region.id_wilayah) {
                     livewireComponent.selectWilayah(region.id_wilayah);
                     setTimeout(() => {
@@ -101,12 +97,12 @@
                         if (detailSec) {
                             detailSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }
-                    }, 200);
+                    }, 300);
                 }
             });
         });
 
-        if (mapData.length > 0) {
+        if (mapData.length > 0 && !initialBounds) {
             initialBounds = latLngBounds;
             mapInstance.fitBounds(latLngBounds, { padding: [40, 40] });
         }
@@ -119,14 +115,25 @@
     window.addEventListener('focusWilayahOnMap', event => {
         const data = Array.isArray(event.detail) ? event.detail[0] : event.detail;
         if (data && data.latitude && data.longitude && mapInstance) {
-            mapInstance.setView([parseFloat(data.latitude), parseFloat(data.longitude)], 11, {
-                animate: true,
+            const lat = parseFloat(data.latitude);
+            const lng = parseFloat(data.longitude);
+
+            mapInstance.flyTo([lat, lng], 11, {
                 duration: 1.2
             });
 
-            if (markersMap[data.id_wilayah]) {
-                markersMap[data.id_wilayah].openTooltip();
+            if (markersMap && markersMap[data.id_wilayah]) {
+                setTimeout(() => {
+                    markersMap[data.id_wilayah].openTooltip();
+                }, 700);
             }
+
+            setTimeout(() => {
+                const detailSec = document.getElementById('regionDetailSection');
+                if (detailSec) {
+                    detailSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 300);
         }
     });
 

@@ -81,6 +81,10 @@ Route::post('/kontak/kirim', [WebsiteKontakController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('website.kontak.kirim');
 
+Route::post('/ai-chat/respond', [\App\Http\Controllers\Website\WebsiteAiChatController::class, 'respond'])
+    ->middleware('throttle:20,1')
+    ->name('website.ai-chat.respond');
+
 
 
 
@@ -176,31 +180,31 @@ Route::prefix('cp-x14')
             ->middleware('permission:profile.konfig')
             ->name('storganisasi.view');
         Route::get('/fasilitas', [FasilitasController::class, 'view'])
-            ->middleware('permission:profile.konfig')
+            ->middleware('permission:fasilitas.konfig')
             ->name('fasilitas.view');
         Route::get('/fasilitas/{id_fasilitas}/foto', [FasilitasFotoController::class, 'view'])
-            ->middleware('permission:profile.konfig')
+            ->middleware('permission:fasilitas.konfig')
             ->name('fasilitas.foto.view');
         Route::get('/fasilitas/{id_fasilitas}/tarif', [FasilitasTarifController::class, 'view'])
-            ->middleware('permission:profile.konfig')
+            ->middleware('permission:fasilitas.konfig')
             ->name('fasilitas.tarif.view');
         Route::get('/fasilitas/halaman', [FasilitasHalamanController::class, 'view'])
-            ->middleware('permission:profile.konfig')
+            ->middleware('permission:fasilitas.konfig')
             ->name('fasilitas.halaman.view');
         Route::get('/fasilitas/halaman/create', [FasilitasHalamanController::class, 'create'])
-            ->middleware('permission:profile.konfig')
+            ->middleware('permission:fasilitas.konfig')
             ->name('fasilitas.halaman.create');
         Route::get('/fasilitas/halaman/{id}/edit', [FasilitasHalamanController::class, 'edit'])
-            ->middleware('permission:profile.konfig')
+            ->middleware('permission:fasilitas.konfig')
             ->name('fasilitas.halaman.edit');
         Route::get('/fasilitas/pemesan', [FasilitasPemesanController::class, 'view'])
-            ->middleware('permission:profile.konfig')
+            ->middleware('permission:fasilitas.konfig')
             ->name('fasilitas.pemesan.view');
         Route::get('/fasilitas/pemesan/{id}/ktp', [FasilitasPemesanController::class, 'viewKtp'])
-            ->middleware('permission:profile.konfig')
+            ->middleware('permission:fasilitas.konfig')
             ->name('fasilitas.pemesan.ktp');
         Route::get('/fasilitas/riwayat', [FasilitasRiwayatController::class, 'view'])
-            ->middleware('permission:profile.konfig')
+            ->middleware('permission:fasilitas.konfig')
             ->name('fasilitas.riwayat.view');
         //end Crud PROFILE WEBSITE
         //Start Crud LAYANAN
@@ -216,7 +220,7 @@ Route::prefix('cp-x14')
         //end Crud LAYANAN
         //Start Crud PRODUK UMKM
         Route::get('/produk-umkm', [ProdukUmkmController::class, 'view'])
-            ->middleware('permission:layanan.konfig')
+            ->middleware('permission:produk_umkm.view')
             ->name('produk-umkm.view');
         //end Crud PRODUK UMKM
         //Start Crud HASHTAG
@@ -241,6 +245,9 @@ Route::prefix('cp-x14')
         Route::get('/berita/edit/{id}', [BeritaController::class, 'edit'])
             ->middleware('permission:post.konfig')
             ->name('berita.edit');
+        Route::get('/post/{id}/cetak-persetujuan', [\App\Http\Controllers\PostCetakController::class, 'cetakPersetujuan'])
+            ->middleware('permission:post.konfig')
+            ->name('post.cetak-persetujuan');
         //end Crud POST
         //Start Crud INFO DAN TIPS
         Route::get('/info', [InfoController::class, 'view'])
@@ -266,14 +273,15 @@ Route::prefix('cp-x14')
         //end Crud ARTIKEL
         //Start Crud VIDEO
         Route::get('/video', [VideoController::class, 'view'])
-            ->middleware('permission:post.konfig')
+            ->middleware('permission:video.konfig')
             ->name('video.view');
         Route::get('/video/create', [VideoController::class, 'create'])
-            ->middleware('permission:post.konfig')
+            ->middleware('permission:video.konfig')
             ->name('video.create');
         Route::get('/video/edit/{id}', [VideoController::class, 'edit'])
-            ->middleware('permission:post.konfig')
+            ->middleware('permission:video.konfig')
             ->name('video.edit');
+        //end Crud VIDEO
         //end Crud VIDEO
         //Start Crud KONTAK HELPDESK
         Route::get('/kontak', [KontakController::class, 'view'])

@@ -33,6 +33,7 @@ class Edit extends Component
 
     public $lastSavedAt='';
     public $isDirty=false;
+    public $isReadOnly=false;
 
     protected $listeners=[
         'auto-save'=>'autoSave'
@@ -48,6 +49,8 @@ class Edit extends Component
         $post=$this->postService
             ->load($id);
 
+        $this->isReadOnly = ($post->id_user != auth()->id() && !auth()->user()->hasRole('Superadmin'));
+
         $this->loadPost($post);
     }
 
@@ -58,7 +61,7 @@ class Edit extends Component
         $this->judul=$post->judul;
         $this->isi=$post->isi;
         $this->ringkasan=$post->ringkasan;
-        $this->status=$post->status;
+        $this->status=(string)$post->status;
         $this->thumbnail=$post->thumbnail;
         $this->id_kategori=$post->id_kategori;
 
@@ -124,6 +127,10 @@ class Edit extends Component
 
     protected function saveDraft()
     {
+        if ($this->isReadOnly) {
+            return false;
+        }
+
         if(
             blank($this->judul)||
             blank($this->id_kategori)||

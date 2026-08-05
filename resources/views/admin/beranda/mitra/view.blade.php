@@ -69,18 +69,7 @@
                 </div>
             </div>
 
-            {{-- Modal Hapus --}}
-            <div class="modal fade" id="modalDeleteLink" tabindex="-1" wire:ignore.self>
-                <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
-                        <div class="modal-header d-flex align-items-center">
-                            <h4 class="modal-title text-danger"><i class="ti ti-alert-triangle me-2"></i>Konfirmasi Hapus</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <livewire:admin.beranda.link-terkait.delete />
-                    </div>
-                </div>
-            </div>
+            <livewire:admin.beranda.link-terkait.delete />
 
         </div>
     </div>
@@ -100,8 +89,19 @@
 
     $(document).on('click', '.btn-hapus-link-terkait', function () {
         let id = $(this).attr('data-id');
-        Livewire.dispatch('konfirmasiHapusLinkTerkait', { id: id });
-        new bootstrap.Modal(document.getElementById('modalDeleteLink')).show();
+
+        Swal.fire({
+            title: 'Hapus data?',
+            text: 'Data yang dihapus tidak dapat dikembalikan.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch('hapusLinkTerkait', { id: id });
+            }
+        });
     });
 
     document.addEventListener('livewire:init', () => {
@@ -111,8 +111,20 @@
         Livewire.on('close-modal-edit-link', () => {
             bootstrap.Modal.getInstance(document.getElementById('modalEditLink'))?.hide();
         });
-        Livewire.on('close-modal-delete-link', () => {
-            bootstrap.Modal.getInstance(document.getElementById('modalDeleteLink'))?.hide();
+        Livewire.on('swal', (data) => {
+            const evt = Array.isArray(data) ? data[0] : data;
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: evt.title || 'Berhasil!',
+                    text: evt.text || 'Data berhasil diproses.',
+                    icon: evt.icon || 'success',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    customClass: {
+                        popup: 'rounded-4 shadow-lg'
+                    }
+                });
+            }
         });
     });
 </script>

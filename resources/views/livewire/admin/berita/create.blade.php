@@ -97,8 +97,11 @@
                     <div class="mb-3">
                         <label class="form-label">Status</label>
                         <select wire:model="status" class="form-select">
-                            <option value="2">Publish</option>
                             <option value="0">Draft</option>
+                            <option value="1">Kirim</option>
+                            @if (auth()->user()->hasRole('Superadmin'))
+                                <option value="2">Publish</option>
+                            @endif
                         </select>
                     </div>
                     <div class="d-grid gap-2">

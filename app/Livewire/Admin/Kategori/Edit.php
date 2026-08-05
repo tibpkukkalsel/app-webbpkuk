@@ -28,8 +28,10 @@ class Edit extends Component
             'kategori' => 'required|unique:kategori,kategori,' . $this->id_kategori . ',id_kategori'
         ]);
 
-        Kategori::where('id_kategori', $this->id_kategori)->update([
-            'kategori' => $this->kategori
+        $katObj = Kategori::findOrFail($this->id_kategori);
+        $katObj->update([
+            'kategori' => $this->kategori,
+            'slug' => \Illuminate\Support\Str::slug($this->kategori)
         ]);
 
         $this->dispatch('kategori-refresh');

@@ -13,14 +13,23 @@ class PegawaiController extends Controller
 {
     public function view(Request $request)
     {
-        $id_seksi = $request->get('seksi');
+        $seksiParam = $request->get('seksi');
         $seksiList = Seksi::where('status', 1)->orderBy('id_seksi', 'asc')->get();
+
+        $selectedSeksi = null;
+        if ($seksiParam) {
+            $selectedSeksi = Seksi::where('status', 1)
+                ->where(function ($q) use ($seksiParam) {
+                    $q->where('slug', $seksiParam)
+                      ->orWhere('id_seksi', $seksiParam);
+                })->first();
+        }
 
         $query = Pegawai::with(['jabatan', 'seksi'])
             ->where('status', 1);
 
-        if ($id_seksi) {
-            $query->where('id_seksi', $id_seksi);
+        if ($selectedSeksi) {
+            $query->where('id_seksi', $selectedSeksi->id_seksi);
         }
 
         $allPegawai = $query->get();
@@ -50,7 +59,6 @@ class PegawaiController extends Controller
             return strcasecmp($a->nama, $b->nama); // Ascending nama
         })->values();
 
-        $selectedSeksi = $id_seksi ? Seksi::find($id_seksi) : null;
         $identitas = Identitas::all();
         $tentang = Tentang::all();
 
@@ -58,7 +66,7 @@ class PegawaiController extends Controller
             'pegawaiList',
             'seksiList',
             'selectedSeksi',
-            'id_seksi',
+            'seksiParam',
             'identitas',
             'tentang'
         ));

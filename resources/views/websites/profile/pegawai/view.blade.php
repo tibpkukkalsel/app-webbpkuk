@@ -38,20 +38,19 @@
 
                 <!-- Horizontal Interactive Pill Tabs (Desktop & Laptop View) -->
                 <div class="pegawai-pills-bar">
-                    <a href="{{ url('/profil/pegawai') }}" class="pegawai-pill-item {{ !$id_seksi ? 'active' : '' }}">
+                    <a href="{{ url('/profil/pegawai') }}" class="pegawai-pill-item {{ !$selectedSeksi ? 'active' : '' }}">
                         <i class="fa-solid fa-layer-group"></i>
                         <span>Semua Seksi</span>
                     </a>
                     @foreach ($seksiList as $s)
-                        <a href="{{ url('/profil/pegawai?seksi=' . $s->id_seksi) }}"
-                            class="pegawai-pill-item {{ (string) $id_seksi === (string) $s->id_seksi ? 'active' : '' }}">
+                        <a href="{{ url('/profil/pegawai?seksi=' . ($s->slug ?? $s->id_seksi)) }}"
+                            class="pegawai-pill-item {{ ($selectedSeksi && $selectedSeksi->id_seksi == $s->id_seksi) ? 'active' : '' }}">
                             <i class="fa-solid fa-building-user"></i>
                             <span>{{ $s->seksi }}</span>
                         </a>
                     @endforeach
                 </div>
 
-                <!-- Custom Select Dropdown (Mobile Responsive View) -->
                 <!-- Custom Select Dropdown (Mobile Responsive View) -->
                 <div class="pegawai-mobile-select-wrap">
                     <form action="{{ url('/profil/pegawai') }}" method="GET" id="mobile-seksi-form">
@@ -69,8 +68,8 @@
                                         onchange="document.getElementById('mobile-seksi-form').submit()">
                                         <option value="">&#9679; Semua Seksi / Subbagian</option>
                                         @foreach ($seksiList as $s)
-                                            <option value="{{ $s->id_seksi }}"
-                                                {{ (string) $id_seksi === (string) $s->id_seksi ? 'selected' : '' }}>
+                                            <option value="{{ $s->slug ?? $s->id_seksi }}"
+                                                {{ ($selectedSeksi && $selectedSeksi->id_seksi == $s->id_seksi) ? 'selected' : '' }}>
                                                 &#9679; {{ $s->seksi }}
                                             </option>
                                         @endforeach

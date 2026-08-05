@@ -53,14 +53,36 @@
                     <td style="text-align:center;"><span class="mb-1 badge text-bg-success">Publish</span></td>
                 @endif
                 <td class="text-center">
-                @if ($d->status < 2)
-                    <a href="{{ route('berita.edit',$d->id_post) }}" class="btn mb-1 bg-primary-subtle rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center">
-                        <i class="fs-5 ti ti-pencil"></i>
+                    <a href="{{ route('berita.edit', $d->id_post) }}" title="Lihat Detail / Edit" class="btn mb-1 bg-info-subtle text-info rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center me-1">
+                        <i class="fs-5 ti ti-eye"></i>
                     </a>
-                    <a title="Hapus" data-id="{{ $d->id_post }}" class="hapus btn mb-1 bg-danger-subtle rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center">
-                        <i class="fs-5 ti ti-trash"></i>
+                    <a href="{{ route('post.cetak-persetujuan', $d->id_post) }}" target="_blank" title="Cetak Lembar Persetujuan Kepala Balai" class="btn mb-1 bg-secondary-subtle text-secondary rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center me-1">
+                        <i class="fs-5 ti ti-printer"></i>
                     </a>
-                @endif
+                    @if (auth()->user()->hasRole('Superadmin'))
+                        @if ($d->status == 1)
+                            <button wire:click="accPost({{ $d->id_post }})" title="ACC & Publish Berita" class="btn mb-1 bg-success-subtle text-success rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center border-0 me-1">
+                                <i class="fs-5 ti ti-check"></i>
+                            </button>
+                            <button wire:click="cancelPost({{ $d->id_post }})" title="Cancel / Kembalikan ke Draft" class="btn mb-1 bg-warning-subtle text-warning rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center border-0 me-1">
+                                <i class="fs-5 ti ti-x"></i>
+                            </button>
+                        @elseif ($d->status == 2)
+                            <button wire:click="cancelPost({{ $d->id_post }})" title="Cancel / Unpublish Berita" class="btn mb-1 bg-secondary-subtle text-secondary rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center border-0 me-1">
+                                <i class="fs-5 ti ti-rotate-clockwise"></i>
+                            </button>
+                        @endif
+                    @endif
+                    @if (auth()->id() == $d->id_user || auth()->user()->hasRole('Superadmin'))
+                        @if ($d->status < 2 || auth()->user()->hasRole('Superadmin'))
+                            <a href="{{ route('berita.edit',$d->id_post) }}" title="Edit" class="btn mb-1 bg-primary-subtle rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center me-1">
+                                <i class="fs-5 ti ti-pencil"></i>
+                            </a>
+                            <a title="Hapus" data-id="{{ $d->id_post }}" class="hapus btn mb-1 bg-danger-subtle rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center">
+                                <i class="fs-5 ti ti-trash"></i>
+                            </a>
+                        @endif
+                    @endif
                 </td>
             </tr>
             @empty
@@ -82,7 +104,6 @@
                 <th class="text-center">Status</th>
                 <th class="text-center">Aksi</th>
             </tr>
-            </tr>
         </tfoot>
     </table>
 
@@ -94,5 +115,4 @@
             {{ $post->links() }}
         </div>
     </div>
-
 </div>

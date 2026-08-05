@@ -27,7 +27,7 @@
         }
 
         .email-header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0d9488 100%);
+            background: linear-gradient(135deg, #000000 0%, #18181b 50%, #3f3f46 100%);
             padding: 32px 24px;
             text-align: center;
             color: #ffffff;
@@ -38,13 +38,13 @@
             background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: #ffffff;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 4px 14px;
+            letter-spacing: 0.5px;
+            text-transform: lowercase;
+            padding: 4px 16px;
             border-radius: 20px;
-            margin-bottom: 12px;
+            margin-bottom: 0;
         }
 
         .header-title {
@@ -142,9 +142,34 @@
 <body>
     <div class="email-wrapper">
         <div class="email-header">
-            <span class="header-tag">SISTEM HELPDESK RESMI</span>
-            <h1 class="header-title">NOTIFIKASI PESAN MASUK BARU</h1>
-            <p class="header-subtitle">Balai Pelatihan Koperasi dan Usaha Kecil Prov. Kalsel</p>
+            @php
+                $identitas = \App\Models\Identitas::all();
+                $logoPemprov = $identitas->firstWhere('nama', 'Logo Pemprov') ?? $identitas->firstWhere('nama', 'Logo Website');
+                $logoBalatkop = $identitas->firstWhere('nama', 'Logo Balatkop Primary') ?? $identitas->firstWhere('nama', 'Logo Balatkop Sec');
+
+                $logoPemprovPath = ($logoPemprov && file_exists(public_path('storage/header/' . $logoPemprov->keterangan)))
+                    ? public_path('storage/header/' . $logoPemprov->keterangan) : null;
+                $logoBalatkopPath = ($logoBalatkop && file_exists(public_path('storage/header/' . $logoBalatkop->keterangan)))
+                    ? public_path('storage/header/' . $logoBalatkop->keterangan) : null;
+            @endphp
+
+            @if(isset($message) && ($logoPemprovPath || $logoBalatkopPath))
+                <div style="text-align: center; margin-bottom: 14px;">
+                    @if($logoPemprovPath)
+                        <img src="{{ $message->embed($logoPemprovPath) }}" alt="Logo Pemprov Kalsel" style="max-height: 52px; width: auto; margin: 0 8px; display: inline-block; vertical-align: middle;">
+                    @endif
+                    @if($logoBalatkopPath)
+                        <img src="{{ $message->embed($logoBalatkopPath) }}" alt="Logo Balatkop-UK" style="max-height: 52px; width: auto; margin: 0 8px; display: inline-block; vertical-align: middle;">
+                    @endif
+                </div>
+            @endif
+
+            <div style="margin-bottom: 4px;">
+                <span class="header-tag">balatkopuk.kalselprov.go.id</span>
+            </div>
+
+            <h1 class="header-title" style="margin: 0 0 6px 0; font-size: 20px;">NOTIFIKASI PESAN MASUK BARU</h1>
+            <p class="header-subtitle" style="margin: 0;">Balai Pelatihan Koperasi dan Usaha Kecil Prov. Kalsel</p>
         </div>
 
         <div class="email-body">

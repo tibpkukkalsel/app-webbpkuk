@@ -19,6 +19,7 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('admins/libs/magnific-popup/dist/magnific-popup.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
+    @stack('styles')
 </head>
 
 <body>
@@ -47,7 +48,8 @@
                             <span class="hide-menu">Home</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="#" id="get-url" aria-expanded="false">
+                            <a class="sidebar-link {{ request()->routeIs('dashboard*') ? 'active' : '' }}"
+                                href="{{ route('dashboard') }}" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-dashboard"></i>
                                 </span>
@@ -55,6 +57,7 @@
                             </a>
                         </li>
 
+                        @hasrole('Superadmin')
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                             <span class="hide-menu">Master Data</span>
@@ -134,6 +137,9 @@
                                 <span class="hide-menu">Pengguna</span>
                             </a>
                         </li>
+                        @endhasrole
+
+                        @hasrole('Superadmin')
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                             <span class="hide-menu">Master Page</span>
@@ -257,10 +263,14 @@
                                 </li>
                             </ul>
                         </li>
+                        @endhasrole
+
+                        @hasanyrole('Superadmin|Admin Diklat|Admin Fasilitas|Admin Layanan Kemasan|Admin Helpdesk')
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                             <span class="hide-menu">Layanan</span>
                         </li>
+                        @hasanyrole('Superadmin|Admin Diklat')
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow {{ request()->routeIs('layanan*') ? 'active' : '' }}"
                                 href="javascript:void(0)" aria-expanded="false">
@@ -317,6 +327,8 @@
                                 </li>
                             </ul>
                         </li>
+                        @endhasanyrole
+                        @hasanyrole('Superadmin|Admin Fasilitas')
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow {{ request()->routeIs('fasilitas*') ? 'active' : '' }}"
                                 href="javascript:void(0)" aria-expanded="false">
@@ -361,6 +373,8 @@
                                 </li>
                             </ul>
                         </li>
+                        @endhasanyrole
+                        @hasanyrole('Superadmin|Admin Layanan Kemasan')
                         <li class="sidebar-item">
                             <a class="sidebar-link {{ request()->routeIs('produk-umkm*') ? 'active' : '' }}"
                                 href="{{ route('produk-umkm.view') }}" aria-expanded="false">
@@ -370,7 +384,8 @@
                                 <span class="hide-menu">Produk UMKM</span>
                             </a>
                         </li>
-                        @can('kontak.view')
+                        @endhasanyrole
+                        @hasanyrole('Superadmin|Admin Helpdesk')
                         <li class="sidebar-item">
                             <a class="sidebar-link {{ request()->routeIs('kontak*') ? 'active' : '' }}"
                                 href="{{ route('kontak.view') }}" aria-expanded="false">
@@ -380,7 +395,10 @@
                                 <span class="hide-menu">Kontak & Helpdesk</span>
                             </a>
                         </li>
-                        @endcan
+                        @endhasanyrole
+                        @endhasanyrole
+
+                        @hasanyrole('Superadmin|Admin Website|Admin Layanan Kemasan')
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                             <span class="hide-menu">Page</span>
@@ -412,6 +430,9 @@
                                 <span class="hide-menu">Info dan Tips</span>
                             </a>
                         </li>
+                        @endhasanyrole
+
+                        @hasrole('Superadmin')
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                             <span class="hide-menu">Media</span>
@@ -425,6 +446,7 @@
                                 <span class="hide-menu">Video</span>
                             </a>
                         </li>
+                        @endhasrole
                     </ul>
                 </nav>
 

@@ -426,14 +426,11 @@
                                                 href="{{ route('website.informasi.detail', $b->slug ?? $b->id_post) }}">{{ $b->judul }}</a>
                                         </h3>
                                         @php
-                                            $summaryText = !empty(trim($b->ringkasan ?? ''))
-                                                ? $b->ringkasan
-                                                : (!empty(trim($b->isi ?? ''))
-                                                    ? $b->isi
-                                                    : $b->judul);
+                                            $rawSummary = !empty(trim($b->ringkasan ?? '')) ? $b->ringkasan : $b->isi;
+                                            $cleanSummary = trim(html_entity_decode(strip_tags($rawSummary ?? '')));
                                         @endphp
                                         <p class="news-excerpt">
-                                            {{ Str::limit(strip_tags($summaryText), 110) }}
+                                            {{ Str::limit($cleanSummary, 120) }}
                                         </p>
                                     </div>
                                 </article>

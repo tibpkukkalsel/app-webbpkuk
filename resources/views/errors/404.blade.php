@@ -128,29 +128,7 @@
                 </div>
             </div>
 
-            <!-- Tautan Cepat -->
-            <div style="background:#f8fafc; border:1px solid #f1f5f9; border-radius:14px; padding:16px 20px; margin-bottom:24px; text-align:left;">
-                <div style="font-size:0.78rem;color:#64748b;font-weight:700;text-transform:uppercase;margin-bottom:12px;">
-                    <i class="fa-solid fa-compass me-1" style="color:#3b82f6;"></i> Halaman yang Mungkin Anda Cari
-                </div>
-                <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                    <a href="{{ url('/') }}" style="display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8f0;padding:6px 14px;border-radius:50px;font-size:0.85rem;font-weight:600;color:#334155;text-decoration:none;">
-                        <i class="fa-solid fa-house" style="color:#3b82f6;font-size:0.75rem;"></i> Beranda
-                    </a>
-                    <a href="{{ url('/profil/tentang') }}" style="display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8f0;padding:6px 14px;border-radius:50px;font-size:0.85rem;font-weight:600;color:#334155;text-decoration:none;">
-                        <i class="fa-solid fa-building" style="color:#3b82f6;font-size:0.75rem;"></i> Tentang
-                    </a>
-                    <a href="{{ url('/layanan/pemanfaatan-fasilitas') }}" style="display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8f0;padding:6px 14px;border-radius:50px;font-size:0.85rem;font-weight:600;color:#334155;text-decoration:none;">
-                        <i class="fa-solid fa-briefcase" style="color:#3b82f6;font-size:0.75rem;"></i> Layanan
-                    </a>
-                    <a href="{{ url('/informasi') }}" style="display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8f0;padding:6px 14px;border-radius:50px;font-size:0.85rem;font-weight:600;color:#334155;text-decoration:none;">
-                        <i class="fa-solid fa-newspaper" style="color:#3b82f6;font-size:0.75rem;"></i> Informasi
-                    </a>
-                    <a href="{{ url('/agenda') }}" style="display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8f0;padding:6px 14px;border-radius:50px;font-size:0.85rem;font-weight:600;color:#334155;text-decoration:none;">
-                        <i class="fa-solid fa-calendar" style="color:#3b82f6;font-size:0.75rem;"></i> Agenda
-                    </a>
-                </div>
-            </div>
+
 
             <!-- Action Buttons -->
             <div class="error-btn-group">

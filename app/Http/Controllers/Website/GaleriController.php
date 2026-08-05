@@ -111,7 +111,12 @@ class GaleriController extends Controller
             ->get();
 
         // Tag Populer
-        $popularHashtags = Hashtag::withCount('posts')
+        $popularHashtags = Hashtag::whereHas('posts', function ($query) {
+            $query->where('status', 2);
+        })
+            ->withCount(['posts' => function ($query) {
+                $query->where('status', 2);
+            }])
             ->orderByDesc('posts_count')
             ->take(6)
             ->get();

@@ -73,8 +73,33 @@
                     </div>
                 </a>
 
-                <!-- Email & Social Media Section -->
+                <!-- Email, Telepon, WhatsApp & Social Media Section -->
                 @php
+                    $teleponItem = isset($identitas)
+                        ? ($identitas->firstWhere('nama', 'Telepon') ??
+                            ($identitas->firstWhere('nama', 'No Telepon') ??
+                                $identitas->firstWhere('nama', 'Telepon Kantor')))
+                        : null;
+                    $teleponNum = $teleponItem?->keterangan ?? '(0511) 4707559';
+                    $teleponLink = $teleponItem?->link ?: 'tel:' . preg_replace('/[^0-9\+]/', '', $teleponNum);
+
+                    $waItem = isset($identitas)
+                        ? ($identitas->firstWhere('nama', 'Telepon(WA)') ??
+                            ($identitas->firstWhere('nama', 'Telepon (WA)') ??
+                                ($identitas->firstWhere('nama', 'Telepon WA') ??
+                                    ($identitas->firstWhere('nama', 'WhatsApp') ??
+                                        ($identitas->firstWhere('nama', 'WA') ??
+                                            ($identitas->firstWhere('nama', 'No WA') ??
+                                                ($identitas->firstWhere('nama', 'Telepon Wa') ??
+                                                    $identitas->firstWhere('nama', 'Telepon WhatsApp'))))))))
+                        : null;
+                    $waNum = $waItem?->keterangan ?? '08123456789';
+                    $waClean = preg_replace('/[^0-9]/', '', $waNum);
+                    if (str_starts_with($waClean, '0')) {
+                        $waClean = '62' . substr($waClean, 1);
+                    }
+                    $waLink = $waItem?->link ?: ('https://wa.me/' . $waClean);
+
                     $emailItem = isset($identitas) ? $identitas->firstWhere('nama', 'Email') : null;
                     $emailAddr = $emailItem?->keterangan ?? 'web.balatkopuk@gmail.com';
                     $emailLink = $emailItem?->link ?: 'mailto:' . $emailAddr;
@@ -92,6 +117,22 @@
                         </span>
                         <span class="email-text">{{ $emailAddr }}</span>
                     </a>
+                    @if ($teleponNum)
+                        <a href="{{ $teleponLink }}" class="footer-email-link" title="Telepon Kantor">
+                            <span class="social-icon-btn phone">
+                                <i class="fa-solid fa-phone"></i>
+                            </span>
+                            <span class="email-text">{{ $teleponNum }}</span>
+                        </a>
+                    @endif
+                    @if ($waNum)
+                        <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer" class="footer-email-link" title="Hotline WhatsApp">
+                            <span class="social-icon-btn whatsapp">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </span>
+                            <span class="email-text">{{ $waNum }}</span>
+                        </a>
+                    @endif
                     <a href="{{ $instaLink }}" target="_blank" rel="noopener noreferrer" class="social-icon-btn instagram" title="Instagram">
                         <i class="fa-brands fa-instagram"></i>
                     </a>
@@ -130,10 +171,10 @@
             <div class="footer-col col-informasi">
                 <h3 class="footer-heading">Informasi</h3>
                 <ul class="footer-links">
-                    <li><a href="{{ url('/informasi?jenis=Berita') }}">Berita</a></li>
-                    <li><a href="{{ url('/informasi?jenis=Artikel') }}">Artikel</a></li>
-                    <li><a href="{{ url('/informasi?jenis=Tips') }}">Info dan Tips</a></li>
                     <li><a href="{{ url('/informasi') }}">Semua Informasi</a></li>
+                    <li><a href="{{ url('/informasi?jenis=berita') }}">Berita</a></li>
+                    <li><a href="{{ url('/informasi?jenis=artikel') }}">Artikel</a></li>
+                    <li><a href="{{ url('/informasi?jenis=tips') }}">Info dan Tips</a></li>
                 </ul>
             </div>
 

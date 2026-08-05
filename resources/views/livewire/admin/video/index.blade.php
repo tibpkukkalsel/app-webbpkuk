@@ -62,12 +62,17 @@
                         @endif
                     </td>
                     <td class="text-center">
-                        <a href="{{ route('video.edit', $d->id_video) }}" class="btn mb-1 bg-primary-subtle rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center">
-                            <i class="fs-5 ti ti-pencil"></i>
+                        <a href="{{ route('video.edit', $d->id_video) }}" title="Lihat Detail / Edit" class="btn mb-1 bg-info-subtle text-info rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center me-1">
+                            <i class="fs-5 ti ti-eye"></i>
                         </a>
-                        <button type="button" data-id="{{ $d->id_video }}" class="hapus btn mb-1 bg-danger-subtle rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center">
-                            <i class="fs-5 ti ti-trash"></i>
-                        </button>
+                        @if (auth()->id() == $d->id_user || auth()->user()->hasRole('Superadmin'))
+                            <a href="{{ route('video.edit', $d->id_video) }}" title="Edit" class="btn mb-1 bg-primary-subtle rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center me-1">
+                                <i class="fs-5 ti ti-pencil"></i>
+                            </a>
+                            <button type="button" data-id="{{ $d->id_video }}" title="Hapus" class="hapus btn mb-1 bg-danger-subtle rounded-circle round-40 btn-sm d-inline-flex align-items-center justify-content-center">
+                                <i class="fs-5 ti ti-trash"></i>
+                            </button>
+                        @endif
                     </td>
                 </tr>
                 @empty

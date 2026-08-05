@@ -1,6 +1,6 @@
 @extends('layouts.websites')
 
-@section('title', 'Halaman Sedang Dibangun - Balatkop-UK Prov. Kalsel')
+@section('title', 'Halaman Sedang Dalam Pembaruan - Balatkop-UK Prov. Kalsel')
 
 @section('content')
     <!-- DEDICATED PENGEMBANGAN CSS -->
@@ -17,22 +17,20 @@
                             <span class="uc-badge-yellow">
                                 <span
                                     style="width: 8px; height: 8px; background: #fbbf24; border-radius: 50%; display: inline-block;"></span>
-                                Under Construction
+                                System Update
                             </span>
-                            <span class="uc-badge-sub">V2 &bull; 2026 Q3 DEPLOY</span>
-                            <span class="uc-badge-sub">STATUS: 30% COMPILED</span>
+                            <span class="uc-badge-sub">&bull; PEMBARUAN SISTEM &amp; DATA RESMI</span>
                         </div>
 
                         <!-- 2. Main Title (Teks Umum) -->
                         <h1 class="uc-heading">
                             Halaman Ini<br>
-                            <span>Sedang Dibangun.</span>
+                            <span>Sedang Dalam Pembaruan.</span>
                         </h1>
 
                         <!-- 3. Main Description (Teks Umum) -->
                         <p class="uc-description">
-                            Kami sedang merombak dan menyiapkan sistem pada halaman ini agar lebih cepat, transparan, dan
-                            mudah diakses — dengan standar performa &amp; sistem keamanan modern.
+                            Kami sedang memperbarui dan menyelaraskan data pada halaman ini agar informasi yang disajikan selalu akurat, mutakhir, dan resmi — sesuai dengan standar pelayanan publik Balai Pelatihan Koperasi dan Usaha Kecil Prov. Kalsel.
                         </p>
 
                         <!-- 4. Action Buttons (Teks Umum) -->

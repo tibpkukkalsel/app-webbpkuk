@@ -89,22 +89,7 @@ class Table extends Component
         if (count($this->items) > 1) {
             unset($this->items[$index]);
             $this->items = array_values($this->items);
-            $this->hitungTotalResponden();
         }
-    }
-
-    public function updatedItems()
-    {
-        $this->hitungTotalResponden();
-    }
-
-    private function hitungTotalResponden()
-    {
-        $total = 0;
-        foreach ($this->items as $it) {
-            $total += intval($it['jumlah_responden'] ?? 0);
-        }
-        $this->jumlah_responden = $total;
     }
 
     public function create()
@@ -146,20 +131,21 @@ class Table extends Component
     public function save()
     {
         $this->validate([
-            'id_wilayah' => 'required|exists:gis_wilayah,id_wilayah',
-            'tahun'      => 'required|integer|min:2010|max:2050',
-            'jenis_sdm'  => 'required|in:sdm_koperasi,sdm_umkm',
-            'items'      => 'required|array|min:1',
+            'id_wilayah'       => 'required|exists:gis_wilayah,id_wilayah',
+            'tahun'            => 'required|integer|min:2010|max:2050',
+            'jenis_sdm'        => 'required|in:sdm_koperasi,sdm_umkm',
+            'jumlah_responden' => 'required|integer|min:1',
+            'items'            => 'required|array|min:1',
             'items.*.id_jenis_diklat'  => 'required|exists:gis_jenis_diklat,id_jenis_diklat',
             'items.*.jumlah_responden' => 'required|integer|min:0',
         ], [
-            'id_wilayah.required' => 'Wilayah kabupaten/kota wajib dipilih.',
-            'tahun.required'      => 'Tahun kegiatan wajib diisi.',
-            'items.min'           => 'Minimal tambahkan 1 detail rincian jenis diklat.',
+            'id_wilayah.required'       => 'Wilayah kabupaten/kota wajib dipilih.',
+            'tahun.required'            => 'Tahun kegiatan wajib diisi.',
+            'jumlah_responden.required' => 'Jumlah responden fisik (orang) wajib diisi.',
+            'jumlah_responden.min'      => 'Jumlah responden fisik minimal 1 orang.',
+            'items.min'                 => 'Minimal tambahkan 1 detail rincian jenis diklat.',
             'items.*.id_jenis_diklat.required' => 'Pilih jenis diklat pada setiap baris.',
         ]);
-
-        $this->hitungTotalResponden();
 
         $identifikasi = GisIdentifikasi::updateOrCreate(
             ['id_identifikasi' => $this->id_identifikasi],

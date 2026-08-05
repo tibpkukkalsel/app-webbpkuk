@@ -145,28 +145,11 @@
                                                 {{ Str::limit($item->deskripsi, 110, '...') ?: 'Sarana pendukung kegiatan pelatihan, rapat, dan acara di UPTD Balatkop & UKM Kalsel.' }}
                                             </p>
 
-                                            <!-- PRICE BOX -->
-                                            <div class="card-price-box">
-                                                <div>
-                                                    <span class="price-label">Skema Tarif Resmi</span>
-                                                    @if ($item->tarifs && $item->tarifs->count() > 0)
-                                                        @php $topTarif = $item->tarifs->first(); @endphp
-                                                        <div class="price-val">
-                                                            Rp {{ number_format($topTarif->tarif, 0, ',', '.') }}
-                                                            <span class="price-unit">/ {{ $topTarif->satuan }}</span>
-                                                        </div>
-                                                    @else
-                                                        <div class="price-val-custom">Sesuai Perda / Peraturan Gubernur
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-
                                             <!-- BUTTON ACTION -->
                                             <div class="card-action">
                                                 <button type="button" class="btn-detail-modal"
                                                     onclick="openFasilitasModal({{ $item->id_fasilitas }})">
-                                                    <i class="fa-solid fa-circle-info"></i> Detail & Tarif
+                                                    <i class="fa-solid fa-circle-info"></i> Detail Fasilitas
                                                 </button>
                                             </div>
                                         </div>
@@ -237,42 +220,7 @@
                                                 <p class="modal-desc-text">
                                                     {{ $item->deskripsi ?: 'Tidak ada deskripsi tambahan.' }}</p>
 
-                                                <h4 class="modal-section-heading"><i
-                                                        class="fa-solid fa-receipt text-green me-1"></i>
-                                                    Daftar Skema Tarif Resmi</h4>
-                                                @if ($item->tarifs && $item->tarifs->count() > 0)
-                                                    <div class="modal-table-wrap">
-                                                        <table class="modal-rate-table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Skema Tarif</th>
-                                                                    <th>Satuan</th>
-                                                                    <th class="text-right">Nilai Tarif</th>
-                                                                    <th>Berlaku</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                @foreach ($item->tarifs as $t)
-                                                                    <tr>
-                                                                        <td class="font-bold">{{ $t->nama }}</td>
-                                                                        <td><span
-                                                                                class="table-badge">{{ $t->satuan }}</span>
-                                                                        </td>
-                                                                        <td class="text-right font-bold text-green">Rp
-                                                                            {{ number_format($t->tarif, 0, ',', '.') }}
-                                                                        </td>
-                                                                        <td>{{ \Carbon\Carbon::parse($t->tanggal_mulai)->format('d/m/Y') }}
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                @else
-                                                    <div class="modal-alert-box">Belum ada daftar tarif publik khusus.
-                                                        Kontak pengelola
-                                                        untuk informasi tarif resmi.</div>
-                                                @endif
+
                                             </div>
 
                                             <div class="modal-box-footer">

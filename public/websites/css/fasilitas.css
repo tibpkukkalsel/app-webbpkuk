@@ -1046,16 +1046,32 @@
 }
 
 .btn-pesan-submit {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #16a34a;
     color: #ffffff;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 30px;
-    font-size: 0.95rem;
-    font-weight: 800;
+    border: 1px solid #16a34a;
+    padding: 11px 22px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-pesan-submit:hover {
+    background: #15803d;
+    border-color: #15803d;
+    color: #ffffff;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-pesan-submit:active {
+    background: #166534;
+    border-color: #166534;
 }
 
 .btn-pesan-primary i,
@@ -1121,31 +1137,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
 }
 
-.summary-item-table {
-    width: 100%;
-    border-collapse: collapse;
-}
 
-.summary-item-table th {
-    background: #f1f5f9;
-    padding: 14px 20px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #475569;
-    text-transform: uppercase;
-}
-
-.summary-item-table td {
-    padding: 16px 20px;
-    border-top: 1px solid #f1f5f9;
-    font-size: 0.9rem;
-}
-
-.summary-item-table tfoot th {
-    background: #f8fafc;
-    padding: 18px 20px;
-    border-top: 2px solid #e2e8f0;
-}
 
 .booking-success-card {
     background: #ffffff;
@@ -1358,6 +1350,7 @@
    ========================================= */
 
 /* Summary items table */
+/* Summary items table */
 .summary-table-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -1377,9 +1370,11 @@
 }
 
 .summary-item-table thead th {
-    padding: 11px 16px;
+    padding: 12px 18px;
     font-weight: 700;
     letter-spacing: 0.03em;
+    color: #ffffff;
+    text-align: center !important;
 }
 
 .summary-item-table tbody tr {
@@ -1392,20 +1387,10 @@
 }
 
 .summary-item-table tbody td {
-    padding: 11px 16px;
+    padding: 14px 18px;
     vertical-align: middle;
     color: #334155;
-}
-
-.summary-item-table tfoot tr {
-    background: #f8fafc;
-    border-top: 2px solid #e2e8f0;
-}
-
-.summary-item-table tfoot th {
-    padding: 12px 16px;
-    font-size: 0.92rem;
-    color: #0f172a;
+    text-align: center !important;
 }
 
 .fs-8 {

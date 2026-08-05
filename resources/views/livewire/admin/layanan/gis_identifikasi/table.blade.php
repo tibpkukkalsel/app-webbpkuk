@@ -159,19 +159,22 @@
 
     <!-- FORM MODAL (CREATE / EDIT) -->
     @if($showModal)
-        <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 1050;">
+        <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5); z-index: 1050;">
             <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content shadow-lg border-0">
-                    <div class="modal-header d-flex align-items-center">
-                        <h4 class="modal-title">{{ $isEdit ? 'Edit Data Identifikasi' : 'Tambah Data Identifikasi' }}</h4>
+                <div class="modal-content border-0 shadow">
+                    <!-- MODAL HEADER -->
+                    <div class="modal-header border-bottom px-4 py-3">
+                        <h5 class="modal-title fw-bold text-dark mb-0">{{ $isEdit ? 'Edit Data Identifikasi Kebutuhan' : 'Tambah Data Identifikasi Kebutuhan' }}</h5>
                         <button type="button" class="btn-close" wire:click="closeModal" aria-label="Close"></button>
                     </div>
+
                     <form wire:submit.prevent="save">
-                        <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
-                            <!-- HEADER INFORMATION -->
-                            <div class="row g-3 mb-4 p-3 bg-light rounded border">
+                        <div class="modal-body p-4" style="max-height: 75vh; overflow-y: auto;">
+                            
+                            <!-- INFORMASI UTAMA -->
+                            <div class="row g-3 mb-3">
                                 <div class="col-md-5">
-                                    <label class="form-label fw-semibold">Wilayah Kabupaten / Kota <span class="text-danger">*</span></label>
+                                    <label class="form-label fw-semibold mb-1">Wilayah Kabupaten / Kota <span class="text-danger">*</span></label>
                                     <select class="form-select @error('id_wilayah') is-invalid @enderror" wire:model="id_wilayah">
                                         <option value="">-- Pilih Wilayah --</option>
                                         @foreach($wilayahOptions as $wOpt)
@@ -180,29 +183,41 @@
                                     </select>
                                     @error('id_wilayah') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
-                                <div class="col-md-3">
-                                    <label class="form-label fw-semibold">Tahun Kegiatan <span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control @error('tahun') is-invalid @enderror"
+
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold mb-1">Tahun <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control text-center @error('tahun') is-invalid @enderror"
                                         placeholder="2026" wire:model="tahun">
                                     @error('tahun') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold">Kategori SDM <span class="text-danger">*</span></label>
+
+                                <div class="col-md-5">
+                                    <label class="form-label fw-semibold mb-1">Kategori SDM <span class="text-danger">*</span></label>
                                     <select class="form-select @error('jenis_sdm') is-invalid @enderror" wire:model.live="jenis_sdm">
                                         <option value="sdm_koperasi">SDM Koperasi</option>
                                         <option value="sdm_umkm">SDM UMKM</option>
                                     </select>
                                     @error('jenis_sdm') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
-                                <div class="col-12">
-                                    <label class="form-label fw-semibold">Keterangan / Catatan Survei</label>
-                                    <textarea class="form-control" rows="2" placeholder="Catatan umum mengenai hasil identifikasi di wilayah tersebut..." wire:model="keterangan"></textarea>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold mb-1">Jumlah Responden (Orang) <span class="text-danger">*</span></label>
+                                    <input type="number" min="1" class="form-control text-center fw-bold text-primary @error('jumlah_responden') is-invalid @enderror"
+                                        placeholder="Contoh: 100" wire:model="jumlah_responden">
+                                    @error('jumlah_responden') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                </div>
+
+                                <div class="col-md-8">
+                                    <label class="form-label fw-semibold mb-1">Keterangan / Catatan Survei</label>
+                                    <input type="text" class="form-control" placeholder="Catatan hasil survei di wilayah tsb (opsional)..." wire:model="keterangan">
                                 </div>
                             </div>
 
-                            <!-- MULTI-ITEM DETAIL BREAKDOWN -->
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="fw-bold mb-0 text-primary"><i class="ti ti-list-check me-1"></i> Rincian Program Diklat yang Dibutuhkan</h6>
+                            <hr class="my-4">
+
+                            <!-- RINCIAN DIKLAT -->
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h6 class="fw-bold text-dark mb-0"><i class="ti ti-list-check me-1 text-primary"></i> Rincian Program Diklat yang Dibutuhkan</h6>
                                 <button type="button" class="btn btn-sm btn-outline-primary" wire:click="tambahItem">
                                     <i class="ti ti-plus me-1"></i> Tambah Program
                                 </button>
@@ -212,14 +227,14 @@
                                 <div class="alert alert-danger py-2 small mb-3">{{ $message }}</div>
                             @enderror
 
-                            <div class="table-responsive border rounded mb-3">
+                            <div class="table-responsive border rounded mb-2">
                                 <table class="table table-bordered table-sm align-middle mb-0">
-                                    <thead class="table-light">
+                                    <thead class="bg-light">
                                         <tr>
                                             <th>Program Jenis Diklat <span class="text-danger">*</span></th>
-                                            <th style="width: 140px;">Jumlah Responden <span class="text-danger">*</span></th>
-                                            <th>Keterangan Kebutuhan</th>
-                                            <th class="text-center" style="width: 50px;">#</th>
+                                            <th style="width: 140px;" class="text-center">Jumlah Pemilih <span class="text-danger">*</span></th>
+                                            <th>Catatan Kebutuhan</th>
+                                            <th class="text-center" style="width: 45px;">#</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -244,7 +259,7 @@
                                                 </td>
                                                 <td class="text-center">
                                                     @if(count($items) > 1)
-                                                        <button type="button" class="btn btn-sm btn-light-danger text-danger p-1" wire:click="hapusItem({{ $idx }})">
+                                                        <button type="button" class="btn btn-sm btn-light-danger text-danger p-1" title="Hapus" wire:click="hapusItem({{ $idx }})">
                                                             <i class="ti ti-x"></i>
                                                         </button>
                                                     @endif
@@ -252,21 +267,24 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
-                                    <tfoot class="table-light">
+                                    <tfoot class="bg-light">
                                         <tr>
-                                            <th class="text-end">Total Akumulasi Responden:</th>
-                                            <th class="text-center text-primary font-monospace fw-bold fs-4">
-                                                {{ number_format($jumlah_responden) }}
+                                            <th class="text-end py-2">Total Pilihan Diklat:</th>
+                                            <th class="text-center text-success fw-bold py-2 fs-5">
+                                                {{ number_format(array_sum(array_map('intval', array_column($items, 'jumlah_responden')))) }}
                                             </th>
-                                            <th colspan="2">Orang</th>
+                                            <th colspan="2" class="text-muted small py-2">Usulan</th>
                                         </tr>
                                     </tfoot>
                                 </table>
                             </div>
+
                         </div>
-                        <div class="modal-footer">
+
+                        <!-- MODAL FOOTER -->
+                        <div class="modal-footer border-top px-4 py-3">
                             <button type="button" class="btn btn-light" wire:click="closeModal">Batal</button>
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <button type="submit" class="btn btn-primary px-4">Simpan Data</button>
                         </div>
                     </form>
                 </div>
@@ -311,7 +329,7 @@
                                 <tr>
                                     <th width="50" class="text-center">No</th>
                                     <th>Program Jenis Diklat</th>
-                                    <th class="text-center">Jumlah Responden</th>
+                                    <th class="text-center">Jumlah Pemilih / Usulan</th>
                                     <th>Catatan Kebutuhan</th>
                                 </tr>
                             </thead>
@@ -320,7 +338,7 @@
                                     <tr>
                                         <td class="text-center">{{ $idx + 1 }}</td>
                                         <td><strong>{{ $dt->jenisDiklat->nama ?? '-' }}</strong></td>
-                                        <td class="text-center text-primary font-monospace fw-bold">{{ number_format($dt->jumlah_responden) }} Orang</td>
+                                        <td class="text-center text-success font-monospace fw-bold">{{ number_format($dt->jumlah_responden) }} Usulan</td>
                                         <td class="small text-muted">{{ $dt->keterangan ?: '-' }}</td>
                                     </tr>
                                 @empty
