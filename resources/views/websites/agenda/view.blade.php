@@ -14,7 +14,7 @@
                 <span class="separator">/</span>
                 <span class="current">AGENDA</span>
             </div>
-            <h1 class="profile-banner-title">Agenda Kegiatan</h1>
+            <h1 class="profile-banner-title">Agenda</h1>
         </div>
     </div>
 
@@ -24,19 +24,129 @@
 
             <!-- Section Header & Filter Button -->
             <div class="informasi-header-row">
-                <h2 class="informasi-section-heading">
-                    Agenda Kegiatan Balatkop-UK Prov. Kalsel
-                </h2>
+                <div>
+                    <h2 class="informasi-section-heading">
+                        Agenda Kegiatan Balatkop-UK Prov. Kalsel
+                    </h2>
+                    <p class="informasi-section-subheading">
+                        Jadwal & kegiatan pelatihan, workshop, dan pembinaan Koperasi & UMKM Kalimantan Selatan.
+                    </p>
+                </div>
 
-                <button type="button" class="btn-filter-toggle {{ !empty($search) ? 'has-filter' : '' }}"
-                    id="informasiFilterToggle">
-                    <i class="fa-solid fa-sliders"></i>
-                    <span>Filter</span>
-                    @if (!empty($search))
-                        <span class="filter-dot-active"></span>
+                <div class="informasi-action-buttons">
+                    @if ($hasActiveFilter)
+                        <a href="{{ url('/agenda') }}" class="btn-reset-filter" title="Reset Semua Filter">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span>Reset Filter</span>
+                        </a>
                     @endif
-                </button>
+                    <button type="button" class="btn-filter-toggle {{ $hasActiveFilter ? 'has-filter' : '' }}"
+                        id="informasiFilterToggle">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>Filter</span>
+                        @if ($hasActiveFilter)
+                            <span class="filter-dot-active"></span>
+                        @endif
+                    </button>
+                </div>
             </div>
+
+            <!-- Quick Status Filter Pills Row -->
+            @php
+                $currStatus = $statusAgenda ?? '';
+                $monthsIndo = [
+                    1 => 'Januari',
+                    2 => 'Februari',
+                    3 => 'Maret',
+                    4 => 'April',
+                    5 => 'Mei',
+                    6 => 'Juni',
+                    7 => 'Juli',
+                    8 => 'Agustus',
+                    9 => 'September',
+                    10 => 'Oktober',
+                    11 => 'November',
+                    12 => 'Desember',
+                ];
+            @endphp
+            <div class="agenda-status-quick-bar mb-4">
+                <a href="{{ url('/agenda') . '?' . http_build_query(array_merge(request()->except(['status_agenda', 'page']))) }}"
+                    class="agenda-quick-tab {{ empty($currStatus) ? 'active' : '' }}">
+                    <i class="fa-solid fa-layer-group me-1"></i> Semua Agenda
+                </a>
+                <a href="{{ url('/agenda') . '?' . http_build_query(array_merge(request()->except(['status_agenda', 'page']), ['status_agenda' => 'active'])) }}"
+                    class="agenda-quick-tab tab-active-live {{ $currStatus === 'active' ? 'active' : '' }}">
+                    <span class="pulse-dot"></span> Sedang Berlangsung
+                </a>
+                <a href="{{ url('/agenda') . '?' . http_build_query(array_merge(request()->except(['status_agenda', 'page']), ['status_agenda' => 'upcoming'])) }}"
+                    class="agenda-quick-tab {{ $currStatus === 'upcoming' ? 'active' : '' }}">
+                    <i class="fa-regular fa-clock me-1"></i> Akan Datang
+                </a>
+                <a href="{{ url('/agenda') . '?' . http_build_query(array_merge(request()->except(['status_agenda', 'page']), ['status_agenda' => 'ended'])) }}"
+                    class="agenda-quick-tab {{ $currStatus === 'ended' ? 'active' : '' }}">
+                    <i class="fa-solid fa-circle-check me-1"></i> Selesai
+                </a>
+            </div>
+
+            <!-- Active Filters Summary Bar (if filter active) -->
+            @if ($hasActiveFilter)
+                <div class="active-filters-bar mb-4">
+                    <span class="active-filter-label"><i class="fa-solid fa-filter text-blue me-1"></i> Filter Aktif:</span>
+                    <div class="active-filter-tags">
+                        @if (!empty($search))
+                            <a href="{{ url('/agenda') . '?' . http_build_query(request()->except(['q', 'page'])) }}"
+                                class="filter-tag-pill">
+                                <span>Pencarian: "{{ $search }}"</span>
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                        @endif
+                        @if (!empty($currStatus))
+                            @php
+                                $statusLabel = match ($currStatus) {
+                                    'active' => 'Sedang Berlangsung',
+                                    'upcoming' => 'Akan Datang',
+                                    'ended' => 'Selesai',
+                                    default => $currStatus,
+                                };
+                            @endphp
+                            <a href="{{ url('/agenda') . '?' . http_build_query(request()->except(['status_agenda', 'page'])) }}"
+                                class="filter-tag-pill">
+                                <span>Status: {{ $statusLabel }}</span>
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                        @endif
+                        @if (!empty($bulan) && isset($monthsIndo[(int) $bulan]))
+                            <a href="{{ url('/agenda') . '?' . http_build_query(request()->except(['bulan', 'page'])) }}"
+                                class="filter-tag-pill">
+                                <span>Bulan: {{ $monthsIndo[(int) $bulan] }}</span>
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                        @endif
+                        @if (!empty($tahun))
+                            <a href="{{ url('/agenda') . '?' . http_build_query(request()->except(['tahun', 'page'])) }}"
+                                class="filter-tag-pill">
+                                <span>Tahun: {{ $tahun }}</span>
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                        @endif
+                        @if (!empty($tglDari))
+                            <a href="{{ url('/agenda') . '?' . http_build_query(request()->except(['tgl_dari', 'page'])) }}"
+                                class="filter-tag-pill">
+                                <span>Dari: {{ \Carbon\Carbon::parse($tglDari)->format('d/m/Y') }}</span>
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                        @endif
+                        @if (!empty($tglSampai))
+                            <a href="{{ url('/agenda') . '?' . http_build_query(request()->except(['tgl_sampai', 'page'])) }}"
+                                class="filter-tag-pill">
+                                <span>Sampai: {{ \Carbon\Carbon::parse($tglSampai)->format('d/m/Y') }}</span>
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                        @endif
+                        <a href="{{ url('/agenda') }}" class="clear-all-filters-link">Hapus Semua</a>
+                    </div>
+                </div>
+            @endif
 
             <!-- FILTER MODAL DIALOG -->
             <div class="informasi-filter-modal" id="informasiFilterModal" aria-hidden="true">
@@ -57,19 +167,92 @@
                         <!-- Modal Body -->
                         <div class="filter-modal-body">
                             <form action="{{ url('/agenda') }}" method="GET" id="filterModalForm">
+                                <input type="hidden" name="status_agenda" id="filterStatusInput"
+                                    value="{{ $statusAgenda ?? '' }}">
+
                                 <!-- Filter Group: Search Input -->
-                                <div class="filter-group filter-group-search">
+                                <div class="filter-group filter-group-search mb-4">
                                     <label class="filter-group-label"><i class="fa-solid fa-magnifying-glass me-1"></i>
-                                        Cari Agenda Kegiatan:</label>
+                                        Cari Kata Kunci:</label>
                                     <div class="filter-search-box">
                                         <input type="text" name="q" class="filter-search-input"
-                                            id="filterQueryInput" placeholder="Ketik Nama atau Lokasi Agenda ..."
+                                            id="filterQueryInput"
+                                            placeholder="Ketik Nama, Deskripsi, atau Lokasi Agenda ..."
                                             value="{{ $search ?? '' }}">
                                         <button type="button" class="clear-search-btn" id="clearSearchInputBtn"
                                             title="Hapus Teks Pencarian"
                                             style="{{ empty($search) ? 'display:none;' : '' }}">
                                             <i class="fa-solid fa-circle-xmark"></i>
                                         </button>
+                                    </div>
+                                </div>
+
+                                <!-- Filter Group: Status Agenda Pills -->
+                                <div class="filter-group mb-4">
+                                    <label class="filter-group-label"><i class="fa-solid fa-list-check me-1"></i>
+                                        Status Agenda:</label>
+                                    <div class="filter-pills-wrap" id="statusPillsGroup">
+                                        <button type="button"
+                                            class="filter-pill-btn {{ empty($statusAgenda) ? 'active' : '' }}"
+                                            data-val="">Semua Status</button>
+                                        <button type="button"
+                                            class="filter-pill-btn {{ $statusAgenda === 'active' ? 'active' : '' }}"
+                                            data-val="active">Sedang Berlangsung</button>
+                                        <button type="button"
+                                            class="filter-pill-btn {{ $statusAgenda === 'upcoming' ? 'active' : '' }}"
+                                            data-val="upcoming">Akan Datang</button>
+                                        <button type="button"
+                                            class="filter-pill-btn {{ $statusAgenda === 'ended' ? 'active' : '' }}"
+                                            data-val="ended">Selesai</button>
+                                    </div>
+                                </div>
+
+                                <!-- Filter Group: Month & Year Select -->
+                                <div class="filter-grid-two-cols mb-4">
+                                    <div class="filter-group">
+                                        <label class="filter-group-label"><i class="fa-solid fa-calendar-days me-1"></i>
+                                            Bulan:</label>
+                                        <select name="bulan" class="filter-select-input">
+                                            <option value="">-- Semua Bulan --</option>
+                                            @foreach ($monthsIndo as $num => $name)
+                                                <option value="{{ $num }}"
+                                                    {{ (string) $bulan === (string) $num ? 'selected' : '' }}>
+                                                    {{ $name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <label class="filter-group-label"><i class="fa-solid fa-calendar me-1"></i>
+                                            Tahun:</label>
+                                        <select name="tahun" class="filter-select-input">
+                                            <option value="">-- Semua Tahun --</option>
+                                            @foreach ($availableYears as $yr)
+                                                <option value="{{ $yr }}"
+                                                    {{ (string) $tahun === (string) $yr ? 'selected' : '' }}>
+                                                    Tahun {{ $yr }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Filter Group: Date Range Picker -->
+                                <div class="filter-group">
+                                    <label class="filter-group-label"><i class="fa-regular fa-calendar-range me-1"></i>
+                                        Rentang Tanggal Spesifik:</label>
+                                    <div class="filter-grid-two-cols">
+                                        <div>
+                                            <span class="sub-label">Dari Tanggal:</span>
+                                            <input type="date" name="tgl_dari" class="filter-date-input"
+                                                value="{{ $tglDari ?? '' }}">
+                                        </div>
+                                        <div>
+                                            <span class="sub-label">Sampai Tanggal:</span>
+                                            <input type="date" name="tgl_sampai" class="filter-date-input"
+                                                value="{{ $tglSampai ?? '' }}">
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -109,10 +292,10 @@
                             }
                         }
 
-                        // Format rentang tanggal awal s.d. tanggal akhir (misal: 19/05/2026 - 22/05/2026)
+                        // Format rentang tanggal awal s.d. tanggal akhir
                         $dateFormatted = \App\Helpers\DateHelper::formatRentangAgenda($a->tgl_awal, $a->tgl_akhir);
 
-                        // Format rentang jam awal s.d. jam akhir (misal: 09:42 - 12:00 WITA)
+                        // Format rentang jam awal s.d. jam akhir
                         $timeFormatted = '';
                         if ($a->jam_mulai) {
                             $jamMulai = \Carbon\Carbon::parse($a->jam_mulai)->format('H:i');
@@ -164,18 +347,21 @@
                                 </a>
                             </h3>
                             <div class="agenda-ref-meta">
-                                <span class="agenda-meta-item" title="Rentang Tanggal Agenda">
-                                    <i class="fa-regular fa-calendar-check text-blue"></i> {{ $dateFormatted }}
-                                </span>
+                                <div class="agenda-meta-item" title="Rentang Tanggal Agenda">
+                                    <i class="fa-regular fa-calendar-check text-blue"></i>
+                                    <span>{{ $dateFormatted }}</span>
+                                </div>
                                 @if ($timeFormatted)
-                                    <span class="agenda-meta-item" title="Rentang Jam Agenda">
-                                        <i class="fa-regular fa-clock text-blue"></i> {{ $timeFormatted }}
-                                    </span>
+                                    <div class="agenda-meta-item" title="Rentang Jam Agenda">
+                                        <i class="fa-regular fa-clock text-blue"></i>
+                                        <span>{{ $timeFormatted }}</span>
+                                    </div>
                                 @endif
                                 @if (!empty($a->tempat))
-                                    <span class="agenda-meta-item" title="Lokasi Tempat Agenda">
-                                        <i class="fa-solid fa-location-dot text-blue"></i> {{ $a->tempat }}
-                                    </span>
+                                    <div class="agenda-meta-item" title="Lokasi Tempat Agenda">
+                                        <i class="fa-solid fa-location-dot text-blue"></i>
+                                        <span>{{ $a->tempat }}</span>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -184,7 +370,8 @@
                     <div class="informasi-empty-state" style="grid-column: 1 / -1;">
                         <i class="fa-regular fa-calendar-xmark empty-icon"></i>
                         <h3 class="empty-title">Tidak Ada Agenda Kegiatan</h3>
-                        <p class="empty-desc">Maaf, belum ada data agenda kegiatan yang sesuai dengan pencarian Anda.</p>
+                        <p class="empty-desc">Maaf, belum ada data agenda kegiatan yang sesuai dengan kriteria filter
+                            pilihan Anda.</p>
                         <a href="{{ url('/agenda') }}" class="btn-outline-blue mt-3">Reset Filter</a>
                     </div>
                 @endforelse
@@ -202,7 +389,8 @@
                     <ul class="custom-pagination-list">
                         @if ($agendas->onFirstPage())
                             <li class="page-item disabled">
-                                <span class="page-link" aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                                <span class="page-link" aria-hidden="true"><i
+                                        class="fa-solid fa-chevron-left"></i></span>
                             </li>
                         @else
                             <li class="page-item">
@@ -254,6 +442,9 @@
             const queryInput = document.getElementById('filterQueryInput');
             const clearSearchBtn = document.getElementById('clearSearchInputBtn');
 
+            const filterStatusInput = document.getElementById('filterStatusInput');
+            const statusPills = document.querySelectorAll('#statusPillsGroup .filter-pill-btn');
+
             function openFilterModal() {
                 if (filterModal) {
                     filterModal.classList.add('is-active');
@@ -276,6 +467,17 @@
                 if (e.key === 'Escape' && filterModal && filterModal.classList.contains('is-active')) {
                     closeFilterModal();
                 }
+            });
+
+            // Toggle active pill in modal
+            statusPills.forEach(function(pill) {
+                pill.addEventListener('click', function() {
+                    statusPills.forEach(p => p.classList.remove('active'));
+                    this.classList.add('active');
+                    if (filterStatusInput) {
+                        filterStatusInput.value = this.getAttribute('data-val');
+                    }
+                });
             });
 
             if (queryInput && clearSearchBtn) {

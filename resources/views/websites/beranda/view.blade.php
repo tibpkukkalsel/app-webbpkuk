@@ -102,25 +102,133 @@
                         <span class="card-text">DASHBOARD DIKLAT</span>
                     </a>
 
-                    <!-- Green Card: Layanan Usaha Kecil -->
-                    <a href="#" class="action-card card-green">
+                    <!-- Green Card: Identifikasi Diklat -->
+                    <a href="{{ url('/layanan/identifikasi-kebutuhan-diklat') }}" class="action-card card-green">
                         <div class="card-icon-box">
-                            <i class="fa-solid fa-file-edit"></i>
+                            <i class="fa-solid fa-file-pen"></i>
                         </div>
                         <span class="card-text">IDENTIFIKASI DIKLAT</span>
                     </a>
 
-                    <!-- Yellow/Gold Card: Info Pelatihan -->
-                    <a href="#" class="action-card card-yellow">
+                    <!-- Yellow/Gold Card: Layanan Lainnya Trigger Button -->
+                    <button type="button" class="action-card card-yellow" id="openLayananLainnyaBtn"
+                        style="border:none; outline:none; cursor:pointer; font-family:inherit;">
                         <div class="card-icon-box">
-                            <i class="fa-solid fa-file-signature"></i>
+                            <i class="fa-solid fa-border-all"></i>
                         </div>
-                        <span class="card-text">SERTIFIKAT ELEKTRONIK</span>
-                    </a>
+                        <span class="card-text">LAYANAN LAINNYA</span>
+                    </button>
                 </div>
 
             </div>
         </main>
+    </div>
+
+    <!-- MODAL LAYANAN LAINNYA DIALOG -->
+    <div class="layanan-modal-overlay" id="layananLainnyaModal" aria-hidden="true">
+        <div class="layanan-modal-backdrop" id="layananModalBackdrop"></div>
+        <div class="layanan-modal-dialog">
+            <div class="layanan-modal-content">
+                <!-- Modal Header -->
+                <div class="layanan-modal-header">
+                    <div class="modal-header-title">
+                        <div class="modal-header-icon-box">
+                            <i class="fa-solid fa-layer-group text-blue"></i>
+                        </div>
+                        <div>
+                            <h3 class="modal-main-heading">Portal Layanan Balatkop-UK</h3>
+                            <p class="modal-sub-heading">Pilih jenis layanan publik digital yang Anda butuhkan</p>
+                        </div>
+                    </div>
+                    <button type="button" class="layanan-modal-close" id="layananModalClose" aria-label="Tutup">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Modal Body: Services Grid (2 Columns) -->
+                <div class="layanan-modal-body">
+                    <div class="layanan-grid-container">
+
+                        <!-- Item 1: Dashboard Diklat -->
+                        <a href="{{ url('/layanan/dashboard-diklat') }}" class="layanan-item-card">
+                            <div class="layanan-item-icon-box bg-icon-blue">
+                                <i class="fa-solid fa-chart-column"></i>
+                            </div>
+                            <div class="layanan-item-info">
+                                <h4 class="layanan-item-title">Dashboard Diklat</h4>
+                                <p class="layanan-item-desc">Informasi & statistik data pelatihan Koperasi dan UMKM.</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right layanan-arrow-icon"></i>
+                        </a>
+
+                        <!-- Item 2: Pemanfaatan Fasilitas -->
+                        <a href="{{ url('/layanan/pemanfaatan-fasilitas') }}" class="layanan-item-card">
+                            <div class="layanan-item-icon-box bg-icon-emerald">
+                                <i class="fa-solid fa-building-user"></i>
+                            </div>
+                            <div class="layanan-item-info">
+                                <h4 class="layanan-item-title">Pemanfaatan Fasilitas</h4>
+                                <p class="layanan-item-desc">Sewa & reservasi gedung, aula, wisma, atau ruang pelatihan.</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right layanan-arrow-icon"></i>
+                        </a>
+
+                        <!-- Item 3: Layanan Kemasan -->
+                        <a href="https://pusatlayanankemasankalsel.com/" target="_blank" rel="noopener noreferrer"
+                            class="layanan-item-card">
+                            <div class="layanan-item-icon-box bg-icon-amber">
+                                <i class="fa-solid fa-box-open"></i>
+                            </div>
+                            <div class="layanan-item-info">
+                                <h4 class="layanan-item-title">
+                                    Layanan Kemasan <i
+                                        class="fa-solid fa-arrow-up-right-from-square external-link-icon"></i>
+                                </h4>
+                                <p class="layanan-item-desc">Pusat desain & konsultasi rumah kemasan UMKM Kalsel.</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right layanan-arrow-icon"></i>
+                        </a>
+
+                        <!-- Item 4: Identifikasi Kebutuhan Pelatihan -->
+                        <a href="{{ url('/layanan/identifikasi-kebutuhan-diklat') }}" class="layanan-item-card">
+                            <div class="layanan-item-icon-box bg-icon-purple">
+                                <i class="fa-solid fa-clipboard-list"></i>
+                            </div>
+                            <div class="layanan-item-info">
+                                <h4 class="layanan-item-title">Identifikasi Kebutuhan Pelatihan</h4>
+                                <p class="layanan-item-desc">Pengisian formulir kebutuhan diklat bagi pengurus/UMKM.</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right layanan-arrow-icon"></i>
+                        </a>
+
+                        <!-- Item 5: Sertifikat Elektronik -->
+                        <a href="{{ url('/layanan/sertifikat-elektronik') }}" class="layanan-item-card">
+                            <div class="layanan-item-icon-box bg-icon-rose">
+                                <i class="fa-solid fa-certificate"></i>
+                            </div>
+                            <div class="layanan-item-info">
+                                <h4 class="layanan-item-title">Sertifikat Elektronik</h4>
+                                <p class="layanan-item-desc">Verifikasi keabsahan & download e-sertifikat alumni diklat.</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right layanan-arrow-icon"></i>
+                        </a>
+
+                        <!-- Item 6: Survei Kepuasan Diklat -->
+                        <a href="{{ url('/layanan/survei-kepuasan-diklat') }}" class="layanan-item-card">
+                            <div class="layanan-item-icon-box bg-icon-indigo">
+                                <i class="fa-solid fa-square-poll-vertical"></i>
+                            </div>
+                            <div class="layanan-item-info">
+                                <h4 class="layanan-item-title">Survei Kepuasan Diklat (SKM)</h4>
+                                <p class="layanan-item-desc">Penilaian indeks kepuasan masyarakat atas pelayanan diklat.</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-right layanan-arrow-icon"></i>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Sasirangan Pattern Slider Section Below Hero -->
@@ -938,3 +1046,38 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const openLayananBtn = document.getElementById('openLayananLainnyaBtn');
+            const layananModal = document.getElementById('layananLainnyaModal');
+            const layananBackdrop = document.getElementById('layananModalBackdrop');
+            const layananClose = document.getElementById('layananModalClose');
+
+            function openLayananModal() {
+                if (layananModal) {
+                    layananModal.classList.add('is-active');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            function closeLayananModal() {
+                if (layananModal) {
+                    layananModal.classList.remove('is-active');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            if (openLayananBtn) openLayananBtn.addEventListener('click', openLayananModal);
+            if (layananBackdrop) layananBackdrop.addEventListener('click', closeLayananModal);
+            if (layananClose) layananClose.addEventListener('click', closeLayananModal);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && layananModal && layananModal.classList.contains('is-active')) {
+                    closeLayananModal();
+                }
+            });
+        });
+    </script>
+@endpush

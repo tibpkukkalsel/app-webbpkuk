@@ -133,9 +133,12 @@
     <!-- Site Footer -->
     @include('layouts.footer')
 
+    <!-- Floating Accessibility Disability Widget -->
+    @include('layouts.partials.accessibility-widget')
+
     {{-- 
     <!-- Asisten AI Balatkop Floating Chatbot Widget (Aira) -->
-    @include('layouts.partials.ai-chat-widget') 
+    @include('layouts.partials.ai-chat-widget')
     --}}
 
     <script src="{{ asset('websites/js/script.js') }}"></script>

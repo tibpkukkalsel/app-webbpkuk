@@ -62,6 +62,9 @@ Route::get('/layanan/pemanfaatan-fasilitas/cek-status', [WebsiteFasilitasControl
     ->middleware('throttle:20,1')
     ->name('website.layanan.fasilitas.cekStatus');
 Route::get('/layanan/pemanfaatan-fasilitas/{slug}', [WebsiteFasilitasController::class, 'halaman'])->name('website.layanan.fasilitas.halaman');
+
+// AI Chatbot Aira Endpoint (DISABLED)
+// Route::post('/ai-chat/respond', [\App\Http\Controllers\Website\AiChatController::class, 'respond'])->name('website.ai-chat.respond');
 Route::get('/agenda', [WebsiteAgendaController::class, 'view'])
     ->middleware('throttle:30,1')
     ->name('website.agenda');
@@ -81,9 +84,9 @@ Route::post('/kontak/kirim', [WebsiteKontakController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('website.kontak.kirim');
 
-Route::post('/ai-chat/respond', [\App\Http\Controllers\Website\WebsiteAiChatController::class, 'respond'])
-    ->middleware('throttle:20,1')
-    ->name('website.ai-chat.respond');
+// Route::post('/ai-chat/respond', [\App\Http\Controllers\Website\AiChatController::class, 'respond'])
+//     ->middleware('throttle:30,1')
+//     ->name('website.ai-chat.respond');
 
 
 

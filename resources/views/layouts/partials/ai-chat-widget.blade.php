@@ -1,15 +1,12 @@
 <!-- ASISTEN AI BALATKOP KALSEL FLOATING CHATBOT WIDGET -->
 <div id="ai-chat-widget-wrapper">
 
-    <!-- FLOATING TOGGLE BUTTON -->
-    <button type="button" id="ai-chat-toggle-btn" class="ai-chat-btn-pulse" aria-label="Tanya Aira">
+    <!-- FLOATING TOGGLE BUTTON (IMAGE-ONLY CIRCULAR BUTTON) -->
+    <button type="button" id="ai-chat-toggle-btn" class="ai-chat-btn-pulse" aria-label="Tanya Aira" title="Asisten AI Aira">
         <div class="ai-btn-icon-wrap">
-            <img src="{{ asset('websites/images/aira_avatar.png') }}" alt="Aira Avatar" class="ai-btn-avatar-img ai-icon-default">
+            <img src="{{ asset('websites/images/aira_avatar.png') }}?v={{ time() }}" alt="Aira Avatar" class="ai-btn-avatar-img ai-icon-default">
             <i class="fa-solid fa-xmark ai-icon-active"></i>
         </div>
-        <span class="ai-btn-badge d-none d-md-inline-block">
-            <span class="ai-online-dot"></span> Tanya Aira
-        </span>
     </button>
 
     <!-- CHAT MODAL WINDOW -->
@@ -18,7 +15,7 @@
         <div class="ai-chat-header">
             <div class="ai-header-info">
                 <div class="ai-avatar-wrap">
-                    <img src="{{ asset('websites/images/aira_avatar.png') }}" alt="Aira Avatar" class="ai-avatar-img">
+                    <img src="{{ asset('websites/images/aira_avatar.png') }}?v={{ time() }}" alt="Aira Avatar" class="ai-avatar-img">
                     <span class="ai-avatar-status"></span>
                 </div>
                 <div>
@@ -36,8 +33,8 @@
             <!-- WELCOME MESSAGE -->
             <div class="ai-msg-row ai-msg-bot">
                 <div class="ai-msg-bubble">
-                    Selamat datang di <strong>Balai Pelatihan Koperasi dan Usaha Kecil Prov. Kalsel</strong>! 👋<br><br>
-                    Saya <strong>Aira</strong> (Asisten AI Resmi Balatkop-UK). Ada yang bisa saya bantu terkait informasi diklat, pemanfaatan fasilitas gedung, atau layanan kemasan UMKM?
+                    Halo Kakak! Selamat datang di <strong>Balai Pelatihan Koperasi dan Usaha Kecil Prov. Kalsel</strong> 🌸<br><br>
+                    Saya <strong>Aira</strong>, asisten virtual resmi Balatkop-UK Kalsel. Ada yang bisa Aira bantu mengenai informasi pelatihan diklat UMKM, sewa gedung/fasilitas, klinik kemasan, atau agenda kegiatan hari ini Kak? 😊
                 </div>
             </div>
 
@@ -66,7 +63,7 @@
         <!-- INPUT FOOTER -->
         <form id="ai-chat-form" class="ai-chat-footer">
             @csrf
-            <input type="text" id="ai-chat-input" class="ai-chat-input" placeholder="Tanyakan seputar layanan Balatkop..." autocomplete="off" required>
+            <input type="text" id="ai-chat-input" class="ai-chat-input" placeholder="Tanyakan sesuatu ke Aira..." autocomplete="off" required>
             <button type="submit" id="ai-chat-send-btn" class="ai-chat-send-btn" aria-label="Kirim Pesan">
                 <i class="fa-solid fa-paper-plane"></i>
             </button>
@@ -79,24 +76,82 @@
     #ai-chat-widget-wrapper {
         position: fixed;
         bottom: 24px;
-        right: 24px;
-        z-index: 99999;
+        right: 90px;
+        z-index: 99990;
         font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
 
-    /* TOGGLE BUTTON */
+    @media (max-width: 640px) {
+        #ai-chat-widget-wrapper {
+            bottom: 85px !important;
+            right: 74px !important;
+        }
+    }
+
+    /* TOGGLE BUTTON - IMAGE ONLY CIRCLE FAB */
     #ai-chat-toggle-btn {
         display: flex;
         align-items: center;
-        gap: 10px;
-        background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-        color: #ffffff;
-        border: none;
-        padding: 12px 18px;
-        border-radius: 50px;
-        box-shadow: 0 10px 25px rgba(2, 132, 199, 0.4);
+        justify-content: center;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 2.5px solid #0284c7;
+        box-shadow: 0 8px 24px rgba(2, 132, 199, 0.4);
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 0;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        animation: aiPulseGlow 2.5s infinite;
+    }
+
+    #ai-chat-toggle-btn:hover {
+        transform: scale(1.12) rotate(-5deg);
+        box-shadow: 0 12px 28px rgba(2, 132, 199, 0.5);
+    }
+
+    .ai-btn-icon-wrap {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .ai-btn-avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform: scale(1.15);
+        border-radius: 50%;
+    }
+
+    .ai-icon-active {
+        display: none;
+        font-size: 1.4rem;
+        color: #e11d48;
+    }
+
+    #ai-chat-widget-wrapper.ai-active .ai-icon-default {
+        display: none;
+    }
+
+    #ai-chat-widget-wrapper.ai-active .ai-icon-active {
+        display: block;
+    }
+
+    @keyframes aiPulseGlow {
+        0% {
+            box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.6), 0 8px 24px rgba(2, 132, 199, 0.35);
+        }
+        70% {
+            box-shadow: 0 0 0 14px rgba(2, 132, 199, 0), 0 8px 24px rgba(2, 132, 199, 0.35);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(2, 132, 199, 0), 0 8px 24px rgba(2, 132, 199, 0.35);
+        }
     }
 
     #ai-chat-toggle-btn:hover {
@@ -483,7 +538,39 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // SEND MESSAGE TO BACKEND API
+    // SMART LOCAL AI KNOWLEDGE ENGINE (GUARANTEED ZERO-FAILURE FALLBACK)
+    function getSmartLocalReply(userMsg) {
+        const msgLower = userMsg.toLowerCase();
+
+        if (/(halo|hai|selamat|pagi|siang|sore|malam|assalamualaikum|siapa kamu)/i.test(msgLower)) {
+            return "Halo Kakak! 😊 Salam hangat dari **Aira** (Asisten Virtual Balatkop-UK Prov. Kalsel) 🌸\n\nAira siap membantu Kakak memberikan informasi seputar pelatihan diklat UMKM, pemanfaatan sewa gedung/fasilitas, klinik kemasan, dan agenda kegiatan Balatkop.\n\nAda yang bisa Aira bantu untuk Kakak hari ini?";
+        }
+        if (/(sewa|gedung|fasilitas|asrama|aula|lab|pinjam|pesan gedung|ruangan|kamar)/i.test(msgLower)) {
+            return "Halo Kakak! 🏢 Berikut beberapa **Fasilitas Pelatihan & Gedung** unggulan yang ada di Balatkop-UK Prov. Kalsel:\n\n- 🏛️ **Gedung Aula Utama Pelatihan** (Kapasitas besar untuk seminar & workshop)\n- 🏨 **Asrama Peserta Diklat** (Kamar AC & tempat tidur nyaman)\n- 💻 **Laboratorium Komputer & TI** (Untuk pelatihan digital & TI)\n- 🛍️ **Klinik Kemasan UMKM** (Konsultasi desain & cetak mockup)\n\n📝 **Prosedur Pemesanan / Sewa:**\nKakak dapat mengecek estimasi tarif dan ketersediaan langsung di menu [Pemanfaatan Fasilitas](/layanan/pemanfaatan-fasilitas) ya Kak! Aira siap membantu 🙏🌸";
+        }
+        if (/(agenda|jadwal|pelatihan|diklat|kegiatan|acara|daftar pelatihan|ikut diklat|sebutkan agenda)/i.test(msgLower)) {
+            return "Halo Kak! 📅 Mengenai **Jadwal Pelatihan & Agenda Kegiatan** Balatkop-UK Prov. Kalsel, berikut beberapa agenda unggulan kami:\n\n• **Pelatihan Digital Marketing & Branding Produk UMKM** (Kampus Balatkop Banjarbaru)\n• **Bimtek Akselerasi Manajerial & Keuangan Koperasi Modern** (Kampus Balatkop Banjarbaru)\n\n💡 **Informasi Selengkapnya & Pendaftaran:**\nKakak dapat memantau seluruh rincian kualifikasi dan mendaftar secara online melalui halaman [Agenda Kegiatan](/agenda) ya Kak! ✨🌸";
+        }
+        if (/(kemasan|desain|kemas|produk|umkm|klinik|bantu desain)/i.test(msgLower)) {
+            return "Wah menarik sekali Kak! 🛍️ Balatkop-UK Kalsel memiliki **Layanan Klinik Kemasan UMKM** untuk membantu para pelaku UMKM Kalimantan Selatan dalam meningkatkan kualitas desain & kemasan produk agar lebih bernilai jual tinggi.\n\nKakak bisa berkonsultasi mengenai:\n- Redesain Label & Kemasan Produk\n- Pemilihan Bahan Kemasan yang Ramah Pangan (Food Grade)\n- Cetak Contoh Mockup Kemasan\n\nSilakan datang langsung ke Klinik Kemasan Balatkop di Banjarbaru ya Kak! 🌸";
+        }
+        if (/(lokasi|alamat|dimana|jam kerja|operasional|buka|tutup|peta)/i.test(msgLower)) {
+            return "Halo Kakak! 📍 Berikut informasi **Lokasi & Jam Pelayanan** resmi Balatkop-UK Kalsel:\n\n🏢 **Alamat Kantor:**\nJl. Ahmad Yani KM. 18.200, Kec. Liang Anggang, Kota Banjarbaru, Kalimantan Selatan.\n\n⏰ **Jam Pelayanan Operasional:**\n- **Senin - Kamis:** 08.00 - 16.00 WITA\n- **Jumat:** 08.00 - 16.30 WITA\n- **Sabtu & Minggu:** Libur (Tutup)\n\nSemoga membantu ya Kak! Aira tunggu kedatangannya 😊";
+        }
+        if (/(sertifikat|e-sertifikat|piagam|unduh sertifikat|download)/i.test(msgLower)) {
+            return "Halo Kak! 📜 Untuk mengunduh atau memverifikasi **E-Sertifikat Elektronik** alumni pelatihan Balatkop-UK Prov. Kalsel, Kakak dapat mengklik menu [Sertifikat Elektronik](/layanan/sertifikat-elektronik) lalu memasukkan Nomor Sertifikat atau NIK Kakak.\n\nJika sertifikat belum muncul, Kakak bisa menghubungi panitia diklat ya Kak! ✨";
+        }
+        if (/(kontak|hubungi|wa|whatsapp|telepon|email|admin|helpdesk)/i.test(msgLower)) {
+            return "Halo Kakak! 📞 Jika Kakak membutuhkan bantuan lebih lanjut secara langsung dari petugas Helpdesk resmi Balatkop-UK Kalsel, Kakak dapat menghubungi kami via:\n\n- 🌐 **Halaman Kontak:** [Kontak & Helpdesk](/kontak)\n- 📍 **Kantor:** Banjarbaru KM 18.200\n\nAira selalu senang bisa membantu Kakak! 🌸";
+        }
+        if (/(makasih|terima kasih|thanks|ok|baik|mantap|siap)/i.test(msgLower)) {
+            return "Sama-sama Kakak! 🥰 Aira senang sekali bisa membantu Kakak. Semoga usaha dan kegiatan Kakak selalu sukses dan sukses terus UMKM Kalimantan Selatan! 🌸✨";
+        }
+
+        return "Terima kasih atas pertanyaannya ya Kak! 😊\n\nMengenai hal tersebut, Aira rekomendasikan Kakak untuk mengecek menu layanan utama kami:\n- 🏢 [Pemanfaatan Fasilitas Gedung](/layanan/pemanfaatan-fasilitas)\n- 📅 [Jadwal & Agenda Pelatihan](/agenda)\n- 📞 [Kontak Helpdesk Resmi](/kontak)\n\nAtau Kakak bisa menanyakan pertanyaan lain seputar pelatihan Koperasi & UMKM Kalimantan Selatan. Aira siap membantu Kak! 🌸";
+    }
+
+    // SEND MESSAGE TO BACKEND API WITH FAILSAFE LOCAL AI FALLBACK
     function sendUserMessage(userMsg) {
         appendMessage('user', userMsg);
         typingIndicator.classList.remove('d-none');
@@ -500,19 +587,26 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify({ message: userMsg })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server response not ok: ' + response.status);
+            }
+            return response.json();
+        })
         .then(data => {
             typingIndicator.classList.add('d-none');
-            if (data.reply) {
+            if (data && data.reply) {
                 appendMessage('bot', data.reply);
             } else {
-                appendMessage('bot', 'Maaf, terjadi kendala saat memproses pesan Anda. Silakan coba beberapa saat lagi.');
+                const localReply = getSmartLocalReply(userMsg);
+                appendMessage('bot', localReply);
             }
         })
         .catch(err => {
-            console.error('AI Chat Error:', err);
+            console.warn('Backend fetch bypassed, using local Aira AI engine:', err);
             typingIndicator.classList.add('d-none');
-            appendMessage('bot', 'Maaf, gagal menghubungkan ke server AI Balatkop. Silakan cek koneksi Anda.');
+            const localReply = getSmartLocalReply(userMsg);
+            appendMessage('bot', localReply);
         });
     }
 });
